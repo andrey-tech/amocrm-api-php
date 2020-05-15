@@ -2,7 +2,7 @@
 
 [amoCRM](https://www.amocrm.ru) REST API Wrapper.
 
-##Требования
+## Требования
 
 - PHP >= 7.0.
 - Произвольный автозагрузчик классов, реализующий стандарт [PSR-4](https://www.php-fig.org/psr/psr-4/).
