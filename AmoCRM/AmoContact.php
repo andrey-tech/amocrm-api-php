@@ -1,0 +1,156 @@
+<?php
+/**
+ * Класс AmoContact. Содержит методы для работы с контактами.
+ *
+ * @author    andrey-tech
+ * @copyright 2019 andrey-tech
+ * @see https://github.com/andrey-tech/amocrm-api
+ * @license   MIT
+ *
+ * @version 1.0.0
+ *
+ * v1.0.0 (24.04.2019) Начальный релиз.
+ *
+ */
+
+declare(strict_types = 1);
+
+namespace AmoCRM;
+
+class AmoContact extends AmoObject
+{
+    /**
+     * Путь для запроса к API
+     * @var string
+     */
+    const URL = '/api/v2/contacts';
+
+    /**
+     * @var array
+     */
+    public $company = [];
+
+    /**
+     * @var array
+     */
+    public $leads = [];
+
+    /**
+     * @var array
+     */
+    public $customers = [];
+
+    /**
+     * @var int
+     */
+    public $closest_task_at;
+
+    /**
+     * Конструктор
+     * @param array $data
+     */
+    public function __construct(array $data = [])
+    {
+        parent::__construct($data);
+    }
+
+    /**
+     * Приводит модель к формату для передачи в API
+     * @return array
+     */
+    public function getParams() :array
+    {
+        $params = [];
+
+        if (isset($this->closest_task_at)) {
+            $params['closest_task_at'] = $this->closest_task_at;
+        }
+        
+        if (count($this->company)) {
+            $params['company_id'] = $this->company['id'];
+        }
+        
+        if (count($this->leads)) {
+            $params['leads_id'] = $this->leads['id'];
+        }
+        
+        if (count($this->customers)) {
+            $params['customers_id'] = $this->customers['id'];
+        }
+        
+        return array_merge(parent::getParams(), $params);
+    }
+
+    /**
+     * Добавляет сделки (не более 40 сделок у 1 контакта)
+     * @param array | int $leads
+     * @return AmoContact
+     *
+     */
+    public function addLeads($leads) :AmoContact
+    {
+        if (! is_array($leads)) {
+            $leads = [ $leads ];
+        }
+        
+        if (isset($this->leads['id'])) {
+            foreach ($leads as $id) {
+                if (! in_array($id, $this->leads['id'])) {
+                    $this->leads['id'][] = $id;
+                }
+            }
+        } else {
+            $this->leads['id'] = $leads;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Добавляет покупателей
+     * @param array | int $customers
+     * @return AmoCompany
+     *
+     */
+    public function addCustomers($customers) :AmoCompany
+    {
+        if (! is_array($customers)) {
+            $customers = [ $customers ];
+        }
+        
+        if (isset($this->customers['id'])) {
+            foreach ($customers as $id) {
+                if (! in_array($id, $this->customers['id'])) {
+                    $this->customers['id'][] = $id;
+                }
+            }
+        } else {
+            $this->customers['id'] = $customers;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Возвращает первый номер телефона из дополнительных полей контакта
+     * @return string | null
+     */
+    public function getPhoneNumber()
+    {
+        $phoneCustomFields = array_filter(
+            $this->custom_fields,
+            function ($item) {
+                return (isset($item['code']) && ($item['code'] === 'PHONE'));
+            }
+        );
+
+        if (count($phoneCustomFields)) {
+            $field = reset($phoneCustomFields);
+            $result = $field['values'][0]['value'];
+        } else {
+            $result = null;
+        }
+
+        return $result;
+    }
+}
