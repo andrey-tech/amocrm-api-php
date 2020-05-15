@@ -49,7 +49,6 @@ class AmoAPI
      * @param string $subdomain
      * @return array
      */
-    // ------------------------------------------------------------------------
     public static function saveObjects($amoObjects, $subdomain = null) :array
     {
         if (! is_array($amoObjects)) {
