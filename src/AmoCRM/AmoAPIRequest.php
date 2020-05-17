@@ -7,9 +7,9 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 2.1.2
+ * @version 2.2.0
  *
- * v1.0.0 (24.04.2019) Начальный релиз.
+ * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
  * v1.2.0 (05.07.2019) Улучшен обработчик ошибки 401 Unautorized для нескольких поддоменов
  * v1.2.1 (05.07.2019) Добавлена проверка авторизации в поддомене
@@ -24,6 +24,7 @@
  * v2.1.0 (09.04.2020) Добавлен метод getLastResponse()
  * v2.1.1 (10.04.2020) Уточнены сообщения об ошибках в request()
  * v2.1.2 (11.04.2020) Уточнены коды исключений в request()
+ * v2.2.0 (16.05.2020) Добавлен вывод времени ответа сервера в отладочные сообщения
  *
  */
 
@@ -44,7 +45,7 @@ trait AmoAPIRequest
      * Не более 7 запросов в секунду!!!
      * @var integer
      */
-    public static $throttle = 1;
+    public static $throttle = 7;
 
     /**
      * Флаг включения проверки SSL-сертификата сервера amoCRM
@@ -63,7 +64,7 @@ trait AmoAPIRequest
      * Домен amoCRM для запросов к API
      * @var string
      */
-    public static $amoDomain = '.amocrm.ru';
+    public static $amoDomain = 'amocrm.ru';
 
     /**
      * UserAgent в запросах к API
@@ -264,7 +265,7 @@ trait AmoAPIRequest
         self::setDefaultCurlOptions($curl, $subdomain);
 
         // Формируем URL запроса
-        $url = 'https://' . $subdomain . self::$amoDomain . $query;
+        $url = 'https://' . $subdomain . '.' . self::$amoDomain . $query;
 
         // Устанавливаем параметры для запроса методом GET или POST
         switch ($type) {
@@ -279,7 +280,7 @@ trait AmoAPIRequest
     
                 // Отладочная информация
                 $requestInfo = " (GET: {$url})";
-                self::debug('['. self::$requestCounter . "] ***** GET: {$url}");
+                self::debug('['. self::$requestCounter . "] GET: {$url}");
     
                 break;
     
@@ -301,7 +302,7 @@ trait AmoAPIRequest
                 // Отладочная информация
                 $jsonParams = self::unescapeUnicode($jsonParams);
                 $requestInfo = " (POST: {$url} {$jsonParams})";
-                self::debug('['. self::$requestCounter . "] ***** POST: {$url}" . PHP_EOL . $jsonParams);
+                self::debug('['. self::$requestCounter . "] POST: {$url}" . PHP_EOL . $jsonParams);
     
                 break;
     
@@ -315,11 +316,12 @@ trait AmoAPIRequest
 
         // Отправляем запрос и сохраняем ответ
         self::$lastResult = self::throttleCurl($curl);
+        $deltaTime = sprintf('%0.4f', microtime(true) - self::$lastRequestTime);
         $result = self::unescapeUnicode(self::$lastResult);
 
         // Извлекаем код статуса HTTP и номер ошибки cURL
         $code = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        self::debug('['. self::$requestCounter . "] ===== RESPONSE ({$code}):" .PHP_EOL . $result);
+        self::debug('['. self::$requestCounter . "] RESPONSE {$deltaTime}s ({$code}):" .PHP_EOL . $result);
         $errno = curl_errno($curl);
         $error = curl_error($curl);
         curl_close($curl);
@@ -493,18 +495,18 @@ trait AmoAPIRequest
     {
         do {
             // Вычисляем необходимое время задержки перед отправкой запроса, микросекунды
-            $sleep = (int) round(self::$lastRequestTime + 1E6 / self::$throttle - microtime(true));
-            if ($sleep <= 0) {
+            $usleep = (int) (1E6 * (self::$lastRequestTime + 1/self::$throttle - microtime(true)));
+            if ($usleep <= 0) {
                 break;
             }
 
-            self::debug('['. self::$requestCounter . "] +++++ THROTTLE: {$sleep} us");
-            usleep($sleep);
+            $throttleTime = sprintf('%0.4f', $usleep/1E6);
+            self::debug('['. self::$requestCounter . "] THROTTLE {$throttleTime}s");
+            usleep($usleep);
         } while (false);
 
         self::$lastRequestTime = microtime(true);
 
-        // Отправляем запрос
         $result = curl_exec($curl);
 
         return $result;

@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 2.1.0
+ * @version 2.2.0
  *
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.1.0 (02.06.2019) Добавлены новые параметры, рефракторинг.
@@ -16,6 +16,7 @@
  * v2.0.0 (06.04.2020) Добавлена авторизация по протоколу OAuth 2.0.
  *                     Добавлены трейты AmoAPIAuth, AmoAPIOAuth2
  * v2.1.0 (10.05.2020) Добавлена проверка ответа сервера в метод saveObjects()
+ * v2.2.0 (16.05.2020) Добавлен метод getItems(). Добавлен параметр $returnResponses в метод saveObjects()
  *
  */
 
@@ -44,12 +45,24 @@ class AmoAPI
     use AmoAPIOAuth2;
 
     /**
+     * Возращает массив параметров сущностей из ответа сервера amoCRM
+     * @param array|null $response Ответ сервера
+     * @return array|null
+     */
+    public static function getItems($response)
+    {
+        return $response['_embedded']['items'] ?? null;
+    }
+
+    /**
      * Добавляет или обновляет объекты AmoObject в AmoCRM
      * @param array | AmoObject $objects
      * @param string $subdomain
+     * @param bool $returnResponses Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей
      * @return array
      */
-    public static function saveObjects($amoObjects, $subdomain = null) :array
+    // ------------------------------------------------------------------------
+    public static function saveObjects($amoObjects, $subdomain = null, bool $returnResponses = false) :array
     {
         if (! is_array($amoObjects)) {
             $amoObjects = [ $amoObjects ];
@@ -73,6 +86,14 @@ class AmoAPI
                 );
             }
             $responses[] = $response;
+        }
+
+        if (! $returnResponses) {
+            $items = [];
+            foreach ($responses as $response) {
+                $items = array_merge($items, self::getItems($response));
+            }
+            return $items;
         }
         
         return $responses;

@@ -7,9 +7,10 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
  * v1.0.0 (24.04.2019) Начальный релиз.
+ * v1.1.0 (16.05.2019) Добавлены свойства first_name, last_name
  *
  */
 
@@ -44,6 +45,16 @@ class AmoContact extends AmoObject
      * @var int
      */
     public $closest_task_at;
+
+    /**
+     * @var string
+     */
+    public $first_name;
+
+    /**
+     * @var string
+     */
+    public $last_name;
 
     /**
      * Конструктор

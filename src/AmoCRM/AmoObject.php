@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.3.0
+ * @version 1.4.0
  *
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.0.1 (09.08.2019) Добавлено 5 секунд к updated_at
@@ -15,7 +15,8 @@
  * v1.1.1 (13.11.2019) Добавлено исключение в метод fillById()
  * v1.2.0 (13.11.2019) Добавлен метод getCustomFieldValueById()
  * v1.2.1 (22.02.2020) Удален метод delete(), как более не поддерживаемый
- * v1.3.0 (10.05.2020) Добавлена проверка ответа сервена в метод save(). Добавлено свойство request_id
+ * v1.3.0 (10.05.2020) Добавлена проверка ответа сервера в метод save(). Добавлено свойство request_id
+ * v1.4.0 (16.05.2020) Добавлена параметр $returnResponse в метод save()
  *
  */
 
@@ -299,11 +300,12 @@ abstract class AmoObject
     }
 
     /**
-     * Обновляет или добавляет объект в AmoCRM
-     * @return array
+     * Обновляет или добавляет объект в amoCRM
+     * @param  bool $returnResponse Вернуть ответ сервера вместо ID сущности
+     * @return array|int
      *
      */
-    public function save() :array
+    public function save($returnResponse = false)
     {
         if (isset($this->id)) {
             $params = [ 'update' => [ $this->getParams() ] ];
@@ -318,6 +320,10 @@ abstract class AmoObject
             $className = get_class($this);
             $message = "Не удалось {$action} {$className} (пустой ответ): " . print_r($params, true);
             throw new AmoAPIException($message);
+        }
+
+        if (! $returnResponse) {
+            return $response['_embedded']['items'][0]['id'];
         }
 
         return $response;
