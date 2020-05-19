@@ -3,7 +3,13 @@
 ![amoCRM logo](./assets/amocrm-logo.png)
 
 Обертка на PHP для работы с REST API [amoCRM](https://www.amocrm.ru) с авторизацией по протоколу oAuth 2.0
-или по API-ключу пользователя и троттлингом запросов к серверу amoCRM.
+или по API-ключу пользователя и троттлингом запросов.
+
+Данная библиотека была создана для удовлетворения
+[новых требований amoCRM](https://www.amocrm.ru/developers/content/integrations/requirements),
+предъявляемых к публичным интерациям:
+*"Публичные интеграции должны использовать механизм авторизации oAuth 2.0,
+использование механизма API ключей не допускается. Требование с февраля 2020 года"*.
 
 **Документация находится в процессе разработки.**
 
@@ -16,11 +22,14 @@
     - [Авторизация по протоколу oAuth 2.0 \(актуальный метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%83-oauth-20-%D0%B0%D0%BA%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
         - [Обмен кода авторизации на access токен и refresh токен](#%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD)
         - [Получение нового access токена по его истечении](#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8)
-        - [Авторизация по API-ключу пользователя \(устаревший метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
-    - [Дополнительные параметры и методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%B8-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
+    - [Авторизация по API-ключу пользователя \(устаревший метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
+- [Дополнительные параметры](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B)
 - [Работа с сущностями amoCRM](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm)
     - [Общие методы моделей](#%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
-    - [Контакт](#%D0%9A%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82)
+    - [Список методов моделей](#%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
+    - [Методы для загрузки сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
+    - [Дополнительные методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
+    - [Примеры работы с контактами](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
 
@@ -35,13 +44,10 @@
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F"></a>
 ## Авторизация
 
-Для авторизации используются статические методы класса \AmoCRM\AmoAPI: oAuth2() или auth().
-
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%83-oauth-20-%D0%B0%D0%BA%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4"></a>
 ### Авторизация по протоколу oAuth 2.0 ([актуальный метод](https://www.amocrm.ru/developers/content/oauth/oauth))
 
-- `static \AmoCRM\AmoAPI::oAuth2(string $subdomain, string $clientId, string $clientSecret,  
-    string $redirectUri, ?string $authCode = null, bool $storeAll = true) :array`  
+- `static AmoAPI::oAuth2(string $subdomain, string $clientId, string $clientSecret, string $redirectUri, ?string $authCode = null, bool $storeAll = true) :array`  
     - `$subdomain` - поддомен amoCRM.
     - `$clientId` - ID интеграции.
     - `$clientSecret` - секрет интеграции.
@@ -52,8 +58,7 @@
 <a id="%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD"></a>
 #### Обмен кода авторизации на access токен и refresh токен
 
-Пример авторизации по протоколу oAuth 2.0 и [обмен временного ключа (кода авторизации)](https://www.amocrm.ru/developers/content/oauth/step-by-step#get_access_token),
-действующего в течение 20 минут с момента получения, на access и refresh токены.
+Пример авторизации по протоколу oAuth 2.0 и [обмен кода авторизации](https://www.amocrm.ru/developers/content/oauth/step-by-step#get_access_token) на access и refresh токены.
 ```php
 use \AmoCRM\AmoAPI;
 
@@ -64,7 +69,7 @@ try {
     $authCode     = 'eee60208cc09e3ae3506d667228038345b6578a11d4862094655f630074c8c6ed87a9d804d49b5880e';
     $redirectUri  = 'https://www.example.com/oauth2/';
     $subdomain    = 'testsubdomain';
-    $storeAll     = true; // Сохранить значения $clientId, $clientSecret, $redirectUri вместе с токенами
+    $storeAll     = true;
 
     // Авторизация
     AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode, $storeAll);
@@ -80,8 +85,7 @@ try {
 <a id="%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8"></a>
 #### Получение нового access токена по его истечении
 
-Пример авторизации по протоколу oAuth 2.0 и получение нового access и refresh токена 
-по истечении срока действия существующего access токена.
+Пример авторизации по протоколу oAuth 2.0 и получение нового access и refresh токена. 
 ```php
 use \AmoCRM\AmoAPI;
 
@@ -103,9 +107,9 @@ try {
 ```
 
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4"></a>
-#### Авторизация по API-ключу пользователя ([устаревший метод](https://www.amocrm.ru/developers/content/oauth/old))
+### Авторизация по API-ключу пользователя ([устаревший метод](https://www.amocrm.ru/developers/content/oauth/old))
 
-- `static \AmoCRM\AmoAPI::oauth(string $login, string $hash, string $subdomain) :array`
+- `static AmoAPI::oauth(string $login, string $hash, string $subdomain) :array`
     - `$login` - логин пользователя.
     - `$hash` - API-ключ пользователя.
     - `$subdomain` - поддомен amoCRM.
@@ -131,89 +135,144 @@ try {
 }
 ```
 
-<a id="%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%B8-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B"></a>
-### Дополнительные параметры и методы
+<a id="%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B"></a>
+## Дополнительные параметры
 
 Дополнительные параметры авторизации и соединения с сервером amoCRM могут быть установлены
-через статические свойства класса \AmoCRM\AmoAPI (ниже приведены значения по умолчанию):
+через статические свойства класса AmoAPI.
 
-- `AmoAPI::$debug = true` Включает отладочный режим с выводом запросов и ответов в STDOUT.
-- `AmoAPI::$throttle = 7` Устанавливает максимальное число запросов к amoCRM API в секунду (не более 7).
-- `AmoAPI::$verifySSLCerfificate = true` Включает проверку SSL-сертификата сервера amoCRM.
-- `AmoAPI::$SSLCertificateFile = 'cacert.pem'` Устанавливает относительный путь к файлу SSL-сертификатов X.509 корневых
-удостоверяющих центров для проверки SSL-сертификата сервера amoCRM.
-- `AmoAPI::$amoDomain` = 'amocrm.ru'` Устанавливает домен amoCRM для запросов к API.
-- `AmoAPI::$amoUserAgent = 'amoCRM-API-client/2.0'` Устанавливает НТТР заголовок UserAgent в запросах к API.
-- `AmoAPI::$amoTimeout = 30` Устанавливает таймаут соединения с сервером аmoCRM, секунды.
-- `AmoAPI::$accessTokenLeeway = 300` Устанавливает временной запас на истечение срока действия access токен, секунд.
-Access токен истекает раньше на указанное число секунд.
-- `AmoAPI::$reOAuth2Attempts = 1` Устанавливает максимальное число попыток обновления access токен по истечении его срока действия при ответе сервера '401 Unauthorized'.
-- `AmoAPI::$reOAuth2Timeout = 5` Устанавливает таймаут перед обновлением access токен  по истечении его срока действия при ответе сервера '401 Unauthorized', секунд.
-- `AmoAPI::$tokensFileDir = 'tokens/'` Устанавливает каталог для хранения файлов с токенами для поддоменов amoCRM.
-- `AmoAPI::$reAuthTimeout = 5`  Устанавливает таймаут перед повторной авторизацией по API-ключу пользователя при ответе сервера '401 Unauthorized', секунд.
-- `AmoAPI::$reAuthAttempts = 3` Устанавливает максимальное число попыток повторной авторизации по API-ключу пользователя при ответе сервера '401 Unauthorized'.
-- `AmoAPI::$cookieFileDir = 'cookies/'` Устанавливает относительный каталог для хранения файлов cookie.
-- `AmoAPI::$limitRows = 500` Устанавливает максимальное количество сущностей, выбираемых за один запрос к серверу amoCRM.
+Свойство                | По умолчанию | Описание
+----------------------- | ------------ | --------
+`$debug`                | false        | Включает отладочный режим с выводом запросов и ответов в STDOUT
+`$throttle`             | 7            | Устанавливает максимальное число запросов к серверу amoCRM в секунду ([не более 7 запросов в секунду](https://www.amocrm.ru/developers/content/api/recommendations))
+`$verifySSLCerfificate` | true         | Включает проверку SSL/TLS-сертификата сервера amoCRM
+`$SSLCertificateFile`   | 'cacert.pem' | Устанавливает относительный путь к файлу SSL/TLS-сертификатов X.509 корневых удостоверяющих центров (CA) в формате РЕМ
+`$amoDomain`            | 'amocrm.ru'  | Устанавливает домен для запросов к API amoCRM
+`$amoUserAgent`         | 'amoCRM-API-client/2.0' | Устанавливает НТТР заголовок UserAgent в запросах
+`$amoTimeout`           | 30           | Устанавливает таймаут соединения с сервером аmoCRM, секунды
+`$accessTokenLeeway`    | 300          | Устанавливает временной запас на истечение срока действия access токен, секунды. Access токен истекает раньше на указанное число секунд
+`$reOAuth2Attempts`     | 1            | Устанавливает максимальное число попыток обновления access токена по истечении его срока действия при ответе сервера '401 Unauthorized'
+`$reOAuth2Timeout`      | 5            | Устанавливает таймаут перед обновлением access токена по истечении его срока действия при ответе сервера '401 Unauthorized', секунды
+`$tokensFileDir`        | 'tokens/'    | Устанавливает каталог для хранения файлов с токенами для поддоменов amoCRM
+`$reAuthTimeout`        | 5            | Устанавливает таймаут перед повторной авторизацией по API-ключу пользователя при ответе сервера '401 Unauthorized', секунды
+`$reAuthAttempts`       | 3            | Устанавливает максимальное число попыток повторной авторизации по API-ключу пользователя при ответе сервера '401 Unauthorized'
+`$cookieFileDir`        | 'cookies/'   | Устанавливает относительный каталог для хранения файлов cookie
+`$limitRows`            | 500          | Устанавливает максимальное количество сущностей, выбираемых за один запрос к серверу amoCRM ([не более 500, рекомендуется не более 250](https://www.amocrm.ru/developers/content/api/recommendations))
 
-Дополнительные статические методы класса \AmoCRM\AmoAPI:
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm"></a>
+## Работа с сущностями amoCRM
 
-- `static getInfo(string $with = '', $subdomain = null) :array`
+Работа с сущностями amoCRM строится с помощью:
+
+- методов классов-моделей:
+    - `AmoContact` Модель контакта.
+    - `AmoCompany` Модель компании.
+    - `AmoLead` Модель сделки.
+    - `AmoNote` Модель события (примечания).
+    - `AmoTask` Модель задачи.
+    - `AmoCatalogElement` Модель элемента каталога.
+
+- дополнительных статических методов класса AmoAPI.
+
+<a id="%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
+### Общие методы моделей
+
+Базовый класс моделей (AmoObject) содержит следующие общие методы:
+
+- `__construct(array $data = [])` Создает новую модель и заполняет данными.
+- `fillById(int $id)` Заполняет модель данными по ID сущности.
+- `getParams() :array` Возвращает текущие параметры модели.
+- `getCustomFields(array $ids) :array` Возвращает дополнительные поля по массиву ID полей.
+- `getCustomFieldValueById(int $id)` Возвращает значение дополнительного поля по ID поля.
+- `setCustomFields(array $params)` Устанавливает значения дополнительных полей.
+- `addTags(array $tags)` Добавляет теги.
+- `delTags(array $tags)` Удаляет теги. 
+
+<a id="%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
+### Список методов моделей
+
+- `AmoContact` Модель контакта.
+    - `addLeads(array $id)` Привязывает сделки по ID сделок.
+    - `addCustomers(array $id)` Привязывает покупателей по ID покупателей.
+
+- `AmoCompany` Модель компании.
+    - `addLeads(array $id)` Привязывает сделки по ID сделок.
+    - `addContacts(array $id)` Привязывает контакты по ID контактов.
+    - `addCustomers(array $id)` Привязывает покупателей по ID покупателей.
+
+- `AmoLead` Модель сделки.
+    - `addContacts(array $id)` Привязывает контакты по ID контактов.
+    - `setCatalogElements(int $id)` Устанавливает элементы каталога по ID элементов.
+
+- `AmoTask` Модель задачи.
+    - `addContact(int $id)` Привязывает контакт по ID контакта.
+    - `addLead(int $id)` Привязывает сделку по ID сделки.
+
+<a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
+### Методы для загрузки сущностей
+
+Класс AmoAPI содержит следующие общие статические методы для загрузки сущностей:
+
+- `static getAll<Entities> (array $params, ?string $subdomain = null, bool $returnResponse = false) :\Generator`
+    Загружает ВСЕ сущности заданного типа <Entities\> c возможностью фильтрации.  
+    Возвращает объект типа \Generator для последующей выборки параметров сущностей.
+    - `<Entities>`:
+        - Contacts
+        - Companies
+        - Leads
+        - Tasks
+        - Notes
+        - CatalogElements
+    - `$params` - параметры фильтрации.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при авторизации.
+    - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
+
+- `static get<Entities>(array $params, ?string $subdomain = null, bool $returnResponse = false) :?array`  
+    Загружает сущности заданного типа <Entities\> c возможностью фильтрации и постраничной выборки.
+    Возвращает массив параметров сущностей для заполнения моделей или null.
+    - `<Entities>`:
+        - Contacts
+        - Companys
+        - Leads
+        - Tasks
+        - Notes
+        - Webhooks
+        - Widgets
+        - IncomingLeads
+        - IncomingLeadsSummary
+        - Pipelines
+        - Catalogs
+        - CatalogElements
+    - `$params` - параметры фильтрации и постраничной выборки.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при авторизации.
+    - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
+
+<a id="%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B"></a>
+### Дополнительные методы
+
+Дополнительные статические методы класса AmoAPI:
+
+- `static getInfo(string $with = '', ?string $subdomain = null) :array`  
     Возвращает информацию по аккаунту amoCRM.
     - `$with` - Разделенный запятыми список дополнительных параметров запроса.
-    - `$subdomain` - поддомен amoCRM. Если не указан, то используется поддомен, указанный при авторизации в методе AmoAPI::oAuth2() или AmoAPI::auth().
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при авторизации.
 
 - `static getLastResponse(bool $unescapeUnicode = true) :?string`  
     Возвращает последний ответ сервера amoCRM в сыром виде.
     - `$unescapeUnicode` - Декодировать символы UTF-8 \uXXXX в ответе сервера.
 
-<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm"></a>
-## Работа с сущностями amoCRM
+- `static request(string $query, string $type = 'GET', array $params = [], ?string $subdomain = null) :?array`
+    Выполняет запрос к серверу amoCRM в сыром виде.  
+    - `$query` - URL-путь с параметрами запроса.
+    - `$type` - метод запроса 'GET' или 'POST'.
+    - `$params` - параметры запроса.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при авторизации.
 
-Работа с сущностями amoCRM реализована через классы-модели. Базовым классом для них является \AmoCRM\AmoObject.
 
-- `AmoContact` Модель контакта.
-- `AmoCompany` Модель компании.
-- `AmoLead` Модель сделки.
-- `AmoNote` Модель примечания.
-- `AmoTask` Модель задачи.
-- `AmoCatalogElement` Модель элемента каталога.
 
-<a id="%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
-### Общие методы моделей
+<a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8"></a>
+### Примеры работы с контактами
 
-- `__construct(array $data = [])` Заполняет модель данными.
-- `fillById(int $id)` Заполняет модель данными по ID сущности.
-- `getParams() :array` Возвращает параметры модели.
-- `getCustomFields(array $ids) :array` Возвращает дополнительные поля сущности по массиву ID полей.
-- `getCustomFieldValueById(int $id)` Возвращает значение дополнительного поля сущности по ID поля.
-- `setCustomFields(array $params)` Устанавливает дополнительные поля сущности.
-- `addTags(array $tags)` Добавляет теги.
-- `delTags(array $tags)` Удаляет теги. 
-
-<a id="%D0%9A%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82"></a>
-### Контакт
-
-Статические методы класса \AmoCRM\AmoAPI для работы с контактами:
-
-- `static getAllContacts(array $params, ?string $subdomain = null, bool $returnResponse = false) :\Generator`
-    Загружает ВСЕ контакты amoCRM с возможностью фильтрации. Возвращает объект \Generator.
-    - `$params` - параметры фильтрации.
-    - `$subdomain` - поддомен amoCRM. Если не указан, то используется поддомен, указанный при авторизации в методе AmoAPI::oAuth2() или AmoAPI::auth().
-    - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров контактов.
-
-- `static getContacts(array $params, ?string $subdomain = null, bool $returnResponse = false) :?array`  
-    Загружает контакты amoCRM с возможностью фильтрации и постраничной выборки.
-    Возвращает массив параметров контактов для заполнения моделей контактов или null.
-    - `$params` - параметры фильтрации и постраничной выборки.
-    - `$subdomain` - поддомен amoCRM. Если не указан, то используется поддомен, указанный при авторизации в методе AmoAPI::oAuth2() или AmoAPI::auth().
-    - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров контактов.
-
-Методы класса \AmoCRM\AmoContact:
-
-- `addLeads(array $leads)` Привязывает сделки к контакту по ID сделок.
-- `addCustomers(array $customers)` Привязывает покупателей к контакту по ID покупателей.
-
-Примеры работы с контактами.
 ```php
 use AmoCRM\AmoAPI;
 use AmoCRM\AmoContact;
@@ -329,6 +388,7 @@ try {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
+
 
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80"></a>
 ## Автор
