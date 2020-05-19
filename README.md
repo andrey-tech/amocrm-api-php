@@ -79,7 +79,7 @@ try {
     // Авторизация
     AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode, $storeAll);
 
-    // Получение информации по аккаунту
+    // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
 
 } catch (\AmoCRM\AmoAPIException $e) {
@@ -103,7 +103,7 @@ try {
     // Если $storeAll = false при обмене кода авторизации на access и refresh токен
     // AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode = null, $storeAll);
 
-    // Получение информации по аккаунту
+    // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
 
 } catch (\AmoCRM\AmoAPIException $e) {
@@ -132,7 +132,7 @@ try {
     // Авторизация
     AmoAPI::auth($login, $hash, $subdomain);
 
-    // Получение информации по аккаунту
+    // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
 
 } catch (\AmoCRM\AmoAPIException $e) {
@@ -220,10 +220,6 @@ try {
 - `save(bool $returnResponse = false)` Сохраняет объект модели в amoCRM и возвращает ID сущности. 
     - `$returnResponse` - вернуть ответ сервера вместо ID сущности.
 
-По умолчанию модели создаются для того поддомена amoCRM, который был указан при последний авторизации.
-Переключение поддомена amoCRM может быть выполнено в конструкторе `__construct($data = [ 'subdomain' => 'testsubdomain2' ])`.
-- через публичное свойство `$subdomain` объекта модели.
-
 <a id="%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
 ### Список методов моделей
 
@@ -307,8 +303,14 @@ try {
 Дополнительные статические методы класса AmoAPI:
 
 - `static getAccount(string $with = '', ?string $subdomain = null) :array`  
-    Возвращает информацию по аккаунту amoCRM.
-    - `$with` - Разделенный запятыми список дополнительных параметров запроса.
+    Возвращает информацию об аккаунте amoCRM.
+    - `$with` - Разделенный запятыми список дополнительных параметров запроса:
+        - custom_fields
+        - users
+        - pipelines
+        - groups
+        - note_types
+        - task_types
     - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
 
 - `static getLastResponse(bool $unescapeUnicode = true) :?string`  
@@ -316,7 +318,7 @@ try {
     - `$unescapeUnicode` - Декодировать символы UTF-8 \uXXXX в ответе сервера.
 
 - `static request(string $query, string $type = 'GET', array $params = [], ?string $subdomain = null) :?array`
-    Выполняет запрос к серверу amoCRM в сыром виде.  
+    Позволяет выполнить запрос к серверу amoCRM в сыром виде.  
     - `$query` - URL-путь с параметрами запроса.
     - `$type` - метод запроса 'GET' или 'POST'.
     - `$params` - параметры запроса.
