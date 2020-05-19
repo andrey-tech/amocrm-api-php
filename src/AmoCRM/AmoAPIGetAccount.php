@@ -1,9 +1,9 @@
 <?php
 /**
- * Трейт AmoAPIGetInfo. Содержит методы для получения информации об аккаунте amoCRM.
+ * Трейт AmoAPIGetAccount. Содержит методы для получения информации об аккаунте.
  *
  * @author    andrey-tech
- * @copyright 2019-2020 andrey-tech
+ * @copyright 2020 andrey-tech
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
@@ -18,7 +18,7 @@ declare(strict_types = 1);
 
 namespace AmoCRM;
 
-trait AmoAPIGetInfo
+trait AmoAPIGetAccount
 {
     /**
      * Возвращает информацию по аккаунту
@@ -26,7 +26,7 @@ trait AmoAPIGetInfo
      * @param string $subdomian Поддомен amoCRM
      * @return array|null
      */
-    public static function getInfo(string $with = '', $subdomain = null)
+    public static function getAccount(string $with = '', $subdomain = null)
     {
         $params = empty($with) ? [] : [ 'with' => $with ];
         return self::request('/api/v2/account', 'GET', $params, $subdomain);

@@ -3,13 +3,14 @@
  * Класс AmoNote. Содержит методы для работы с примечаниями.
  *
  * @author    andrey-tech
- * @copyright 2019 andrey-tech
+ * @copyright 2020 andrey-tech
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
- * v1.0.0 (24.04.2019) Начальный релиз.
+ * v1.0.0 (24.04.2019) Первоначальная версия
+ * v1.1.0 (19.05.2020) Добавлена поддержка параметра $subdomain в конструктор
  *
  */
 
@@ -66,11 +67,12 @@ class AmoNote extends AmoObject
 
     /**
      * Конструктор
-     * @param array $data
+     * @param array $data Параметры модели
+     * @param string $subdomain Поддомен amoCRM
      */
-    public function __construct(array $data = [])
+    public function __construct(array $data = [], $subdomain = null)
     {
-        parent::__construct($data);
+        parent::__construct($data, $subdomain);
     }
 
     /**

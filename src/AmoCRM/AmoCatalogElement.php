@@ -3,13 +3,14 @@
  * Класс AmoCatalogElement. Содерит методы для работы с элементами каталога.
  *
  * @author    andrey-tech
- * @copyright 2019 andrey-tech
+ * @copyright 2020 andrey-tech
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 0.1.0
+ * @version 1.1.0
  *
  * v1.0.0 (19.08.2019) Начальный релиз.
+ * v1.1.0 (19.05.2020) Добавлена поддержка параметра $subdomain в конструктор
  *
  */
 
@@ -33,15 +34,12 @@ class AmoCatalogElement extends AmoObject
 
     /**
      * Конструктор
-     * @param array $data
+     * @param array $data Параметры модели
+     * @param string $subdomain Поддомен amoCRM
      */
-    public function __construct(array $data = [])
+    public function __construct(array $data = [], $subdomain = null)
     {
-        if (isset($data['subdomain'])) {
-            $this->subdomain = $data['subdomain'];
-            unset($data['subdomain']);
-        }
-        $this->fill($data);
+        parent::__construct($data, $subdomain);
     }
 
     /**

@@ -33,6 +33,7 @@
     - [Дополнительные методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
     - [Примеры работы с контактами](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8)
     - [Примеры работы с компаниями](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8)
+    - [Примеры работы с несколькими поддоменами amoCRM](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8-amocrm)
 - [Обработка исключений](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
@@ -79,7 +80,7 @@ try {
     AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode, $storeAll);
 
     // Получение информации по аккаунту
-    print_r(AmoAPI::getInfo());
+    print_r(AmoAPI::getAccount());
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
@@ -103,7 +104,7 @@ try {
     // AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode = null, $storeAll);
 
     // Получение информации по аккаунту
-    print_r(AmoAPI::getInfo());
+    print_r(AmoAPI::getAccount());
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
@@ -132,7 +133,7 @@ try {
     AmoAPI::auth($login, $hash, $subdomain);
 
     // Получение информации по аккаунту
-    print_r(AmoAPI::getInfo());
+    print_r(AmoAPI::getAccount());
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
@@ -153,7 +154,7 @@ try {
     AmoAPI::oAuth2($subdomain1, $clientId1, $clientSecret1, $redirectUri1, $authCode1);
 
     // Авторизация в поддомене 2
-    AmoAPI::oAuth2($subdomain2, $clientId2, $clientSecret2, $redirectUri2, $authCode2);
+    AmoAPI::auth($login2, $hash2, $subdomain2);
 
     // Авторизация в поддомене N
     AmoAPI::oAuth2($subdomainN, $clientIdN, $clientSecretN, $redirectUriN, $authCodeN);
@@ -207,7 +208,8 @@ try {
 
 Базовый класс моделей (AmoObject) содержит следующие общие методы:
 
-- `__construct(array $data = [])` Создает новый объект модели и заполняет модель данными.
+- `__construct(array $data = [], ?string $subdomain = null)` Создает новый объект модели и заполняет данными.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
 - `fillById(int $id)` Заполняет модель данными по ID сущности.
 - `getParams() :array` Возвращает текущие параметры модели.
 - `getCustomFields(array|int $ids) :array` Возвращает дополнительные поля по ID полей.
@@ -216,12 +218,10 @@ try {
 - `addTags(array|string $tags)` Добавляет теги.
 - `delTags(array|string $tags)` Удаляет теги. 
 - `save(bool $returnResponse = false)` Сохраняет объект модели в amoCRM и возвращает ID сущности. 
-    - `$returnResponse` Вернуть ответ сервера вместо ID сущности.
+    - `$returnResponse` - вернуть ответ сервера вместо ID сущности.
 
-По умолчанию во всех методах используется поддомен amoCRM, указанный при последний авторизации.
-Переключение поддомена amoCRM может быть выполнено:
-
-- в конструкторе `__construct($data = [ 'subdomain' => 'testsubdomain2' ])`.
+По умолчанию модели создаются для того поддомена amoCRM, который был указан при последний авторизации.
+Переключение поддомена amoCRM может быть выполнено в конструкторе `__construct($data = [ 'subdomain' => 'testsubdomain2' ])`.
 - через публичное свойство `$subdomain` объекта модели.
 
 <a id="%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
@@ -260,11 +260,11 @@ try {
         - Notes
         - CatalogElements
     - `$params` - параметры фильтрации.
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при последний авторизации.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последний авторизации.
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
 
 - `static get<Entities>(array $params, ?string $subdomain = null, bool $returnResponse = false) :?array`  
-    Загружает сущности заданного типа <Entities\> c возможностью фильтрации и постраничной выборки.
+    Загружает сущности заданного типа <Entities\> c возможностью фильтрации и постраничной выборки.  
     Возвращает массив параметров сущностей для заполнения моделей или null.
     - `<Entities>`:
         - Contacts
@@ -280,7 +280,7 @@ try {
         - Catalogs
         - CatalogElements
     - `$params` - параметры фильтрации и постраничной выборки.
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при авторизации.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
@@ -306,10 +306,10 @@ try {
 
 Дополнительные статические методы класса AmoAPI:
 
-- `static getInfo(string $with = '', ?string $subdomain = null) :array`  
+- `static getAccount(string $with = '', ?string $subdomain = null) :array`  
     Возвращает информацию по аккаунту amoCRM.
     - `$with` - Разделенный запятыми список дополнительных параметров запроса.
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при авторизации.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
 
 - `static getLastResponse(bool $unescapeUnicode = true) :?string`  
     Возвращает последний ответ сервера amoCRM в сыром виде.
@@ -320,7 +320,7 @@ try {
     - `$query` - URL-путь с параметрами запроса.
     - `$type` - метод запроса 'GET' или 'POST'.
     - `$params` - параметры запроса.
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при авторизации.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
 
 
 
@@ -377,12 +377,12 @@ try {
 
     // Обновление существующего контакта и получение ответа сервера amoCRM
     $contact2 = new AmoContact([
-        'id'         => 12345679,
-        'name'       => 'Улоф Пальме',
-        'first_name' => 'Улоф',
-        'last_name'  => 'Пальме'
+        'id'         => 12300344,
+        'name'       => 'Улоф Йоаким Пальме'
     ]);
-    $response = $contact1->save($returnResponse = true);
+    $contact2->first_name = 'Улоф';
+    $contact2->last_name  = 'Пальме';
+    print_r($contact1->save($returnResponse = true));
 
     // Пакетное добавление и/или обновление контактов
     $items = AmoAPI::saveObjects([ $contact1, $contact2 ]);
@@ -408,16 +408,16 @@ try {
     // -------------------------------------------------------------------------
 
     // Привязка сделок к контакту по ID сделок
-    $contact3->addLeads([ 12380925, 12380925 ]);
+    $contact3->addLeads([ 12380925, 12364352 ]);
 
     // Привязка покупателей к контакту по ID покупателей
     $contact3->addCustomers([ 1237374, 1239658 ]);
 
     // Добавление тегов к контакту
-    $contact3->addTags([ 'тег1', 'тег2' ]);
+    $contact3->addTags([ 'сотрудник', 'стажер' ]);
 
-    // Удаление тегов к контакту
-    $contact3->delTags([ 'тег3', 'тег4' ]);
+    // Удаление тегов контакта
+    $contact3->delTags('курьер');
 
     // Сохранение контакта
     $contact3->save();
@@ -498,13 +498,13 @@ try {
     $company1->addContacts(12375435);
 
     // Привязка сделки
-    $company1->addLeads(123496903);
+    $company1->addLeads(12349693);
 
     // Привязка покупателя
     $company1->addCustomers(1237374);
 
     // Добавление тега
-    $company1->addTags('ООО');
+    $company1->addTags('Акционер');
 
     // Добавление компании и получение ее ID
     $companyId = $company1->save();
@@ -558,6 +558,47 @@ try {
 }
 ```
 
+<a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8-amocrm"></a>
+### Примеры работы с несколькими поддоменами amoCRM
+
+```php
+use AmoCRM\AmoAPI;
+use AmoCRM\AmoContact;
+
+try {
+    // Авторизация в поддомене 1
+    AmoAPI::oAuth2($subdomain1, $clientId1, $clientSecret1, $redirectUri1, $authCode1);
+
+    // Авторизация в поддомене 2
+    AmoAPI::oAuth2($subdomain2, $clientId2, $clientSecret2, $redirectUri2, $authCode2);
+
+    // Загрузка компаний из поддомена 1
+    $items1 = AmoAPI::getCompanies([
+        'responsible_user_id' => 12357492
+    ], $subdomain1);
+
+    // Загрузка всех компаний из поддомена 2
+    $generator2 = AmoAPI::getAllCompanies([
+        'query' => 'OOO'
+    ], $subdomain2);
+
+    // Создание новой компании для поддомена 1
+    $company1 = new AmoCompany([
+        'name' => 'ООО Абракадабра',
+    ], $subdomain1);
+
+    // Обновление существущей компании для поддомена 1
+    $company2 = new AmoCompany([], $subdomain1);
+    $company2->fillById(12389423);
+    $company2->name = 'OOO Розенталь';
+
+    // Пакетное сохранение компаний для поддомена 1
+    AmoAPI::saveObjects([ $company1, $company2 ], $subomain1);
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
 
 <a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9"></a>
 ## Обработка исключений

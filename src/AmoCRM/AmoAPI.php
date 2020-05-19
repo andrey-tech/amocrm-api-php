@@ -29,8 +29,8 @@ class AmoAPI
     // Трейт, формирующий GET/POST запросы к amoCRM
     use AmoAPIRequest;
 
-    // Трейт методов для получения информации по сущностям
-    use AmoAPIGetInfo;
+    // Трейт методов для получения информации об аккаунте
+    use AmoAPIGetAccount;
 
     // Трейт методов для получения сущностей
     use AmoAPIGetEntities;
