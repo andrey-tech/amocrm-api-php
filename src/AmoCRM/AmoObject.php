@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.4.0
+ * @version 1.5.0
  *
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.0.1 (09.08.2019) Добавлено 5 секунд к updated_at
@@ -17,6 +17,7 @@
  * v1.2.1 (22.02.2020) Удален метод delete(), как более не поддерживаемый
  * v1.3.0 (10.05.2020) Добавлена проверка ответа сервера в метод save(). Добавлено свойство request_id
  * v1.4.0 (16.05.2020) Добавлена параметр $returnResponse в метод save()
+ * v1.5.0 (19.05.2020) Свойство $subdomain теперь является публичным
  *
  */
 
@@ -106,7 +107,7 @@ abstract class AmoObject
      * Текущий поддомен для доступа к API
      * @var string
      */
-    protected $subdomain;
+    public $subdomain;
 
     /**
      * Конструктор
@@ -305,7 +306,7 @@ abstract class AmoObject
      * @return array|int
      *
      */
-    public function save($returnResponse = false)
+    public function save(bool $returnResponse = false)
     {
         if (isset($this->id)) {
             $params = [ 'update' => [ $this->getParams() ] ];

@@ -3,7 +3,7 @@
 ![amoCRM logo](./assets/amocrm-logo.png)
 
 Обертка на PHP для работы с REST API [amoCRM](https://www.amocrm.ru) с авторизацией по протоколу oAuth 2.0
-или по API-ключу пользователя и троттлингом запросов.
+или по API-ключу пользователя и троттлингом запросов к серверу.
 
 Данная библиотека была создана для удовлетворения
 [новых требований amoCRM](https://www.amocrm.ru/developers/content/integrations/requirements),
@@ -23,13 +23,17 @@
         - [Обмен кода авторизации на access токен и refresh токен](#%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD)
         - [Получение нового access токена по его истечении](#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8)
     - [Авторизация по API-ключу пользователя \(устаревший метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
+    - [Авторизация в нескольких поддоменах amoCRM](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D1%85-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D1%85-amocrm)
 - [Дополнительные параметры](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B)
 - [Работа с сущностями amoCRM](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm)
     - [Общие методы моделей](#%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
     - [Список методов моделей](#%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
     - [Методы для загрузки сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
+    - [Методы для пакетного сохранения сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Дополнительные методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
     - [Примеры работы с контактами](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8)
+    - [Примеры работы с компаниями](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8)
+- [Обработка исключений](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
 
@@ -135,6 +139,30 @@ try {
 }
 ```
 
+<a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D1%85-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D1%85-amocrm"></a>
+### Авторизация в нескольких поддоменах amoCRM
+
+Библиотека позволяет одновременно работать с несколькими поддоменами amoCRM.
+Для этого необходимо последовательно выполнить авторизацию в каждом их поддоменов.
+
+```php
+use \AmoCRM\AmoAPI;
+
+try {
+    // Авторизация в поддомене 1
+    AmoAPI::oAuth2($subdomain1, $clientId1, $clientSecret1, $redirectUri1, $authCode1);
+
+    // Авторизация в поддомене 2
+    AmoAPI::oAuth2($subdomain2, $clientId2, $clientSecret2, $redirectUri2, $authCode2);
+
+    // Авторизация в поддомене N
+    AmoAPI::oAuth2($subdomainN, $clientIdN, $clientSecretN, $redirectUriN, $authCodeN);
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
 <a id="%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B"></a>
 ## Дополнительные параметры
 
@@ -179,34 +207,42 @@ try {
 
 Базовый класс моделей (AmoObject) содержит следующие общие методы:
 
-- `__construct(array $data = [])` Создает новую модель и заполняет данными.
+- `__construct(array $data = [])` Создает новый объект модели и заполняет модель данными.
 - `fillById(int $id)` Заполняет модель данными по ID сущности.
 - `getParams() :array` Возвращает текущие параметры модели.
-- `getCustomFields(array $ids) :array` Возвращает дополнительные поля по массиву ID полей.
+- `getCustomFields(array|int $ids) :array` Возвращает дополнительные поля по ID полей.
 - `getCustomFieldValueById(int $id)` Возвращает значение дополнительного поля по ID поля.
 - `setCustomFields(array $params)` Устанавливает значения дополнительных полей.
-- `addTags(array $tags)` Добавляет теги.
-- `delTags(array $tags)` Удаляет теги. 
+- `addTags(array|string $tags)` Добавляет теги.
+- `delTags(array|string $tags)` Удаляет теги. 
+- `save(bool $returnResponse = false)` Сохраняет объект модели в amoCRM и возвращает ID сущности. 
+    - `$returnResponse` Вернуть ответ сервера вместо ID сущности.
+
+По умолчанию во всех методах используется поддомен amoCRM, указанный при последний авторизации.
+Переключение поддомена amoCRM может быть выполнено:
+
+- в конструкторе `__construct($data = [ 'subdomain' => 'testsubdomain2' ])`.
+- через публичное свойство `$subdomain` объекта модели.
 
 <a id="%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
 ### Список методов моделей
 
 - `AmoContact` Модель контакта.
-    - `addLeads(array $id)` Привязывает сделки по ID сделок.
-    - `addCustomers(array $id)` Привязывает покупателей по ID покупателей.
+    - `addLeads(array|int $id)` Привязывает сделки по ID.
+    - `addCustomers(array|int $id)` Привязывает покупателей по ID.
 
 - `AmoCompany` Модель компании.
-    - `addLeads(array $id)` Привязывает сделки по ID сделок.
-    - `addContacts(array $id)` Привязывает контакты по ID контактов.
-    - `addCustomers(array $id)` Привязывает покупателей по ID покупателей.
+    - `addLeads(array|int $id)` Привязывает сделки по ID.
+    - `addContacts(array|int $id)` Привязывает контакты по ID.
+    - `addCustomers(array|int $id)` Привязывает покупателей по ID.
 
 - `AmoLead` Модель сделки.
-    - `addContacts(array $id)` Привязывает контакты по ID контактов.
-    - `setCatalogElements(int $id)` Устанавливает элементы каталога по ID элементов.
+    - `addContacts(array|int $id)` Привязывает контакты по ID.
+    - `setCatalogElements(int $id)` Устанавливает элементы каталога по ID.
 
 - `AmoTask` Модель задачи.
-    - `addContact(int $id)` Привязывает контакт по ID контакта.
-    - `addLead(int $id)` Привязывает сделку по ID сделки.
+    - `addContact(int $id)` Привязывает контакт по ID.
+    - `addLead(int $id)` Привязывает сделку по ID.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для загрузки сущностей
@@ -224,7 +260,7 @@ try {
         - Notes
         - CatalogElements
     - `$params` - параметры фильтрации.
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при авторизации.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при последний авторизации.
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
 
 - `static get<Entities>(array $params, ?string $subdomain = null, bool $returnResponse = false) :?array`  
@@ -246,6 +282,24 @@ try {
     - `$params` - параметры фильтрации и постраничной выборки.
     - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при авторизации.
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
+
+<a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
+### Методы для пакетного сохранения сущностей
+
+Класс AmoAPI содержит статический метод для пакетного сохранения (добавления или обновления) за один запрос до 500
+сущностей различного типа для одного поддомена amoCRM:
+
+- `static saveObjects(array $amoObjects, ?string $subdomain = null, bool $returnResponses = false) :array`  
+    Добавляет или обновляет сущности в amoCRM. Возвращает массив параметров сущностей.
+    - `$amoObjects` Массив объектов моделей (не более 500 объектов одного типа):
+        - `AmoContact`
+        - `AmoCompany`
+        - `AmoLead`
+        - `AmoNote`
+        - `AmoTask`
+        - `AmoCatalogElement`
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при последний авторизации.
+    - `$returnResponses` Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей.
 
 <a id="%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B"></a>
 ### Дополнительные методы
@@ -290,7 +344,7 @@ try {
 
     // Загрузка контактов amoCRM с возможностью фильтрации и постраничной выборки
     $items = AmoAPI::getContacts([
-        'limit_rows'   => 500,
+        'limit_rows'   => 100,
         'limit_offset' => 1000
     ]);
     foreach ($items as $item) {
@@ -307,6 +361,7 @@ try {
 
     // Установка дополнительных полей
     $contact1->addCustomFields([
+        '6532343' => 41,
         '123456' => [[
             'value' => '+79451112233',
             'enum'  => 'WORK'
@@ -389,6 +444,128 @@ try {
 }
 ```
 
+<a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8"></a>
+### Примеры работы с компаниями
+
+```php
+use AmoCRM\AmoAPI;
+use AmoCRM\AmoCompany;
+
+try {
+    // Загрузка ВСЕХ компаний amoCRM с возможностью фильтрации
+    $generator = AmoAPI::getAllCompanies([
+        'query'        => 'OOO',
+        'limit_offset' => 12000        
+    ]);
+    foreach ($generator as $items) {
+        foreach ($items as $item) {
+            print_r($item);
+        }
+    }
+
+    // Загрузка компаний amoCRM с возможностью фильтрации и постраничной выборки
+    $items = AmoAPI::getCompanies([
+        'responsible_user_id' => 12357492,
+        'limit_rows'          => 250,
+        'limit_offset'        => 1000
+    ]);
+    foreach ($items as $item) {
+        print_r($item);
+    }
+
+    // -------------------------------------------------------------------------
+
+    // Создание новой компании
+    $company1 = new AmoCompany([
+        'name'                => 'ООО МММ',
+        'responsible_user_id' => 12358394,
+    ]);
+
+    // Установка дополнительных полей
+    $company1->addCustomFields([
+        '2390423' => 'Город Москва',
+        '123456' => [[
+            'value' => '+79457778899',
+            'enum'  => 'WORK'
+        ]],
+        '123467' => [[
+            'value' => 'mmm@example.com',
+            'enum'  => 'WORK'
+        ]]
+    ]);
+
+    // Привязка контакта
+    $company1->addContacts(12375435);
+
+    // Привязка сделки
+    $company1->addLeads(123496903);
+
+    // Привязка покупателя
+    $company1->addCustomers(1237374);
+
+    // Добавление тега
+    $company1->addTags('ООО');
+
+    // Добавление компании и получение ее ID
+    $companyId = $company1->save();
+
+    // Обновление существующей компании и получение ответа сервера amoCRM
+    $company2 = new AmoCompany([
+        'id'         => 12375435,
+        'created_by' => 12396034,
+        'name'       => 'ООО Рога и Копыта',
+    ]);
+    $response = $company2->save($returnResponse = true);
+
+    // Пакетное добавление и/или обновление компаний
+    $items = AmoAPI::saveObjects([ $company1, $company2 ]);
+    foreach ($items as $item) {
+        print_r($item);
+    }
+
+    // -------------------------------------------------------------------------
+
+    // Заполнение модели компании по ID
+    $company3 = new AmoContact();
+    $company3->fillById(12375435);
+
+    // Получение всех параметров компании из модели
+    print_r($company3->getParams());
+
+    // Получение дополнительных полей компании по ID полей
+    print_r($company3->getCustomFields([ 123456, 123467, 2390423 ]));    
+
+    // Получение значения дополнительного поля компании по ID поля
+    print_r($company3->getCustomFieldValueById(2390423));
+
+    // -------------------------------------------------------------------------
+
+    $items = AmoAPI::getCompanies([
+        'responsible_user_id' => 12358394
+    ]);
+
+    // Пакетная привязка сделки к компаниям
+    $companies = [];
+    foreach ($items as $item) {
+        $companies[] = (new AmoCompany($item))->addLeads(12380925);
+    }
+
+    // Пакетное обновление компаний
+    AmoAPI::saveObjects($companies);
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
+
+<a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9"></a>
+## Обработка исключений
+
+Класс-исключение AmoAPIException содержит следующие вспомогательные методы:
+
+- `getErrors() :array` Возвращает массив сообщений об ошибках из ответа сервера amoCRM при возникновении исключения.
+- `getItems() :array` Возвращает массив параметров сущностей из ответа сервера amoCRM при возникновении исключения.
 
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80"></a>
 ## Автор
@@ -398,5 +575,4 @@ try {
 <a id="%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F"></a>
 ## Лицензия
 
-[The MIT License](https://github.com/andrey-tech/amocrm-api/blob/master/LICENSE)
-
+Данная библиотека распространяется на условиях лицензии [MIT](./LICENSE)
