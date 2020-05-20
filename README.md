@@ -33,6 +33,7 @@
     - [Дополнительные методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
     - [Примеры работы с контактами](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8)
     - [Примеры работы с компаниями](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8)
+    - [Примеры работы со сделками](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8)
     - [Примеры работы с несколькими поддоменами amoCRM](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8-amocrm)
 - [Обработка исключений](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
@@ -226,14 +227,20 @@ try {
 - `AmoContact` Модель контакта.
     - `addLeads(array|int $id)` Привязывает сделки по ID.
     - `addCustomers(array|int $id)` Привязывает покупателей по ID.
+    - `addCompany(int $id)` Привязывает компанию по ID.
+    - `getPhone()` Возвращает первый телефон контакта.
+    - `getEmail()` Возвращает первый e-mail контакта.
 
 - `AmoCompany` Модель компании.
     - `addLeads(array|int $id)` Привязывает сделки по ID.
     - `addContacts(array|int $id)` Привязывает контакты по ID.
     - `addCustomers(array|int $id)` Привязывает покупателей по ID.
+    - `getPhone()` Возвращает первый телефон компании.
+    - `getEmail()` Возвращает первый e-mail компании.
 
 - `AmoLead` Модель сделки.
-    - `addContacts(array|int $id)` Привязывает контакты по ID.
+    - `addContacts(array|int $id)` Привязывает контакты по ID ([не более 40 контактов у одной сделки](https://www.amocrm.ru/developers/content/api/leads)).
+    - `addCompany(int $id)` Привязывает компанию по ID.
     - `setCatalogElements(int $id)` Устанавливает элементы каталога по ID.
 
 - `AmoTask` Модель задачи.
@@ -334,7 +341,7 @@ use AmoCRM\AmoAPI;
 use AmoCRM\AmoContact;
 
 try {
-    // Загрузка ВСЕХ контактов amoCRM с возможностью фильтрации
+    // Загрузка ВСЕХ контактов с возможностью фильтрации
     $generator = AmoAPI::getAllContacts([
         'query' => 'Ганс'
     ]);
@@ -344,7 +351,7 @@ try {
         }
     }
 
-    // Загрузка контактов amoCRM с возможностью фильтрации и постраничной выборки
+    // Загрузка контактов с возможностью фильтрации и постраничной выборки
     $items = AmoAPI::getContacts([
         'limit_rows'   => 100,
         'limit_offset' => 1000
@@ -374,7 +381,7 @@ try {
         ]]
     ]);
 
-    // Добавление контакта и получение его ID
+    // Сохранение контакта и получение его ID
     $contact1Id = $contact1->save();
 
     // Обновление существующего контакта и получение ответа сервера amoCRM
@@ -430,12 +437,10 @@ try {
         'responsible_user_id' => 12373452
     ]);
 
-    // Пакетная привязка сделки к контаткам
+    // Пакетная привязка сделки к контактам
     $contacts = [];
     foreach ($items as $item) {
-        $contact = new AmoContact($item);
-        $contact->addLeads(12380925);
-        $contacts[] = $contact;
+        $contacts[] = (new AmoContact($item))->addLeads(12380925);
     }
 
     // Пакетное обновление контактов
@@ -454,7 +459,7 @@ use AmoCRM\AmoAPI;
 use AmoCRM\AmoCompany;
 
 try {
-    // Загрузка ВСЕХ компаний amoCRM с возможностью фильтрации
+    // Загрузка ВСЕХ компаний с возможностью фильтрации
     $generator = AmoAPI::getAllCompanies([
         'query'        => 'OOO',
         'limit_offset' => 12000        
@@ -465,7 +470,7 @@ try {
         }
     }
 
-    // Загрузка компаний amoCRM с возможностью фильтрации и постраничной выборки
+    // Загрузка компаний с возможностью фильтрации и постраничной выборки
     $items = AmoAPI::getCompanies([
         'responsible_user_id' => 12357492,
         'limit_rows'          => 250,
@@ -508,7 +513,7 @@ try {
     // Добавление тега
     $company1->addTags('Акционер');
 
-    // Добавление компании и получение ее ID
+    // Сохранение компании и получение ее ID
     $companyId = $company1->save();
 
     // Обновление существующей компании и получение ответа сервера amoCRM
@@ -528,7 +533,7 @@ try {
     // -------------------------------------------------------------------------
 
     // Заполнение модели компании по ID
-    $company3 = new AmoContact();
+    $company3 = new AmoCompany();
     $company3->fillById(12375435);
 
     // Получение всех параметров компании из модели
@@ -549,11 +554,123 @@ try {
     // Пакетная привязка сделки к компаниям
     $companies = [];
     foreach ($items as $item) {
-        $companies[] = (new AmoCompany($item))->addLeads(12380925);
+        $companies[] = (new AmoCompany($item))->addLeads([ 12380925 ]);
     }
 
     // Пакетное обновление компаний
     AmoAPI::saveObjects($companies);
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
+<a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8"></a>
+### Примеры работы со сделками
+
+```php
+use AmoCRM\AmoAPI;
+use AmoCRM\AmoLeads;
+
+try {
+    // Загрузка ВСЕХ сделок с возможностью фильтрации
+    $generator = AmoAPI::getAllLeads([
+        'responsible_user_id' => 12357492
+    ]);
+    foreach ($generator as $items) {
+        foreach ($items as $item) {
+            print_r($item);
+        }
+    }
+
+    // Загрузка сделок с возможностью фильтрации и постраничной выборки
+    $items = AmoAPI::getLeads([
+        'limit_rows'          => 250,
+        'limit_offset'        => 2000
+    ]);
+    foreach ($items as $item) {
+        print_r($item);
+    }
+
+    // -------------------------------------------------------------------------
+
+    // Создание новой сделки
+    $lead1 = new AmoLead([
+        'name'                => 'Заказ № 964023',
+        'responsible_user_id' => 12358394,
+        'pipeline'            => [ 'id' => 45232121 ],
+        'status_id'           => 142,
+        'sale'                => 15000
+   ]);
+
+    // Установка дополнительных полей
+    $lead1->addCustomFields([
+        '3434323' => 'Акционерное общество',
+        '3434327' => [ 1121, 1122, 1123 ]
+    ]);
+
+    // Привязка контакта
+    $lead1->addContacts(12375435);
+
+    // Привязка компании
+    $lead1->addCompany(12364643);
+
+    // Установка элементов каталога
+    $lead1->setCatalogElements([
+        93492 => [
+            9898: 10,
+            9899: 5
+        ]
+    ]);
+
+    // Добавление тега
+    $lead1->addTags('Акционер');
+
+    // Сохранение сделки и получение ее ID
+    $leadId = $lead1->save();
+
+    // Обновление существующей компании и получение ответа сервера amoCRM
+    $lead2 = new AmoLead([
+        'id'         => 123057838,
+        'sale'       => 175000
+    ]);
+    $response = $lead2->save($returnResponse = true);
+
+    // Пакетное добавление и/или обновление сделок
+    $items = AmoAPI::saveObjects([ $lead1, $lead2 ]);
+    foreach ($items as $item) {
+        print_r($item);
+    }
+
+    // -------------------------------------------------------------------------
+
+    // Заполнение модели сделки по ID
+    $lead3 = new AmoContact();
+    $lead3->fillById(12328958);
+
+    // Получение параметров сделки из модели
+    print_r($lead3->getParams());
+
+    // Получение дополнительных полей сделки по ID полей
+    print_r($lead3->getCustomFields([ 123456, 123467, 2390423 ]));    
+
+    // Получение значения дополнительного поля сделки по ID поля
+    print_r($lead3->getCustomFieldValueById(2390423));
+
+    // -------------------------------------------------------------------------
+
+    $leads = AmoAPI::getLeads([
+        'responsible_user_id' => 12358394
+    ]);
+
+    // Пакетная привязка компании к сделкам
+    $leads = [];
+    foreach ($items as $item) {
+        $leads[] = (new AmoLead($item))->addCompany(12380925);
+    }
+
+    // Пакетное обновление компаний
+    AmoAPI::saveObjects($leads);
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
@@ -618,4 +735,4 @@ try {
 <a id="%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F"></a>
 ## Лицензия
 
-Данная библиотека распространяется на условиях лицензии [MIT](./LICENSE)
+Данная библиотека распространяется на условиях лицензии [MIT](./LICENSE).

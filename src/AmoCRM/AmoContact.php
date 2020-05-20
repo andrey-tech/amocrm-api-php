@@ -7,11 +7,12 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.2.0
+ * @version 1.3.0
  *
  * v1.0.0 (24.04.2019) Начальный релиз.
  * v1.1.0 (16.05.2019) Добавлены свойства first_name, last_name
  * v1.2.0 (19.05.2020) Добавлена поддержка параметра $subdomain в конструктор
+ * v1.3.0 (20.05.2020) Добавлены методы addCompany(), getPhone(), getEmail()
  *
  */
 
@@ -145,25 +146,44 @@ class AmoContact extends AmoObject
     }
 
     /**
-     * Возвращает первый номер телефона из дополнительных полей контакта
-     * @return string | null
+     * Добавляет компанию
+     * @param int $companyId ID компании
      */
-    public function getPhoneNumber()
+    public function addCompany($companyId)
     {
-        $phoneCustomFields = array_filter(
-            $this->custom_fields,
-            function ($item) {
-                return (isset($item['code']) && ($item['code'] === 'PHONE'));
-            }
-        );
+        $this->company = [ 'id' => $companyId ];
+        return $this;
+    }
 
-        if (count($phoneCustomFields)) {
-            $field = reset($phoneCustomFields);
-            $result = $field['values'][0]['value'];
-        } else {
-            $result = null;
+    /**
+     * Возвращает первый номер телефона из дополнительных полей
+     * @return string|null
+     */
+    public function getPhone()
+    {
+        foreach ($this->custom_fields as $customField) {
+            if (! isset($customField['code']) || $customField['code'] !== 'PHONE') {
+                continue;
+            }
+            return $customField['values'][0]['value'];
         }
 
-        return $result;
+        return null;
+    }
+
+    /**
+     * Возвращает первый адрес электронной почты из дополнительных полей
+     * @return string|null
+     */
+    public function getEmail()
+    {
+        foreach ($this->custom_fields as $customField) {
+            if (! isset($customField['code']) || $customField['code'] !== 'EMAIL') {
+                continue;
+            }
+            return $customField['values'][0]['value'];
+        }
+
+        return null;
     }
 }

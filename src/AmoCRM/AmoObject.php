@@ -158,7 +158,7 @@ abstract class AmoObject
         }
 
         // Если обновление сущности, то добавляем обязательный параметр 'updated_at'.
-        // Добавляем 5 секунд для снижения вероятности возниконвения ошибки в amoCRM:
+        // Добавляем 5 секунд для снижения вероятности возникновения ошибки в amoCRM:
         // "Last modified date is older than in database"
         if (isset($this->id)) {
             $params['updated_at'] = time() + 5;
@@ -226,7 +226,7 @@ abstract class AmoObject
 
     /**
      * Устанавливет значение кастомным полям
-     * @param array $params = [ 'id' => '12345678' ]
+     * @param array $params Значения дополнительных полей
      * @return AmoObject
      */
     public function setCustomFields(array $params)

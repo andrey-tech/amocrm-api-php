@@ -7,11 +7,12 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.2.0
+ * @version 1.3.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (15.08.2019) Добавлен метод setCatalogElements
  * v1.2.0 (19.05.2020) Добавлена поддержка параметра $subdomain в конструктор
+ * v1.3.0 (20.05.2020) Добавлен метод addCompany()
  *
  */
 
@@ -147,13 +148,23 @@ class AmoLead extends AmoObject
     }
 
     /**
-     * Добавляет элементы каталога
+     * Устанавливает элементы каталога
      * @param array $catalogElements Массив каталогов с их элементами
      */
     public function setCatalogElements($catalogElements) :AmoLead
     {
         $this->catalog_elements = $catalogElements;
         
+        return $this;
+    }
+
+    /**
+     * Добавляет компанию
+     * @param int $companyId ID компании
+     */
+    public function addCompany($companyId)
+    {
+        $this->company = [ 'id' => $companyId ];
         return $this;
     }
 }
