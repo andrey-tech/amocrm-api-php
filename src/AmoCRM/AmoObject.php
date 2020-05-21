@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.5.0
+ * @version 1.6.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.0.1 (09.08.2019) Добавлено 5 секунд к updated_at
@@ -18,6 +18,7 @@
  * v1.3.0 (10.05.2020) Добавлена проверка ответа сервена в метод save(). Добавлено свойство request_id
  * v1.4.0 (16.05.2020) Добавлен параметр $returnResponse в метод save()
  * v1.5.0 (19.05.2020) Добавлен параметр $subdomain в конструктор
+ * v1.6.0 (21.05.2020) Добавлена поддержка параметра AmoAPI::$updatedAtDelta
  *
  */
 
@@ -158,10 +159,10 @@ abstract class AmoObject
         }
 
         // Если обновление сущности, то добавляем обязательный параметр 'updated_at'.
-        // Добавляем 5 секунд для снижения вероятности возникновения ошибки в amoCRM:
+        // Добавляем AmoAPI::$updatedAtDelta секунд для снижения вероятности возникновения ошибки amoCRM:
         // "Last modified date is older than in database"
         if (isset($this->id)) {
-            $params['updated_at'] = time() + 5;
+            $params['updated_at'] = time() + AmoAPI::$updatedAtDelta;
         }
 
         return $params;

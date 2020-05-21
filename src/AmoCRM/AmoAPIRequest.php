@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 2.2.0
+ * @version 2.4.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -25,6 +25,8 @@
  * v2.1.1 (10.04.2020) Уточнены сообщения об ошибках в request()
  * v2.1.2 (11.04.2020) Уточнены коды исключений в request()
  * v2.2.0 (16.05.2020) Добавлен вывод времени ответа сервера в отладочные сообщения
+ * v2.3.0 (21.05.2020) Добавлен вывод отладочных сообщений в лог файл
+ * v2.4.0 (21.05.2020) Добавлен параметр $updatedAtDelta
  *
  */
 
@@ -35,15 +37,21 @@ namespace AmoCRM;
 trait AmoAPIRequest
 {
     /**
-     * Флаг включения вывода отладочной информации
+     * Флаг включения вывода отладочной информации в лог файл
      * @var bool
      */
     public static $debug = false;
 
     /**
+     * Лог файл для сохранения отладочной информации (относительно каталога файла класса AmoAPI)
+     * @var string
+     */
+    public static $debugLogFile = 'temp/debug.log';
+
+    /**
      * Максимальное число запросов к amoCRM API в секунду
      * Не более 7 запросов в секунду!!!
-     * @var integer
+     * @var float
      */
     public static $throttle = 7;
 
@@ -54,7 +62,7 @@ trait AmoAPIRequest
     public static $verifySSLCerfificate = true;
 
     /**
-     * Файл SSL-сертификатов X.509 корневых удостоверяющих центров относительно каталога файла класса AmoAPI
+     * Файл SSL-сертификатов X.509 корневых удостоверяющих центров (относительно каталога файла класса AmoAPI)
      * (null - файл, указанный в настройках php.ini)
      * @var string | null
      */
@@ -77,6 +85,13 @@ trait AmoAPIRequest
      * @var integer
      */
     public static $amoTimeout = 30; // Секунды
+
+    /**
+     * Количество секунд, которое добавляется к параметру updated_at при обновлении сущности
+     * для снижения вероятности возникновения ошибки amoCRM: "Last modified date is older than in database"
+     * @var integer
+     */
+    public static $updatedAtDelta = 5; // Секунды
 
     /**
      * Соответствие кодов ошибок и сообщений аmoCRM
@@ -184,6 +199,12 @@ trait AmoAPIRequest
      * @var integer
      */
     protected static $requestCounter = 0;
+
+    /**
+     * Уникальное значение ID для метки в отладочных сообщениях
+     * @var string
+     */
+    protected static $uniqId;
 
     /**
      * Устанавливает параметры по умолчанию для библиотеки libcurl
@@ -501,7 +522,7 @@ trait AmoAPIRequest
             }
 
             $throttleTime = sprintf('%0.4f', $usleep/1E6);
-            self::debug('['. self::$requestCounter . "] THROTTLE {$throttleTime}s");
+            self::debug('['. self::$requestCounter . '] THROTTLE (' . self::$throttle . "): {$throttleTime}s");
             usleep($usleep);
         } while (false);
 
@@ -574,12 +595,35 @@ trait AmoAPIRequest
             return;
         }
 
-        // Проверка работы в командной строке
-        $isCommandLine = strpos(PHP_SAPI, 'cli') !== false;
-        if (! $isCommandLine) {
-            $message = "<pre>{$message}</pre>";
-        }
+        // Формируем строку времени логгирования
+        $dateTime = \DateTime::createFromFormat('U.u', sprintf('%.f', microtime(true)));
+        $timeZone = new \DateTimeZone(date_default_timezone_get());
+        $dateTime->setTimeZone($timeZone);
+        $timeString = $dateTime->format('Y-m-d H:i:s,u P');
 
-        echo $message . PHP_EOL . PHP_EOL;
+        $uniqId = self::getUniqId();
+        $message = "*** {$uniqId} [{$timeString}]" . PHP_EOL . $message . PHP_EOL . PHP_EOL;
+
+        // Формируем полное имя лог файла
+        $debugLogFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::$debugLogFile;
+        self::checkDir(dirname($debugLogFile));
+
+        // Записываем сообщение в лог файл
+        if (! file_put_contents($debugLogFile, $message, FILE_APPEND|LOCK_EX)) {
+            throw new AmoAPIException("Не удалось записать в лог файл " . $debugLogFile);
+        }
+    }
+
+    /**
+     * Возвращает уникальное значение ID для метки в отладочных сообщениях
+     * @param  int $length Длина ID
+     * @return string
+     */
+    protected static function getUniqId(int $length = 7) :string
+    {
+        if (! isset(self::$uniqId)) {
+            self::$uniqId = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, $length);
+        }
+        return self::$uniqId;
     }
 }
