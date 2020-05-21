@@ -31,11 +31,13 @@
     - [Методы для загрузки сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Методы для пакетного сохранения сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Дополнительные методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
-    - [Примеры работы с контактами](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8)
-    - [Примеры работы с компаниями](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8)
-    - [Примеры работы со сделками](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8)
-    - [Примеры работы с несколькими поддоменами amoCRM](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8-amocrm)
-- [Обработка исключений](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9)
+    - [Обработка исключений](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9)
+- [Примеры](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B)
+    - [Работа с контактами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8)
+    - [Работа с компаниями](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8)
+    - [Работа со сделками](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8)
+    - [Работа с событиями](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F%D0%BC%D0%B8)
+    - [Работа с несколькими поддоменами amoCRM](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8-amocrm)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
 
@@ -332,19 +334,31 @@ try {
     - `$params` - параметры запроса.
     - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
 
+<a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9"></a>
+### Обработка исключений
 
+Класс-исключение AmoAPIException содержит следующие вспомогательные методы:
 
-<a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8"></a>
-### Примеры работы с контактами
+- `getErrors() :array` Возвращает массив сообщений об ошибках из ответа сервера amoCRM.
+- `getItems() :array` Возвращает массив параметров сущностей из ответа сервера amoCRM.
+
+<a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B"></a>
+## Примеры
+
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8"></a>
+### Работа с контактами
 
 ```php
 use AmoCRM\AmoAPI;
 use AmoCRM\AmoContact;
 
-// Включение отладочного режима
+// Включение отладочного режима с сохранение запросов и ответов в лог файл
 AmoAPI::$debug = true;
 
 try {
+    // Авторизация
+    AmoAPI::oAuth2($subdomain);
+
     // Загрузка ВСЕХ контактов с возможностью фильтрации
     $generator = AmoAPI::getAllContacts([
         'query' => 'Ганс'
@@ -447,7 +461,7 @@ try {
         $contacts[] = (new AmoContact($item))->addLeads(12380925);
     }
 
-    // Пакетное обновление контактов
+    // Пакетное сохранение контактов
     AmoAPI::saveObjects($contacts);
 
 } catch (\AmoCRM\AmoAPIException $e) {
@@ -455,14 +469,17 @@ try {
 }
 ```
 
-<a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8"></a>
-### Примеры работы с компаниями
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8"></a>
+### Работа с компаниями
 
 ```php
 use AmoCRM\AmoAPI;
 use AmoCRM\AmoCompany;
 
 try {
+    // Авторизация
+    AmoAPI::oAuth2($subdomain);
+
     // Загрузка ВСЕХ компаний с возможностью фильтрации
     $generator = AmoAPI::getAllCompanies([
         'query'        => 'OOO',
@@ -561,7 +578,7 @@ try {
         $companies[] = (new AmoCompany($item))->addLeads([ 12380925 ]);
     }
 
-    // Пакетное обновление компаний
+    // Пакетное сохранение компаний
     AmoAPI::saveObjects($companies);
 
 } catch (\AmoCRM\AmoAPIException $e) {
@@ -569,14 +586,17 @@ try {
 }
 ```
 
-<a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8"></a>
-### Примеры работы со сделками
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8"></a>
+### Работа со сделками
 
 ```php
 use AmoCRM\AmoAPI;
-use AmoCRM\AmoLeads;
+use AmoCRM\AmoLead;
 
 try {
+    // Авторизация
+    AmoAPI::oAuth2($subdomain);
+
     // Загрузка ВСЕХ сделок с возможностью фильтрации
     $generator = AmoAPI::getAllLeads([
         'responsible_user_id' => 12357492
@@ -673,7 +693,7 @@ try {
         $leads[] = (new AmoLead($item))->addCompany(12380925);
     }
 
-    // Пакетное обновление компаний
+    // Пакетное сохранение сделок
     AmoAPI::saveObjects($leads);
 
 } catch (\AmoCRM\AmoAPIException $e) {
@@ -681,8 +701,76 @@ try {
 }
 ```
 
-<a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8-amocrm"></a>
-### Примеры работы с несколькими поддоменами amoCRM
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F%D0%BC%D0%B8"></a>
+### Работа с событиями
+
+```php
+use AmoCRM\AmoAPI;
+use AmoCRM\AmoNote;
+
+try {
+    // Авторизация
+    AmoAPI::oAuth2($subdomain);
+
+    // Загрузка ВСЕХ событий, привязанных к сделкам, с возможностью фильтрации
+    $generator = AmoAPI::getAllNotes([
+        'type'       => 'lead',
+        'note_type'  => AmoNote::COMMON_NOTETYPE
+    ]);
+    foreach ($generator as $items) {
+        foreach ($items as $item) {
+            print_r($item);
+        }
+    }
+
+    // Загрузка событий, привязанных к контактам, с возможностью фильтрации и постраничной выборки
+    $items = AmoAPI::getLeads([
+        'type'           => 'contact',
+        'limit_rows'     => 250,
+        'limit_offset'   => 2000
+    ]);
+    foreach ($items as $item) {
+        print_r($item);
+    }
+
+    // -------------------------------------------------------------------------
+    
+    // Создание нового события типа "обычное примечание", привязанного к сделке
+    $note = new AmoNote([
+        'element_id'   => 12328687,
+        'note_type'    => AmoNote::COMMON_NOTETYPE,
+        'element_type' => AmoNOTE::LEAD_TYPE,
+        'text'         => 'Текст примечания к сделке'
+    ]);
+
+    // Сохранение события и получение его ID
+    $noteId = $note->save();
+
+    // Обновление существующего события
+    $note2 = new AmoNote([
+        'id'   => 12300958,
+        'text' => 'Обновленный текст события'
+    ]);
+
+    // Заполнение модели события по ID и изменение текста события
+    $note3 = new AmoNote();
+    $note3->fillById(12347842);
+    $note3->text = 'Новый тест события';
+
+    // Получение параметров события из модели
+    print_r($note3->getParams());
+
+    // Пакетное сохранение событий
+    AmoAPI::saveObjects([ $note2, $note3 ]);
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+
+```
+
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8-amocrm"></a>
+### Работа с несколькими поддоменами amoCRM
 
 ```php
 use AmoCRM\AmoAPI;
@@ -722,15 +810,6 @@ try {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
-
-<a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9"></a>
-## Обработка исключений
-
-Класс-исключение AmoAPIException содержит следующие вспомогательные методы:
-
-- `getErrors() :array` Возвращает массив сообщений об ошибках из ответа сервера amoCRM при возникновении исключения.
-- `getItems() :array` Возвращает массив параметров сущностей из ответа сервера amoCRM при возникновении исключения.
-
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80"></a>
 ## Автор
 
