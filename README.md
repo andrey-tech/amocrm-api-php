@@ -231,17 +231,16 @@ try {
 - `save(bool $returnResponse = false)` Сохраняет объект модели в amoCRM и возвращает ID сущности. 
     - `$returnResponse` - вернуть ответ сервера вместо ID сущности.
 
-Класс `AmoObject` содержит следующие константы, определяющие типы связываемых сущностей:
-
-- `CONTACT_TYPE = 1` - контакт;
-- `LEAD_TYPE = 2` - сделка;
-- `COMPANY_TYPE = 3` - компания;
-- `TASK_TYPE = 4` - задача;
-- `CUSTOMER_TYPE = 12` - покупатель.
-
-
 <a id="%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%B8-%D0%BA%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
 ### Список методов и констант моделей
+
+- Базовый класс `AmoObject` содержит следующие константы, определяющие типы связываемых сущностей:
+
+    - `CONTACT_TYPE = 1` - контакт;
+    - `LEAD_TYPE = 2` - сделка;
+    - `COMPANY_TYPE = 3` - компания;
+    - `TASK_TYPE = 4` - задача;
+    - `CUSTOMER_TYPE = 12` - покупатель.
 
 - Класс `AmoContact` - модель контакта.
     - `addLeads(array|int $id)` Привязывает сделки по ID.
