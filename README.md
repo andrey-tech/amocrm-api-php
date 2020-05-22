@@ -27,9 +27,10 @@
 - [Дополнительные параметры](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BF%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B)
 - [Работа с сущностями amoCRM](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm)
     - [Общие методы моделей](#%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
-    - [Список методов моделей](#%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
+    - [Список методов и констант моделей](#%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%B8-%D0%BA%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
     - [Методы для загрузки сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Методы для пакетного сохранения сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
+    - [Методы для пакетного удаления сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Дополнительные методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
     - [Обработка исключений](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9)
 - [Примеры](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B)
@@ -37,7 +38,9 @@
     - [Работа с компаниями](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8)
     - [Работа со сделками](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8)
     - [Работа с событиями](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F%D0%BC%D0%B8)
-    - [Работа с несколькими поддоменами amoCRM](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8-amocrm)
+    - [Работа с задачами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0%D0%BC%D0%B8)
+    - [Работа с элементами списка](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0)
+    - [Работа с несколькими поддоменами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
 
@@ -56,11 +59,11 @@
 ### Авторизация по протоколу oAuth 2.0 ([актуальный метод](https://www.amocrm.ru/developers/content/oauth/oauth))
 
 - `static AmoAPI::oAuth2(string $subdomain, string $clientId, string $clientSecret, string $redirectUri, ?string $authCode = null, bool $storeAll = true) :array`  
-    - `$subdomain` - поддомен amoCRM.
-    - `$clientId` - ID интеграции.
-    - `$clientSecret` - секрет интеграции.
-    - `$redirectUri` - URI перенаправления.
-    - `$authCode` - код авторизации (временный ключ).
+    - `$subdomain` - поддомен amoCRM;
+    - `$clientId` - ID интеграции;
+    - `$clientSecret` - секрет интеграции;
+    - `$redirectUri` - URI перенаправления;
+    - `$authCode` - код авторизации (временный ключ);
     - `$storeAll` - сохранять $clientId, $clientSecret, $redirectUri вместе с полученными access и refresh токенами.
 
 <a id="%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD"></a>
@@ -118,8 +121,8 @@ try {
 ### Авторизация по API-ключу пользователя ([устаревший метод](https://www.amocrm.ru/developers/content/oauth/old))
 
 - `static AmoAPI::oauth(string $login, string $hash, string $subdomain) :array`
-    - `$login` - логин пользователя.
-    - `$hash` - API-ключ пользователя.
+    - `$login` - логин пользователя;
+    - `$hash` - API-ключ пользователя;
     - `$subdomain` - поддомен amoCRM.
 
 Пример авторизации по API-ключу пользователя.
@@ -159,6 +162,8 @@ try {
     // Авторизация в поддомене 2
     AmoAPI::auth($login2, $hash2, $subdomain2);
 
+    //...
+
     // Авторизация в поддомене N
     AmoAPI::oAuth2($subdomainN, $clientIdN, $clientSecretN, $redirectUriN, $authCodeN);
 
@@ -171,7 +176,7 @@ try {
 ## Дополнительные параметры
 
 Дополнительные параметры авторизации и соединения с сервером amoCRM могут быть установлены
-через статические свойства класса AmoAPI.
+через статические свойства класса `AmoAPI`.
 
 Свойство                | По умолчанию | Описание
 ----------------------- | ------------ | --------
@@ -198,19 +203,21 @@ try {
 Работа с сущностями amoCRM строится с помощью:
 
 - методов классов-моделей:
-    - `AmoContact` Модель контакта.
-    - `AmoCompany` Модель компании.
-    - `AmoLead` Модель сделки.
-    - `AmoNote` Модель события (примечания).
-    - `AmoTask` Модель задачи.
-    - `AmoCatalogElement` Модель элемента каталога.
+    - `AmoContact` - модель контакта;
+    - `AmoCompany` - модель компании;
+    - `AmoLead` - модель сделки;
+    - `AmoNote` - модель события (примечания);
+    - `AmoTask` - модель задачи;
+    - `AmoCatalogElement` - модель элемента списка.
 
-- дополнительных статических методов класса AmoAPI.
+- дополнительных статических методов класса `AmoAPI`.
+
+Параметры моделей доступны через публичные свойства и методы классов-моделей.
 
 <a id="%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
 ### Общие методы моделей
 
-Базовый класс моделей (AmoObject) содержит следующие общие методы:
+Базовый класс моделей  `AmoObject` содержит следующие общие методы:
 
 - `__construct(array $data = [], ?string $subdomain = null)` Создает новый объект модели и заполняет данными.
     - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
@@ -224,36 +231,66 @@ try {
 - `save(bool $returnResponse = false)` Сохраняет объект модели в amoCRM и возвращает ID сущности. 
     - `$returnResponse` - вернуть ответ сервера вместо ID сущности.
 
-<a id="%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
-### Список методов моделей
+Класс `AmoObject` содержит следующие константы, определяющие типы связываемых сущностей:
 
-- `AmoContact` Модель контакта.
+- `CONTACT_TYPE = 1` - контакт;
+- `LEAD_TYPE = 2` - сделка;
+- `COMPANY_TYPE = 3` - компания;
+- `TASK_TYPE = 4` - задача;
+- `CUSTOMER_TYPE = 12` - покупатель.
+
+
+<a id="%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%B8-%D0%BA%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
+### Список методов и констант моделей
+
+- Класс `AmoContact` - модель контакта.
     - `addLeads(array|int $id)` Привязывает сделки по ID.
     - `addCustomers(array|int $id)` Привязывает покупателей по ID.
     - `addCompany(int $id)` Привязывает компанию по ID.
     - `getPhone()` Возвращает первый телефон контакта.
     - `getEmail()` Возвращает первый e-mail контакта.
 
-- `AmoCompany` Модель компании.
+- Класс `AmoCompany` - модель компании.
     - `addLeads(array|int $id)` Привязывает сделки по ID.
     - `addContacts(array|int $id)` Привязывает контакты по ID.
     - `addCustomers(array|int $id)` Привязывает покупателей по ID.
     - `getPhone()` Возвращает первый телефон компании.
     - `getEmail()` Возвращает первый e-mail компании.
 
-- `AmoLead` Модель сделки.
+- Класс `AmoLead` - модель сделки.
     - `addContacts(array|int $id)` Привязывает контакты по ID ([не более 40 контактов у одной сделки](https://www.amocrm.ru/developers/content/api/leads)).
     - `addCompany(int $id)` Привязывает компанию по ID.
-    - `setCatalogElements(int $id)` Устанавливает элементы каталога по ID.
+    - `setCatalogElements(int $id)` Устанавливает элементы списка по ID.
 
-- `AmoTask` Модель задачи.
+- Класс `AmoTask` - модель задачи.
     - `addContact(int $id)` Привязывает контакт по ID.
     - `addLead(int $id)` Привязывает сделку по ID.
+
+    Константы, определяющие типы задач:
+    
+    - `CALL_TASKTYPE = 1` - звонок;
+    - `MEET_TASKTYPE = 2` - встреча;
+    - `MAIL_TASKTYPE = 3` - написать письмо.
+
+- Класс `AmoNote` - модель события (примечания).
+
+    Константы, определяющие типы событий:
+
+    - `LEAD_CREATED_NOTETYPE = 1` - создание сделки;
+    - `CONTACT_CREATED_NOTETYPE = 2` - создание контакта;
+    - `LEAD_STATUS_CHANGED_NOTETYPE = 3` - изменение статуса сделки;
+    - `COMMON_NOTETYPE = 4` - обычное примечание;
+    - `COMPANY_CREATED_NOTETYPE = 12` - создание компании;
+    - `TASK_RESULT_NOTETYPE = 13`  результат по задаче;
+    - `SYSTEM_NOTETYPE = 25` - системное сообщение;
+    - `SMS_IN_NOTETYPE = 102` - входящее SMS сообщение;
+    - `SMS_OUT_NOTETYPE = 103` - исходящее SMS сообщение.
+
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для загрузки сущностей
 
-Класс AmoAPI содержит следующие общие статические методы для загрузки сущностей:
+Класс `AmoAPI` содержит следующие общие статические методы для загрузки сущностей:
 
 - `static getAll<Entities> (array $params, ?string $subdomain = null, bool $returnResponse = false) :\Generator`
     Загружает ВСЕ сущности заданного типа <Entities\> c возможностью фильтрации.  
@@ -285,14 +322,14 @@ try {
         - Pipelines
         - Catalogs
         - CatalogElements
-    - `$params` - параметры фильтрации и постраничной выборки.
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
+    - `$params` - параметры фильтрации и постраничной выборки;
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации;
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для пакетного сохранения сущностей
 
-Класс AmoAPI содержит статический метод для пакетного сохранения (добавления или обновления) за один запрос до 500
+Класс `AmoAPI` содержит статический метод для пакетного сохранения (добавления или обновления) за один запрос до 500
 сущностей различного типа для одного поддомена amoCRM:
 
 - `static saveObjects(array $amoObjects, ?string $subdomain = null, bool $returnResponses = false) :array`  
@@ -304,13 +341,27 @@ try {
         - `AmoNote`
         - `AmoTask`
         - `AmoCatalogElement`
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при последний авторизации.
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при последний авторизации;
     - `$returnResponses` Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей.
+
+<a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
+### Методы для пакетного удаления сущностей
+
+Класс `AmoAPI` содержит статический метод для пакетного удаления списков и элементов списков:
+
+- `static delteObjects(array $amoObjects, ?string $subdomain = null, bool $returnResponses = false) :array`  
+    Удаляет сущности в amoCRM. Возвращает пустой массив параметров сущностей.
+    - `$amoObjects` Массив объектов моделей:
+        - `AmoCatalog`
+        - `AmoCatalogElement`
+    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при последний авторизации;
+    - `$returnResponses` Возвращать массив ответов сервера amoCRM вместо пустого массива параметров сущностей.
+
 
 <a id="%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B"></a>
 ### Дополнительные методы
 
-Дополнительные статические методы класса AmoAPI:
+Дополнительные статические методы класса `AmoAPI`:
 
 - `static getAccount(string $with = '', ?string $subdomain = null) :array`  
     Возвращает информацию об аккаунте amoCRM.
@@ -329,15 +380,15 @@ try {
 
 - `static request(string $query, string $type = 'GET', array $params = [], ?string $subdomain = null) :?array`
     Позволяет выполнить запрос к серверу amoCRM в сыром виде.  
-    - `$query` - URL-путь с параметрами запроса.
-    - `$type` - метод запроса 'GET' или 'POST'.
-    - `$params` - параметры запроса.
+    - `$query` - URL-путь с параметрами запроса;
+    - `$type` - метод запроса 'GET' или 'POST';
+    - `$params` - параметры запроса;
     - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
 
 <a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9"></a>
 ### Обработка исключений
 
-Класс-исключение AmoAPIException содержит следующие вспомогательные методы:
+Класс-исключение `AmoAPIException` содержит следующие вспомогательные методы:
 
 - `getErrors() :array` Возвращает массив сообщений об ошибках из ответа сервера amoCRM.
 - `getItems() :array` Возвращает массив параметров сущностей из ответа сервера amoCRM.
@@ -639,7 +690,7 @@ try {
     // Привязка компании
     $lead1->addCompany(12364643);
 
-    // Установка элементов каталога
+    // Установка элементов списка
     $lead1->setCatalogElements([
         93492 => [
             9898: 10,
@@ -766,11 +817,157 @@ try {
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
-
 ```
 
-<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8-amocrm"></a>
-### Работа с несколькими поддоменами amoCRM
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0%D0%BC%D0%B8"></a>
+### Работа с задачами
+
+```php
+use AmoCRM\AmoAPI;
+use AmoCRM\AmoTask;
+
+try {
+    // Авторизация
+    AmoAPI::oAuth2($subdomain);
+
+    // Загрузка ВСЕХ задач, привязанных к сделкам, с возможностью фильтрации
+    $generator = AmoAPI::getAllTasks([
+        'type'   => 'lead',
+        'filter' => [
+            'task_type' => [ AmoTask::CALL_TASKTYPE, AmoTask::MAIL_TASKTYPE ]
+        ]
+    ]);
+    foreach ($generator as $items) {
+        foreach ($items as $item) {
+            print_r($item);
+        }
+    }
+
+    // Загрузка задач, с возможностью фильтрации и постраничной выборки
+    $items = AmoAPI::getTasks([
+        'responsible_user_id' => 12381202,
+        'limit_rows'          => 100,
+        'limit_offset'        => 800
+    ]);
+    foreach ($items as $item) {
+        print_r($item);
+    }
+
+    // -------------------------------------------------------------------------
+
+    // Создание новой задачи типа "написать письмо", привязанной к контакту
+    $task = new AmoTask([
+        'task_type'        => AmoTASK::MAIL_TASKTYPE,
+        'element_type'     => AmoTask::CONTACT_TYPE,
+        'element_id'       => 12367433,
+        'text'             => 'Необходимо написать письмо',
+        'complete_till_at' => 1508706000
+    ]);
+
+    // Сохранение задачи и получение её ID
+    $taskId = $task->save();
+
+    // Обновление существующей задачи
+    $task2 = new AmoTask([
+        'id'   => 12311954,
+        'text' => 'Обновленный текст задачи'
+    ]);
+
+    // Привязка сделки к задаче по ID
+    $task2->addLead(12389536);
+
+    // Заполнение модели задачи по ID и изменение текста задачи
+    $task3 = new AmoTask();
+    $task3->fillById(12327872);
+    $task3->text = 'Новый тест события';
+
+    // Получение параметров задачи из модели
+    print_r($task3->getParams());
+
+    // Пакетное сохранение задач
+    AmoAPI::saveObjects([ $task2, $task3 ]);
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0"></a>
+### Работа с элементами списка
+
+```php
+use AmoCRM\AmoAPI;
+use AmoCRM\AmoCatalogElement;
+
+try {
+    // Авторизация
+    AmoAPI::oAuth2($subdomain);
+
+    // Загрузка ВСЕХ элементов заданного списка с возможностью фильтрации
+    $generator = AmoAPI::getAllCatalogElements([
+        'catalog_id' => 4422,
+        'term'   => 'Маркер'
+    ]);
+    foreach ($generator as $items) {
+        foreach ($items as $item) {
+            print_r($item);
+        }
+    }
+
+    // Загрузка элементов заданного списка с фильтрацией с постраничной выборкой
+    $items = AmoAPI::getCatalogElements([
+        'catalog_id' => 4422,
+        'term'       => 'Фломастер',
+        'page'       => 21
+    ]);
+    foreach ($items as $item) {
+        print_r($item);
+    }
+
+    // -------------------------------------------------------------------------
+
+    // Создание нового элемента каталога
+    $element = new AmoCatalogElement([
+        'catalog_id' => 4422,
+        'name'       => 'Ручка гелевая'
+    ]);
+
+    // Установка дополнительных полей
+    $element->addCustomFields([
+        '20423' => 'Артикул 14567323',
+        '24233' => 120
+    ]);
+
+    // Сохранение элемента списка и получение его ID
+    $elementId = $element->save();
+
+    // Обновление существующего элемента списка
+    $element2 = new AmoCatalogElement([
+        'id'   => 12312312,
+        'text' => 'Ручка перьевая'
+    ]);
+
+    // Заполнение модели элемента списка по ID и изменение имени элемента
+    $element3 = new AmoCatalogElement();
+    $element3->fillById(12398096);
+    $element3->name = 'Карандаш';
+
+    // Получение параметров элемента списка из модели
+    print_r($element3->getParams());
+
+    // Пакетное сохранение элементов
+    AmoAPI::saveObjects([ $element2, $element3 ]);
+
+    // Пакетное удаление элементов
+    AmoAPI::deleteObjects([ $element1, $element2 ]);
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8"></a>
+### Работа с несколькими поддоменами
 
 ```php
 use AmoCRM\AmoAPI;

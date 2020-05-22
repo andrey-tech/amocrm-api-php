@@ -12,12 +12,12 @@
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.1.0 (02.06.2019) Добавлены новые параметры, рефракторинг.
  * v1.2.0 (19.08.2019) Добавлен метод deleteObjects()
- * v1.2.1 (19.02.2020) Удален метод deleteObjects(), как неработающий
+ * v1.2.1 (19.02.2020) Удален метод deleteObjects()
  * v2.0.0 (06.04.2020) Добавлена авторизация по протоколу OAuth 2.0.
  *                     Добавлены трейты AmoAPIAuth, AmoAPIOAuth2
  * v2.1.0 (10.05.2020) Добавлена проверка ответа сервера в метод saveObjects()
  * v2.2.0 (16.05.2020) Добавлен метод getItems(). Добавлен параметр $returnResponses в метод saveObjects()
- *
+ * v2.3.0 (22.05.2020) Добавлен метод deleteObjects() для удаления списков и их элементов
  */
 
 declare(strict_types = 1);
@@ -55,9 +55,9 @@ class AmoAPI
     }
 
     /**
-     * Добавляет или обновляет объекты AmoObject в AmoCRM
-     * @param array | AmoObject $objects
-     * @param string $subdomain
+     * Сохраняет (добавляет или обновляет) объекты AmoObject
+     * @param array $amoObjects Массив объектов
+     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponses Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей
      * @return array
      */
@@ -83,6 +83,52 @@ class AmoAPI
             if (empty($response)) {
                 throw new AmoAPIException(
                     "Не удалось пакетно добавить/обновить сущности (пустой ответ) по запросу {$url}: " . print_r($params, true)
+                );
+            }
+            $responses[] = $response;
+        }
+
+        if (! $returnResponses) {
+            $items = [];
+            foreach ($responses as $response) {
+                $items = array_merge($items, self::getItems($response));
+            }
+            return $items;
+        }
+        
+        return $responses;
+    }
+
+    /**
+     * Удаляет объекты AmoObject (списки или элементы списков)
+     * @param array $amoObjects Массив объектов
+     * @param string $subdomain Поддомен amoCRM
+     * @param bool $returnResponses Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей
+     * @return array
+     */
+    // ------------------------------------------------------------------------
+    public static function deleteObjects($amoObjects, $subdomain = null, bool $returnResponses = false) :array
+    {
+        if (! is_array($amoObjects)) {
+            $amoObjects = [ $amoObjects ];
+        }
+        
+        $parameters = [];
+        foreach ($amoObjects as $object) {
+            $params = $object->getParams();
+            $id = $params['id'] ?? null;
+            if (! $id) {
+                throw new AmoAPIException("Для удаления сущности требуется свойство id: " . print_r($params, true));
+            }
+            $parameters[$object::URL]['delete'][] = $id;
+        }
+
+        $responses = [];
+        foreach ($parameters as $url => $params) {
+            $response = AmoAPI::request($url, 'POST', $params, $subdomain);
+            if (empty($response)) {
+                throw new AmoAPIException(
+                    "Не удалось пакетно удаилить сущности (пустой ответ) по запросу {$url}: " . print_r($params, true)
                 );
             }
             $responses[] = $response;

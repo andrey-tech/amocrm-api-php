@@ -7,11 +7,12 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.2.1
+ * @version 1.2.2
  *
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.2.0 (16.05.2020) Добавлен параметр $returnResponse во все методы
  * v1.2.1 (18.05.2020) Рефракторинг
+ * v1.2.2 (22.05.2020) Исправлен метод getAllCatalogElements()
  *
  */
 
@@ -148,23 +149,21 @@ trait AmoAPIGetAllEntities
         $subdomain = null,
         bool $returnResponse = false
     ) :\Generator {
-        $page = 0;
-
         while (true) {
-            $requestParams = array_merge($params, [ 'PAGEN_1' => $page ]);
-            $response = self::request('/api/v2/catalog_elements', 'GET', $requestParams, $subdomain);
-            if (is_null($response) || ! isset($response['_embedded'])) {
+            $params['page'] = $params['page'] ?? 1;
+            $response = self::request('/api/v2/catalog_elements', 'GET', $params, $subdomain);
+            if (is_null($response)) {
                 break;
             }
+
             $items = self::getItems($response);
+            if (is_null($items)) {
+                break;
+            }
 
             yield $returnResponse ? $response : $items;
 
-            if (count($items) < 50) {
-                break;
-            }
-
-            $page++;
+            $params['page']++;
         }
     }
 }
