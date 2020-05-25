@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 2.4.0
+ * @version 2.5.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -27,6 +27,7 @@
  * v2.2.0 (16.05.2020) Добавлен вывод времени ответа сервера в отладочные сообщения
  * v2.3.0 (21.05.2020) Добавлен вывод отладочных сообщений в лог файл
  * v2.4.0 (21.05.2020) Добавлен параметр $updatedAtDelta
+ * v2.5.0 (25.05.2020) Добавлена возможность вывода отладочных сообщений в STDOUT
  *
  */
 
@@ -44,7 +45,8 @@ trait AmoAPIRequest
 
     /**
      * Лог файл для сохранения отладочной информации (относительно каталога файла класса AmoAPI)
-     * @var string
+     * (null - вывод в STDOUT)
+     * @var string|null
      */
     public static $debugLogFile = 'temp/debug.log';
 
@@ -64,7 +66,7 @@ trait AmoAPIRequest
     /**
      * Файл SSL-сертификатов X.509 корневых удостоверяющих центров (относительно каталога файла класса AmoAPI)
      * (null - файл, указанный в настройках php.ini)
-     * @var string | null
+     * @var string|null
      */
     public static $SSLCertificateFile = 'cacert.pem';
 
@@ -88,8 +90,7 @@ trait AmoAPIRequest
 
     /**
      * Количество секунд, которое добавляется к параметру updated_at при обновлении сущности
-     * для снижения вероятности возникновения ошибки amoCRM: "Last modified date is older than in database"
-     * @var integer
+     * @var int
      */
     public static $updatedAtDelta = 5; // Секунды
 
@@ -234,7 +235,7 @@ trait AmoAPIRequest
         }
 
         // Включение или отключение проверки SSL-сертификата сервера amoCRM
-        if (self::$verifySSLCerfificate) {
+        if (! empty(self::$verifySSLCerfificate)) {
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
             if (self::$SSLCertificateFile) {
@@ -603,6 +604,12 @@ trait AmoAPIRequest
 
         $uniqId = self::getUniqId();
         $message = "*** {$uniqId} [{$timeString}]" . PHP_EOL . $message . PHP_EOL . PHP_EOL;
+
+        // Если лог файл не указан, то вывод в STDOUT
+        if (empty(self::$debugLogFile)) {
+            echo $message;
+            return;
+        }
 
         // Формируем полное имя лог файла
         $debugLogFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::$debugLogFile;

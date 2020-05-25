@@ -7,13 +7,14 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.2.0
+ * @version 1.2.1
  *
  * v1.0.0 (06.04.2020) Начальный релиз.
  * v1.1.0 (10.04.2020) Изменен алгоритм работы метода oAuth2().
  * v1.1.1 (14.04.2020) Метод loadTokens() теперь публичный
  *                     и может быть использован для проверки наличия токенов для поддомена amoCRM.
  * v1.2.0 (19.04.2020) Изменен метод oAuth2(): добавлен параметр storeAll.
+ * v1.2.1 (25.05.2020) Исправлено отладочное сообщение
  *
  */
 
@@ -325,7 +326,7 @@ trait AmoAPIOAuth2
         }
 
         // Отладочная информация
-        self::debug('['. self::$requestCounter . "] +++++ RE OAUTH2 TIMEOUT: " . self::$reOAuth2Timeout . ' s');
+        self::debug('['. self::$requestCounter . "] RE OAUTH2 TIMEOUT " . self::$reOAuth2Timeout . 's');
 
         // Выдерживаем таймаут перед повторным запросом
         sleep(self::$reOAuth2Timeout);

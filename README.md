@@ -39,7 +39,8 @@
     - [Работа со сделками](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8)
     - [Работа с событиями](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F%D0%BC%D0%B8)
     - [Работа с задачами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0%D0%BC%D0%B8)
-    - [Работа с элементами списка](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0)
+    - [Работа со списками \(каталогами\)](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0%D0%BC%D0%B8-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0%D0%BC%D0%B8)
+    - [Работа с элементами списков \(каталогов\)](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%BE%D0%B2-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2)
     - [Работа с несколькими поддоменами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
@@ -180,11 +181,11 @@ try {
 
 Свойство                | По умолчанию | Описание
 ----------------------- | ------------ | --------
-`$debug`                | false        | Включает отладочный режим с сохранением запросов и ответов в лог файл
-`$debugLogFile`         | temp/debug.log | Устанавливает лог файл отладочного режима
+`$debug`                | false        | Включает отладочный режим с сохранением запросов и ответов в лог файл или выводом в STDOUT
+`$debugLogFile`         | temp/debug.log | Устанавливает лог файл отладочного режима (null - вывод в STDOUT)
 `$throttle`             | 7            | Устанавливает максимальное число запросов к серверу amoCRM в секунду ([не более 7 запросов в секунду](https://www.amocrm.ru/developers/content/api/recommendations))
 `$verifySSLCerfificate` | true         | Включает проверку SSL/TLS-сертификата сервера amoCRM
-`$SSLCertificateFile`   | 'cacert.pem' | Устанавливает файл SSL/TLS-сертификатов X.509 корневых удостоверяющих центров (CA) в формате РЕМ
+`$SSLCertificateFile`   | 'cacert.pem' | Устанавливает файл SSL/TLS-сертификатов X.509 корневых удостоверяющих центров (CA) в формате РЕМ (null - использовать файл, указанный в параметре curl.cainfo файла php.ini)
 `$amoDomain`            | 'amocrm.ru'  | Устанавливает домен для запросов к API amoCRM
 `$amoUserAgent`         | 'amoCRM-API-client/2.0' | Устанавливает НТТР заголовок UserAgent в запросах
 `$amoTimeout`           | 30           | Устанавливает таймаут соединения с сервером аmoCRM, секунды
@@ -208,7 +209,8 @@ try {
     - `AmoLead` - модель сделки;
     - `AmoNote` - модель события (примечания);
     - `AmoTask` - модель задачи;
-    - `AmoCatalogElement` - модель элемента списка.
+    - `AmoCatalog` - модель списка (каталога);
+    - `AmoCatalogElement` - модель элемента списка (каталога).
 
 - дополнительных статических методов класса `AmoAPI`.
 
@@ -221,7 +223,8 @@ try {
 
 - `__construct(array $data = [], ?string $subdomain = null)` Создает новый объект модели и заполняет данными.
     - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
-- `fillById(int $id)` Заполняет модель данными по ID сущности.
+- `fillById(int $id, array $params = [])` Заполняет модель данными по ID сущности.
+    - `$params` - дополнительные параметры, передаваемые в GET-запросе к amoCRM.
 - `getParams() :array` Возвращает текущие параметры модели.
 - `getCustomFields(array|int $ids) :array` Возвращает дополнительные поля по ID полей.
 - `getCustomFieldValueById(int $id)` Возвращает значение дополнительного поля по ID поля.
@@ -333,7 +336,7 @@ try {
 
 - `static saveObjects(array $amoObjects, ?string $subdomain = null, bool $returnResponses = false) :array`  
     Добавляет или обновляет сущности в amoCRM. Возвращает массив параметров сущностей.
-    - `$amoObjects` Массив объектов моделей (не более 500 объектов одного типа):
+    - `$amoObjects` Массив объектов классов-моделей (не более 500 объектов одного типа):
         - `AmoContact`
         - `AmoCompany`
         - `AmoLead`
@@ -350,7 +353,7 @@ try {
 
 - `static delteObjects(array $amoObjects, ?string $subdomain = null, bool $returnResponses = false) :array`  
     Удаляет сущности в amoCRM. Возвращает пустой массив параметров сущностей.
-    - `$amoObjects` Массив объектов моделей:
+    - `$amoObjects` Массив объектов классов-моделей:
         - `AmoCatalog`
         - `AmoCatalogElement`
     - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при последний авторизации;
@@ -389,8 +392,8 @@ try {
 
 Класс-исключение `AmoAPIException` содержит следующие вспомогательные методы:
 
-- `getErrors() :array` Возвращает массив сообщений об ошибках из ответа сервера amoCRM.
-- `getItems() :array` Возвращает массив параметров сущностей из ответа сервера amoCRM.
+- `getErrors() :array` Возвращает массив сообщений об ошибках (errors) из ответа сервера amoCRM.
+- `getItems() :array` Возвращает массив параметров сущностей (items) из ответа сервера amoCRM.
 
 <a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B"></a>
 ## Примеры
@@ -891,8 +894,57 @@ try {
 }
 ```
 
-<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0"></a>
-### Работа с элементами списка
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0%D0%BC%D0%B8-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0%D0%BC%D0%B8"></a>
+### Работа со списками (каталогами)
+```php
+use AmoCRM\AmoAPI;
+use AmoCRM\AmoCatalog;
+
+try {
+    // Авторизация
+    AmoAPI::oAuth2($subdomain);
+
+    // Загрузка перечня списков с возможностью фильтрации
+    $items = AmoAPI::getCatalogs();
+    foreach ($items as $item) {
+        print_r($item);
+    }
+
+    // Создание нового списка
+    $catalog = new AmoCatalog([
+        'name' => 'Товары на складе'
+    ]);
+
+    // Сохранение списка и получение его ID
+    $catalogId = $catalog->save();
+
+    // Обновление существующего списка
+    $catalog2 = new AmoCatalog([
+        'id'   => 7185,
+        'name' => 'Не товары'
+    ]);
+
+    // Заполнение модели списка по ID и изменение названия списка 
+    $catalog3 = new AmoCatalog();
+    $catalog3->fillById(7187);
+    $catalog3->name = 'Актуальные товары';
+
+    // Получение параметров списка из модели
+    print_r($catalog3->getParams());
+
+    // Пакетное сохранение списков
+    AmoAPI::saveObjects([ $catalog2, $catalog3 ]);
+
+    // Пакетное удаление списков
+    AmoAPI::deleteObjects([ $catalog1, $catalog3 ]);
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%BE%D0%B2-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2"></a>
+### Работа с элементами списков (каталогов)
 
 ```php
 use AmoCRM\AmoAPI;

@@ -106,7 +106,6 @@ class AmoAPI
      * @param bool $returnResponses Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей
      * @return array
      */
-    // ------------------------------------------------------------------------
     public static function deleteObjects($amoObjects, $subdomain = null, bool $returnResponses = false) :array
     {
         if (! is_array($amoObjects)) {

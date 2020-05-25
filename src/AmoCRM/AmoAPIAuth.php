@@ -7,9 +7,10 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * v1.0.0 (07.04.2020) Начальный релиз
+ * v1.0.1 (25.05.2020) Исправлено отладочное сообщение
  *
  */
 
@@ -115,7 +116,7 @@ trait AmoAPIAuth
         );
 
         // Отладочная информация
-        self::debug('['. self::$requestCounter . "] +++++ RE AUTH TIMEOUT: " . self::$reAuthTimeout . ' s');
+        self::debug('['. self::$requestCounter . "] RE AUTH TIMEOUT " . self::$reAuthTimeout . 's');
 
         // Выдерживаем таймаут перед повторным запросом
         sleep(self::$reAuthTimeout);

@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.6.0
+ * @version 1.6.1
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.0.1 (09.08.2019) Добавлено 5 секунд к updated_at
@@ -19,6 +19,7 @@
  * v1.4.0 (16.05.2020) Добавлен параметр $returnResponse в метод save()
  * v1.5.0 (19.05.2020) Добавлен параметр $subdomain в конструктор
  * v1.6.0 (21.05.2020) Добавлена поддержка параметра AmoAPI::$updatedAtDelta
+ * v1.6.1 (25.05.2020) Рефракторинг
  *
  */
 
@@ -158,9 +159,7 @@ abstract class AmoObject
             $params['tags'] = array_column($this->tags, 'name');
         }
 
-        // Если обновление сущности, то добавляем обязательный параметр 'updated_at'.
-        // Добавляем AmoAPI::$updatedAtDelta секунд для снижения вероятности возникновения ошибки amoCRM:
-        // "Last modified date is older than in database"
+        // Если обновление сущности, то добавляем обязательный параметр 'updated_at'
         if (isset($this->id)) {
             $params['updated_at'] = time() + AmoAPI::$updatedAtDelta;
         }
@@ -169,20 +168,29 @@ abstract class AmoObject
     }
 
     /**
-     * Заполняет модель по id
-     * @param int|string $id
-     * @param array $params
+     * Заполняет модель по ID сущности
+     * @param int|string $id ID сущности
+     * @param array $params Дополнительные параметры запроса, передаваемые при GET-запросе к amoCRM
      * @return AmoObject
      */
-    public function fillById($id, array $params = []) :AmoObject
+    public function fillById($id, array $params = [])
     {
         $params = array_merge([ 'id' => $id ], $params);
         $response = AmoAPI::request($this::URL, 'GET', $params, $this->subdomain);
-        if (empty($response)) {
-            $className = get_class($this);
+        $items = AmoAPI::getItems($response);
+
+        $className = get_class($this);
+        if (empty($items)) {
             throw new AmoAPIException("Не найдена сущность {$className} с ID {$id}");
         }
-        $this->fill($response['_embedded']['items'][0]);
+
+        $item = array_shift($items);
+        if (empty($item)) {
+            throw new AmoAPIException("Нет сущности {$className} с ID {$id}");
+        }
+
+        $this->fill($item);
+
         return $this;
     }
 
@@ -314,16 +322,18 @@ abstract class AmoObject
         }
 
         $response = AmoAPI::request($this::URL, 'POST', $params, $this->subdomain);
+        $items = AmoAPI::getItems($response);
 
-        if (empty($response)) {
+        if (empty($items)) {
             $action = isset($this->id) ? 'обновить' : 'добавить';
             $className = get_class($this);
-            $message = "Не удалось {$action} {$className} (пустой ответ): " . print_r($params, true);
-            throw new AmoAPIException($message);
+            throw new AmoAPIException(
+                "Не удалось {$action} сущность {$className} (пустой ответ): " . print_r($params, true)
+            );
         }
 
         if (! $returnResponse) {
-            return $response['_embedded']['items'][0]['id'];
+            return $items[0]['id'];
         }
 
         return $response;
