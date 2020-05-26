@@ -116,7 +116,7 @@ trait AmoAPIAuth
         );
 
         // Отладочная информация
-        self::debug('['. self::$requestCounter . "] RE AUTH TIMEOUT " . self::$reAuthTimeout . 's');
+        self::debug('['. self::$requestCounter . "] RE AUTH (" . self::$reAuthTimeout . 's)');
 
         // Выдерживаем таймаут перед повторным запросом
         sleep(self::$reAuthTimeout);

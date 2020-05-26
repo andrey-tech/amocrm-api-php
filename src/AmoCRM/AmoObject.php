@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 1.6.1
+ * @version 1.7.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.0.1 (09.08.2019) Добавлено 5 секунд к updated_at
@@ -20,6 +20,7 @@
  * v1.5.0 (19.05.2020) Добавлен параметр $subdomain в конструктор
  * v1.6.0 (21.05.2020) Добавлена поддержка параметра AmoAPI::$updatedAtDelta
  * v1.6.1 (25.05.2020) Рефракторинг
+ * v1.7.0 (26.05.2020) Добавлена блокировка сущностей при обновлении (update) методом save()
  *
  */
 
@@ -316,14 +317,17 @@ abstract class AmoObject
     public function save($returnResponse = false)
     {
         if (isset($this->id)) {
+            $lock = AmoAPI::lockEntity($this);
             $params = [ 'update' => [ $this->getParams() ] ];
         } else {
+            $lock = null;
             $params = [ 'add' => [ $this->getParams() ] ];
         }
 
         $response = AmoAPI::request($this::URL, 'POST', $params, $this->subdomain);
-        $items = AmoAPI::getItems($response);
+        AmoAPI::unlockEntity($lock);
 
+        $items = AmoAPI::getItems($response);
         if (empty($items)) {
             $action = isset($this->id) ? 'обновить' : 'добавить';
             $className = get_class($this);

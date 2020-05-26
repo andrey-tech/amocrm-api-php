@@ -325,18 +325,18 @@ trait AmoAPIOAuth2
             return true;
         }
 
-        // Отладочная информация
-        self::debug('['. self::$requestCounter . "] RE OAUTH2 TIMEOUT " . self::$reOAuth2Timeout . 's');
-
-        // Выдерживаем таймаут перед повторным запросом
-        sleep(self::$reOAuth2Timeout);
-
         // Сохраняем сообщение в лог файл
         trigger_error(
             "Запрос обновления access token OAuth 2.0 #" . self::$reAuthCounter .
                 " ({$subdomain}) при ответе '401 Unauthorized': {$lastResult}",
             E_USER_NOTICE
         );
+
+        // Отладочная информация
+        self::debug('['. self::$requestCounter . "] RE OAUTH2 (" . self::$reOAuth2Timeout . 's)');
+
+        // Выдерживаем таймаут перед повторным запросом
+        sleep(self::$reOAuth2Timeout);
 
          // Получаем обновленные токены OAuth 2.0
         $response = self::refreshTokens($subdomain);

@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api
  * @license   MIT
  *
- * @version 2.5.0
+ * @version 2.6.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -28,6 +28,7 @@
  * v2.3.0 (21.05.2020) Добавлен вывод отладочных сообщений в лог файл
  * v2.4.0 (21.05.2020) Добавлен параметр $updatedAtDelta
  * v2.5.0 (25.05.2020) Добавлена возможность вывода отладочных сообщений в STDOUT
+ * v2.6.0 (26.05.2020) Добавлена блокировка сущностей при обновлении (update) методом AmoObject::save()
  *
  */
 
@@ -48,7 +49,7 @@ trait AmoAPIRequest
      * (null - вывод в STDOUT)
      * @var string|null
      */
-    public static $debugLogFile = 'temp/debug.log';
+    public static $debugLogFile = 'logs/debug.log';
 
     /**
      * Максимальное число запросов к amoCRM API в секунду
@@ -93,6 +94,25 @@ trait AmoAPIRequest
      * @var int
      */
     public static $updatedAtDelta = 5; // Секунды
+
+    /**
+     * Каталог для хранения lock файлов блокировки сущностей при обновлении (update) методом AmoObject::save()
+     * @var string
+     */
+    public static $lockEntityDir = 'lock/';
+
+    /**
+     * Максимальное число попыток блокировки сущности при обновлении (update) методом AmoObject::save()
+     * (0 - блокировка не выполняется)
+     * @var int
+     */
+    public static $lockEntityAttempts = 10;
+
+    /**
+     * Таймаут между попытками блокировки сущности при обновлении (update) методом AmoObject::save(), секунды
+     * @var int
+     */
+    public static $lockEntityTimeout = 1; // Секунды
 
     /**
      * Соответствие кодов ошибок и сообщений аmoCRM
@@ -523,7 +543,7 @@ trait AmoAPIRequest
             }
 
             $throttleTime = sprintf('%0.4f', $usleep/1E6);
-            self::debug('['. self::$requestCounter . '] THROTTLE (' . self::$throttle . "): {$throttleTime}s");
+            self::debug('['. self::$requestCounter . '] THROTTLE (' . self::$throttle . ") {$throttleTime}s");
             usleep($usleep);
         } while (false);
 
@@ -563,7 +583,7 @@ trait AmoAPIRequest
      */
     protected static function checkDir(string $directory)
     {
-        // Выходим, если каталог уже есть
+        // Выходим, если каталог уже есть (is_dir кешируется PHP)
         if (is_dir($directory)) {
             return;
         }
@@ -632,5 +652,80 @@ trait AmoAPIRequest
             self::$uniqId = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyz"), 0, $length);
         }
         return self::$uniqId;
+    }
+
+    /**
+     * Выполняет блокировку сущности при обновлении (update) методом AmoObject::save()
+     * @param  object $amoObject Объект \AmoCRM\AmoObject
+     * @return array|null
+     */
+    public static function lockEntity($amoObject)
+    {
+        // Выходим, если блокировка отключена
+        if (! self::$lockEntityAttempts) {
+            return null;
+        }
+
+        // Проверяем каталог для хранения файлов блокировки
+        $dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::$lockEntityDir;
+        self::checkDir($dir);
+        
+        // Формируем полное имя файла блокировки
+        $fileName = $amoObject->id . '.' . substr(strtolower(get_class($amoObject)), 10);
+        $file = $dir . $fileName;
+
+        $attempt = 0;
+        while ($attempt < self::$lockEntityAttempts) {
+            $attempt++;
+
+            $fh = @fopen($file, 'c');
+            if ($fh === false) {
+                throw new AmoAPIException("Не удалось открыть lock-файл {$fileName}");
+            }
+
+            if (flock($fh, LOCK_EX|LOCK_NB)) {
+                return [ 'fh' => $fh, 'file' => $file, 'fileName' => $fileName ];
+            }
+            
+            if (! fclose($fh)) {
+                throw new AmoAPIException("Не удалось закрыть lock-файл {$fileName}");
+            }
+
+            self::debug(
+                '['. self::$requestCounter . "] LOCK {$fileName} #{$attempt} (" . self::$lockEntityTimeout . 's)'
+            );
+
+            sleep(self::$lockEntityTimeout);
+        }
+
+        self::debug(
+            '['. self::$requestCounter . "] LOCK {$fileName} attempts exceeded (" . self::$lockEntityAttempts . ')'
+        );
+
+        return null;
+    }
+
+    /**
+     * Выполняет разблокировку сущности при обновлении (update) методом AmoObject::save()
+     * @param  array|null $lock Параметры блокировки сущности
+     * @return void
+     */
+    public static function unlockEntity($lock)
+    {
+        if (empty($lock)) {
+            return;
+        }
+
+        if (! flock($lock['fh'], LOCK_UN)) {
+            throw new AmoAPIException("Не удалось разблокировать lock-файл {$lock['fileName']}");
+        }
+
+        if (! fclose($lock['fh'])) {
+            throw new AmoAPIException("Не удалось закрыть lock-файл {$lock['fileName']}");
+        }
+
+        if (! @unlink($lock['file'])) {
+            throw new AmoAPIException("Не удалось удалить lock-файл {$lock['fileName']}");
+        }
     }
 }
