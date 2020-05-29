@@ -4,7 +4,7 @@
  *
  * @author    andrey-tech
  * @copyright 2020 andrey-tech
- * @see https://github.com/andrey-tech/amocrm-api
+ * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
  * @version 1.1.0

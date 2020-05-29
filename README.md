@@ -1,4 +1,4 @@
-# amoCRM API Wrapper
+# amoCRM API PHP Wrapper
 
 ![amoCRM logo](./assets/amocrm-logo.png)
 
