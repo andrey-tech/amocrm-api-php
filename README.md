@@ -2,8 +2,8 @@
 
 ![amoCRM logo](./assets/amocrm-logo.png)
 
-Обертка на PHP7+ для работы с REST API v2 [amoCRM](https://www.amocrm.ru) с авторизацией по протоколу oAuth 2.0
-или по API-ключу пользователя, троттлингом запросов к серверу, блокировкой одновременного обновления одной сущности
+Обертка на PHP7+ для работы с REST API **v2** [amoCRM](https://www.amocrm.ru) с авторизацией по протоколу oAuth 2.0
+или по API-ключу пользователя, троттлингом запросов к API, блокировкой одновременного обновления одной сущности
 и логированием.
 
 Данная библиотека была создана для удовлетворения
@@ -11,6 +11,16 @@
 предъявляемых к публичным интерациям:
 *"Публичные интеграции должны использовать механизм авторизации oAuth 2.0,
 использование механизма API ключей не допускается. Требование с февраля 2020 года"*.
+
+В настоящее время документация по REST API **v2** amoCRM доступна по следующим ссылкам:
+
+- [Компании](https://www.amocrm.ru/developers/content/api/companies)
+- [Контакты](https://www.amocrm.ru/developers/content/api/contacts)
+- [Сделки](https://www.amocrm.ru/developers/content/api/leads)
+- [События](https://www.amocrm.ru/developers/content/api/notes)
+- [Задачи](https://www.amocrm.ru/developers/content/api/tasks)
+- [Списки](https://www.amocrm.ru/developers/content/catalogs/catalogs)
+- [Элементы списков](https://www.amocrm.ru/developers/content/catalogs/elements) 
 
 ## Содержание
 
@@ -23,7 +33,7 @@
         - [Получение нового access токена по его истечении](#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8)
     - [Авторизация по API-ключу пользователя \(устаревший метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
     - [Авторизация в нескольких поддоменах amoCRM](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D1%85-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D1%85-amocrm)
-- [Параметры настроки](#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%BA%D0%B8)
+- [Параметры настройки](#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8)
 - [Работа с сущностями amoCRM](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm)
     - [Общие методы моделей](#%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
     - [Список методов и констант моделей](#%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%B8-%D0%BA%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
@@ -172,8 +182,8 @@ try {
 }
 ```
 
-<a id="%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%BA%D0%B8"></a>
-## Параметры настроки
+<a id="%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8"></a>
+## Параметры настройки
 
 Все параметры настройки библиотеки установливаются через статические свойства класса `AmoAPI`.
 
