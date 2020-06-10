@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.6.0
+ * @version 2.6.1
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -29,6 +29,7 @@
  * v2.4.0 (21.05.2020) Добавлен параметр $updatedAtDelta
  * v2.5.0 (25.05.2020) Добавлена возможность вывода отладочных сообщений в STDOUT
  * v2.6.0 (26.05.2020) Добавлена блокировка сущностей при обновлении (update) методом AmoObject::save()
+ * v2.6.1 (10.06.2020) Исправлено приведение к целому в методе throttle()
  *
  */
 
@@ -537,7 +538,7 @@ trait AmoAPIRequest
     {
         do {
             // Вычисляем необходимое время задержки перед отправкой запроса, микросекунды
-            $usleep = (int) (1E6 * (self::$lastRequestTime + 1/self::$throttle - microtime(true)));
+            $usleep = intval(1E6 * (self::$lastRequestTime + 1/self::$throttle - microtime(true)));
             if ($usleep <= 0) {
                 break;
             }
