@@ -7,8 +7,10 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version v1.0.0 (24.05.2019) Начальный релиз
- * @version v1.1.0 (13.11.2019) Добавлены методы getItems, setItems, getErrors, setErrors
+ * @version 1.1.0
+ *
+ * v1.0.0 (24.05.2019) Начальный релиз
+ * v1.1.0 (13.11.2019) Добавлены методы getItems, setItems, getErrors, setErrors
  *
  */
 

@@ -1,0 +1,22 @@
+{
+    "name": "andrey-tech/amocrm-api-php",
+    "description": "Обертка для работы с API v2 amoCRM с авторизацией по протоколу oAuth 2.0 или по API-ключу пользователя, троттлингом запросов, блокировкой одновременного обновления одной сущности и логированием в файл",
+    "homepage": "https://github.com/andrey-tech/amocrm-api-php",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "andrey-tech",
+            "homepage": "https://github.com/andrey-tech/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AmoCRM\\": "src/AmoCRM"
+        }
+    }
+}

@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.2.0
+ * @version 2.3.0
  *
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.1.0 (02.06.2019) Добавлены новые параметры, рефракторинг.
