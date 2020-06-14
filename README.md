@@ -27,6 +27,7 @@
 <!-- MarkdownTOC levels="1,2,3,4,5,6" autoanchor="true" autolink="true" -->
 
 - [Требования](#%D0%A2%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F)
+- [Установка](#%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0)
 - [Авторизация](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F)
     - [Авторизация по протоколу oAuth 2.0 \(актуальный метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%83-oauth-20-%D0%B0%D0%BA%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
         - [Обмен кода авторизации на access токен и refresh токен](#%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD)
@@ -61,6 +62,23 @@
 
 - PHP >= 7.0.
 - Произвольный автозагрузчик классов, реализующий стандарт [PSR-4](https://www.php-fig.org/psr/psr-4/).
+
+<a id="%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0"></a>
+## Установка
+
+Установка через composer:
+```
+$ composer require andrey-tech/amocrm-api-php
+```
+
+или добавить
+
+```
+"andrey-tech/amocrm-api-php": "2.6.*"
+```
+
+в секцию require файла composer.json.
+
 
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F"></a>
 ## Авторизация
@@ -196,7 +214,8 @@ try {
 `$SSLCertificateFile`   | 'cacert.pem' | Устанавливает файл SSL/TLS-сертификатов X.509 корневых удостоверяющих центров (CA) в формате РЕМ (null - использовать файл, указанный в параметре curl.cainfo файла php.ini)
 `$amoDomain`            | 'amocrm.ru'  | Устанавливает домен для запросов к API amoCRM
 `$amoUserAgent`         | 'amoCRM-API-client/2.0' | Устанавливает НТТР заголовок UserAgent в запросах
-`$amoTimeout`           | 30           | Устанавливает таймаут соединения с сервером аmoCRM, секунды
+`$amoConnectTimeout`    | 30           | Устанавливает таймаут соединения с сервером аmoCRM, секунды
+`$amoTimeout`           | 30           | Устанавливает таймаут обмена данными с сервером аmoCRM, секунды
 `$accessTokenLeeway`    | 300          | Устанавливает временной запас на истечение срока действия access токен, секунды. Access токен истекает раньше на указанное число секунд
 `$reOAuth2Attempts`     | 1            | Устанавливает максимальное число попыток обновления access токена по истечении его срока действия при ответе сервера '401 Unauthorized'
 `$reOAuth2Timeout`      | 5            | Устанавливает таймаут перед обновлением access токена по истечении его срока действия при ответе сервера '401 Unauthorized', секунды
