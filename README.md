@@ -68,13 +68,13 @@
 
 Установка через composer:
 ```
-$ composer require andrey-tech/amocrm-api-php:"~2.7"
+$ composer require andrey-tech/amocrm-api-php:"^2.7"
 ```
 
 или добавить
 
 ```
-"andrey-tech/amocrm-api-php": "~2.7"
+"andrey-tech/amocrm-api-php": "^2.7"
 ```
 
 в секцию require файла composer.json.
