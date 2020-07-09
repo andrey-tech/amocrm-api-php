@@ -21,6 +21,7 @@
 - [Задачи](https://www.amocrm.ru/developers/content/api/tasks)
 - [Списки](https://www.amocrm.ru/developers/content/catalogs/catalogs)
 - [Элементы списков](https://www.amocrm.ru/developers/content/catalogs/elements) 
+- [Неразобранное (form)](https://www.amocrm.ru/developers/content/api/unsorted) 
 
 ## Содержание
 
@@ -326,11 +327,12 @@ try {
     - `AmoNote` - модель события (примечания);
     - `AmoTask` - модель задачи;
     - `AmoCatalog` - модель списка (каталога);
-    - `AmoCatalogElement` - модель элемента списка (каталога).
+    - `AmoCatalogElement` - модель элемента списка (каталога);
+    - `AmoIncomingLeadForm` - модель сделки из неразобранного (при добавлении из веб-формы).
 
 - дополнительных статических методов класса `AmoAPI`.
 
-Параметры моделей доступны через публичные свойства и методы классов-моделей.
+Параметры моделей доступны через публичные свойства объектов классов-моделей.
 
 <a id="%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
 ### Общие методы моделей
