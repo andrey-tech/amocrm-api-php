@@ -32,6 +32,10 @@
     - [Авторизация по протоколу oAuth 2.0 \(актуальный метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%83-oauth-20-%D0%B0%D0%BA%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
         - [Обмен кода авторизации на access токен и refresh токен](#%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD)
         - [Получение нового access токена по его истечении](#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8)
+        - [Хранение access и refresh токенов](#%D0%A5%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-access-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2)
+            - [Интерфейс `TokenStorageInterface`](#%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-tokenstorageinterface)
+            - [Класс  `FileStorage`](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage)
+            - [Использованиe собственного класса для сохранения токенов](#%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8e-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2)
     - [Авторизация по API-ключу пользователя \(устаревший метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
     - [Авторизация в нескольких поддоменах amoCRM](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D1%85-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D1%85-amocrm)
 - [Параметры настройки](#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8)
@@ -86,13 +90,12 @@ $ composer require andrey-tech/amocrm-api-php:"^2.7"
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%83-oauth-20-%D0%B0%D0%BA%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4"></a>
 ### Авторизация по протоколу oAuth 2.0 ([актуальный метод](https://www.amocrm.ru/developers/content/oauth/oauth))
 
-- `static AmoAPI::oAuth2(string $subdomain, string $clientId, string $clientSecret, string $redirectUri, ?string $authCode = null, bool $storeAll = true) :array`  
+- `static AmoAPI::oAuth2(string $subdomain, string $clientId, string $clientSecret, string $redirectUri, ?string $authCode = null) :array`  
     - `$subdomain` - поддомен amoCRM;
     - `$clientId` - ID интеграции;
     - `$clientSecret` - секрет интеграции;
     - `$redirectUri` - URI перенаправления;
-    - `$authCode` - код авторизации (временный ключ);
-    - `$storeAll` - сохранять $clientId, $clientSecret, $redirectUri вместе с полученными access и refresh токенами.
+    - `$authCode` - код авторизации (временный ключ) для обмена на access токен и refresh токен.
 
 <a id="%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD"></a>
 #### Обмен кода авторизации на access токен и refresh токен
@@ -108,10 +111,9 @@ try {
     $authCode     = 'eee60208cc09e3ae3506d667228038345b6578a11d4862094655f630074c8c6ed87a9d804d49b5880e';
     $redirectUri  = 'https://www.example.com/oauth2/';
     $subdomain    = 'testsubdomain';
-    $storeAll     = true;
 
     // Авторизация
-    AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode, $storeAll);
+    AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode);
 
     // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
@@ -129,19 +131,106 @@ try {
 use \AmoCRM\AmoAPI;
 
 try {
-    $subdomain = 'testsubdomain';
+    // Параметры авторизации по протоколу oAuth 2.0
+    $clientId     = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
+    $clientSecret = 'TFPoaG2A5hp3G3o6opCL8eC9v92Mm0fKQWEHBDwIjedCmVliT4kI3XQcjOOP1s';
+    $redirectUri  = 'https://www.example.com/oauth2/';
+    $subdomain    = 'testsubdomain';
 
-    // Если $storeAll = true при обмене кода авторизации на access и refresh токен
-    AmoAPI::oAuth2($subdomain);
-
-    // Если $storeAll = false при обмене кода авторизации на access и refresh токен
-    // AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode = null, $storeAll);
+    // Авторизация
+    AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri);
 
     // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
+<a id="%D0%A5%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-access-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2"></a>
+#### Хранение access и refresh токенов
+
+Сохранение и загрузка токенов выполняется с помощью классов, реализующих интерфейс `\AmoCRM\TokenStorage\TokenStorageInterface`.
+
+<a id="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-tokenstorageinterface"></a>
+##### Интерфейс `TokenStorageInterface`
+
+Интерфейс определяет два метода:
+
+- `save(array $tokens, string $domain) :void` Сохраняет токены.
+    * `$tokens` - ассоциативный массив токенов `[ 'access_token' => '...', 'refresh_token' => '...' ]`;
+    * `$domain` - полный домен amoCRM (например, `testsubdomain.amocrm.ru`).
+- `load(string $domain) :?array` Загружает токены и возвращает их в виде ассоциативного массива.  
+    Должен возвращать `null` когда нет сохраненных токенов.
+    * `$domain` - полный домен amoCRM.
+
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage"></a>
+##### Класс  `FileStorage`
+
+По умолчанию для сохранения и загрузки токенов используется класс `\AmoCRM\TokenStorage\FileStorage`,
+который хранит токены в JSON-файлах, с именами, соответствующими именам доменов amoCRM (например, `testsubdomain.amocrm.ru.json`).
+В параметрах, передаваемых конструктору класса, можно указать каталог для хранения файлов токенов:
+
+- `__construct(string $storageFolder = 'tokens/')` Конструктор класса.
+    * `$storageFolder` - каталог для хранения файлов токенов.
+
+<a id="%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8e-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2"></a>
+##### Использованиe собственного класса для сохранения токенов
+
+Пример использования собственного класса для сохранения токенов в базе данных:
+```php
+use \AmoCRM\AmoAPI;
+
+try {
+    // Параметры авторизации по протоколу oAuth 2.0
+    $clientId     = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
+    $clientSecret = 'TFPoaG2A5hp3G3o6opCL8eC9v92Mm0fKQWEHBDwIjedCmVliT4kI3XQcjOOP1s';
+    $authCode     = 'eee60208cc09e3ae3506d667228038345b6578a11d4862094655f630074c8c6ed87a9d804d49b5880e';
+    $redirectUri  = 'https://www.example.com/oauth2/';
+    $subdomain    = 'testsubdomain';
+
+    // Устанавливаем объект класса, обеспечивающего сохранение токенов
+    AmoAPI::$tokenStorage = new \AmoCRM\TokenStorage\DatabaseStorage();
+
+    // Авторизация
+    AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode);
+
+    // Получение информации об аккаунте
+    print_r(AmoAPI::getAccount());
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
+Пример класса `\AmoCRM\TokenStorage\DatabaseStorage`:
+```php
+<?php
+namespace AmoCRM\TokenStorage;
+
+class DatabaseStorage implements TokenStorageInterface
+{
+    /**
+     * Сохраняет токены
+     * @param  array  $tokens Токены для сохранения
+     * @param  string $domain Домен amoCRM
+     * @return void
+     */
+    public function save(array $tokens, string $domain)
+    {
+        // Здесь токены сохраняются в базе данных
+    }
+
+    /**
+     * Загружает токены
+     * @param  string $domain Домен amoCRM
+     * @return array|null
+     */
+    public function load(string $domain)
+    {
+        // Здесь токены извлекаются из базы данных
+    }
 }
 ```
 
@@ -216,10 +305,6 @@ try {
 `$amoUserAgent`         | 'amoCRM-API-client/2.0' | Устанавливает НТТР заголовок UserAgent в запросах
 `$amoConnectTimeout`    | 30           | Устанавливает таймаут соединения с сервером аmoCRM, секунды
 `$amoTimeout`           | 30           | Устанавливает таймаут обмена данными с сервером аmoCRM, секунды
-`$accessTokenLeeway`    | 300          | Устанавливает временной запас на истечение срока действия access токен, секунды. Access токен истекает раньше на указанное число секунд
-`$reOAuth2Attempts`     | 1            | Устанавливает максимальное число попыток обновления access токена по истечении его срока действия при ответе сервера '401 Unauthorized'
-`$reOAuth2Timeout`      | 5            | Устанавливает таймаут перед обновлением access токена по истечении его срока действия при ответе сервера '401 Unauthorized', секунды
-`$tokensFileDir`        | 'tokens/'    | Устанавливает относительный каталог для хранения файлов с токенами для поддоменов amoCRM
 `$reAuthTimeout`        | 5            | Устанавливает таймаут перед повторной авторизацией по API-ключу пользователя при ответе сервера '401 Unauthorized', секунды
 `$reAuthAttempts`       | 3            | Устанавливает максимальное число попыток повторной авторизации по API-ключу пользователя при ответе сервера '401 Unauthorized'
 `$cookieFileDir`        | 'cookies/'   | Устанавливает относительный каталог для хранения файлов cookie
@@ -227,6 +312,7 @@ try {
 `$lockEntityAttempts`   | 10           | Устанавливает максимальное число попыток блокировки обновления сущности при вызове метода `AmoObject::save()` (0 - блокировка не выполняется)
 `$lockEntityTimeout`    | 1            | Устанавливает таймаут между попытками блокировки обновления сущности при вызове метода `AmoObject::save()`, секунды
 `$limitRows`            | 500          | Устанавливает максимальное количество сущностей, выбираемых за один запрос к серверу amoCRM ([не более 500, рекомендуется не более 250](https://www.amocrm.ru/developers/content/api/recommendations))
+`$tokenStorage`         | object       | Устанавливает объект класса, обеспечивающего сохранение токенов oAuth 2.0. По умолчанию `new \AmoCRM\TokenStorage\FileStorage()`
 
 <a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm"></a>
 ## Работа с сущностями amoCRM

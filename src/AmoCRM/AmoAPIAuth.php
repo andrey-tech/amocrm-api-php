@@ -7,10 +7,11 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.0.1
+ * @version 1.0.2
  *
  * v1.0.0 (07.04.2020) Начальный релиз
  * v1.0.1 (25.05.2020) Исправлено отладочное сообщение
+ * v1.0.2 (08.07.2020) Отключен trigger_error
  *
  */
 
@@ -33,9 +34,8 @@ trait AmoAPIAuth
     public static $reAuthAttempts = 3;
 
     /**
-     * Каталог для хранения файлов cookie относительно каталога файла класса AmoAPI
-     * (null - текущий каталог, на конце /)
-     * @var string|null
+     * Каталог для хранения файлов cookie относительно каталога файла класса AmoAPI (на конце /)
+     * @var string
      */
     public static $cookieFileDir = 'cookies/';
 
@@ -109,11 +109,11 @@ trait AmoAPIAuth
         }
 
         // Сохраняем сообщение в лог файл
-        trigger_error(
-            "Повторная авторизация по API-ключу #" . self::$reAuthCounter .
-                " (" . $lastRequest['subdomain'] . ") при ответе '401 Unauthorized': {$lastResult}",
-            E_USER_NOTICE
-        );
+        // trigger_error(
+        //     "Повторная авторизация по API-ключу #" . self::$reAuthCounter .
+        //         " (" . $lastRequest['subdomain'] . ") при ответе '401 Unauthorized': {$lastResult}",
+        //     E_USER_NOTICE
+        // );
 
         // Отладочная информация
         self::debug('['. self::$requestCounter . "] RE AUTH (" . self::$reAuthTimeout . 's)');

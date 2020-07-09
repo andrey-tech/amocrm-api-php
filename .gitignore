@@ -2,3 +2,6 @@ examples/
 logs/
 lock/
 cookies/
+tokens/
+*.log
+*.bak

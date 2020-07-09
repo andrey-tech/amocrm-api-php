@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.7.0
+ * @version 2.7.1
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -31,6 +31,7 @@
  * v2.6.0 (26.05.2020) Добавлена блокировка сущностей при обновлении (update) методом AmoObject::save()
  * v2.6.1 (10.06.2020) Исправлено приведение к целому в методе throttle()
  * v2.7.0 (14.06.2020) Добавлен параметр $amoConnectTimeout
+ * v2.7.1 (08.07.2020) Исправлена обработка пустого значения каталога хранения cookies. Рефракторинг.
  *
  */
 
@@ -255,7 +256,7 @@ trait AmoAPIRequest
         // Если авторизация по API-ключу пользователя, то устанавливаем файл cookies
         if (! self::$lastAuth[ $subdomain ]['is_oauth2']) {
             // Формируем полное имя файла cookies
-            $cookieFilePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . (self::$cookieFileDir ?? '');
+            $cookieFilePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::$cookieFileDir;
             self::checkDir($cookieFilePath);
             $cookieFile = $cookieFilePath . $subdomain . '.txt';
 
@@ -386,14 +387,11 @@ trait AmoAPIRequest
         if ($code === 401) {
             if (self::$lastAuth[ $subdomain ]['is_oauth2']) { // Если авторизация по протоколу OAuth 2.0
                 $response = self::reOAuth2();
-                if ($response !== true) {
-                    return $response;
-                }
             } else { // Если авторизация по API ключу пользователя
                 $response = self::reAuth();
-                if ($response !== true) {
-                    return $response;
-                }
+            }
+            if ($response !== true) {
+                return $response;
             }
         }
 
