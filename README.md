@@ -21,7 +21,7 @@
 - [Задачи](https://www.amocrm.ru/developers/content/api/tasks)
 - [Списки](https://www.amocrm.ru/developers/content/catalogs/catalogs)
 - [Элементы списков](https://www.amocrm.ru/developers/content/catalogs/elements) 
-- [Неразобранное (form)](https://www.amocrm.ru/developers/content/api/unsorted) 
+- [Неразобранное](https://www.amocrm.ru/developers/content/api/unsorted) 
 
 ## Содержание
 
