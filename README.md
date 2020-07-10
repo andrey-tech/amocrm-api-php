@@ -160,9 +160,10 @@ try {
 Интерфейс определяет два метода:
 
 - `save(array $tokens, string $domain) :void` Сохраняет токены.
-    * `$tokens` - ассоциативный массив токенов `[ 'access_token' => '...', 'refresh_token' => '...' ]`;
+    * `$tokens` - ассоциативный массив параметров авторизации и токенов:  
+       `[ 'access_token' => '...', 'refresh_token' => '...', 'client_id' => '...', 'client_secret' => '...', 'redirect_uri'=> '...' ]`;
     * `$domain` - полный домен amoCRM (например, `testsubdomain.amocrm.ru`).
-- `load(string $domain) :?array` Загружает токены и возвращает их в виде ассоциативного массива.  
+- `load(string $domain) :?array` Загружает параметры авторизации и токены и возвращает их в виде ассоциативного массива.  
     Должен возвращать `null` когда нет сохраненных токенов.
     * `$domain` - полный домен amoCRM.
 
