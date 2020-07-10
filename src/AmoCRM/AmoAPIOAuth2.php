@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.3.0
+ * @version 1.4.0
  *
  * v1.0.0 (06.04.2020) Начальный релиз.
  * v1.1.0 (10.04.2020) Изменен алгоритм работы метода oAuth2()
@@ -15,6 +15,7 @@
  * v1.2.0 (19.04.2020) Изменен метод oAuth2(): добавлен параметр storeAll
  * v1.2.1 (25.05.2020) Исправлено отладочное сообщение
  * v1.3.0 (08.07.2020) Изменен принцип хранения токенов. Отключен trigger_error
+ * v1.4.0 (10.07.2020) Добавлено сохранение параметров авторизации вместе с токенами
  *
  */
 
@@ -38,17 +39,17 @@ trait AmoAPIOAuth2
     /**
      * Выполняет авторизацию в amoCRM по протоколу OAuth 2.0
      * @param  string $subdomain    Поддомен amoCRM
-     * @param  string $clientId     ID интеграции
-     * @param  string $clientSecret Секрет интеграции
-     * @param  string $redirectUri  Redirect URI, указанный в настройках интеграции
-     * @param  ?string $authCode    Код авторизации, полученный в настройках интеграции
+     * @param  ?string $clientId     ID интеграции
+     * @param  ?string $clientSecret Секрет интеграции
+     * @param  ?string $redirectUri  Redirect URI
+     * @param  ?string $authCode    Код авторизации
      * @return array
      */
     public static function oAuth2(
         string $subdomain,
-        string $clientId,
-        string $clientSecret,
-        string $redirectUri,
+        string $clientId = null,
+        string $clientSecret = null,
+        string $redirectUri = null,
         string $authCode = null
     ) :array {
 
@@ -80,9 +81,9 @@ trait AmoAPIOAuth2
             $tokens = self::getTokens($subdomain);
 
             // Сохраняем полученные токены
-            self::$tokenStorage->save($data, $domain);
-        } else {
-            // Если код авторизации НЕ был передан, то загружем токены
+            self::$tokenStorage->save($tokens, $domain);
+        } else { // Если код авторизации НЕ был передан
+            // Загружем сохраненнные токены
             $tokens = self::$tokenStorage->load($domain);
 
             // Если нет токенов
@@ -94,10 +95,36 @@ trait AmoAPIOAuth2
         }
 
         // Обновляем данные, использованные при последней авторизации для поддомена
-        self::$lastAuth[ $subdomain ]['access_token'] = $tokens['access_token'];
-        self::$lastAuth[ $subdomain ]['refresh_token'] = $tokens['refresh_token'];
+        self::updateLastAuth($tokens, $subdomain);
+
+        // Проверяем наличие всех параметров авторизации для поддомена
+        foreach ([ 'client_id', 'client_secret', 'redirect_uri', 'access_token', 'refresh_token' ] as $name) {
+            if (empty(self::$lastAuth[ $subdomain ][ $name ])) {
+                throw new AmoAPIException(
+                    "Не установлен параметр авторизации oAuth2 '{$name}' для поддомена '{$subdomain}'"
+                );
+            }
+        }
 
         return $tokens;
+    }
+
+    /**
+     * Обновляем данные, использованные при последней авторизации для поддомена
+     * @param  array  $tokens    Токены
+     * @param  string $subdomain Поддомен amoCRM
+     * @return void
+     */
+    protected static function updateLastAuth(array $tokens, string $subdomain)
+    {
+        foreach ([ 'client_id', 'client_secret', 'redirect_uri' ] as $name) {
+            if (isset($tokens[ $name ])) {
+                self::$lastAuth[ $subdomain ][ $name ] = $tokens[ $name ];
+            }
+        }
+
+        self::$lastAuth[ $subdomain ]['access_token'] = $tokens['access_token'];
+        self::$lastAuth[ $subdomain ]['refresh_token'] = $tokens['refresh_token'];
     }
 
     /**
@@ -119,7 +146,10 @@ trait AmoAPIOAuth2
         $response = self::request('/oauth2/access_token', 'POST', $params, $subdomain);
 
         $tokens = [
-            'access_token' => $response['access_token'],
+            'client_id'     => $lastAuth['client_id'],
+            'client_secret' => $lastAuth['client_secret'],
+            'redirect_uri'  => $lastAuth['redirect_uri'],
+            'access_token'  => $response['access_token'],
             'refresh_token' => $response['refresh_token']
         ];
 
@@ -145,7 +175,10 @@ trait AmoAPIOAuth2
         $response = self::request('/oauth2/access_token', 'POST', $params, $subdomain);
 
         $tokens = [
-            'access_token' => $response['access_token'],
+            'client_id'     => $lastAuth['client_id'],
+            'client_secret' => $lastAuth['client_secret'],
+            'redirect_uri'  => $lastAuth['redirect_uri'],
+            'access_token'  => $response['access_token'],
             'refresh_token' => $response['refresh_token']
         ];
 
@@ -189,7 +222,7 @@ trait AmoAPIOAuth2
         // Отладочная информация
         self::debug('['. self::$requestCounter . "] RE OAUTH2 (" . self::$reOAuth2Timeout . 's)');
 
-         // Получаем обновленные токены OAuth 2.0
+        // Получаем обновленные токены OAuth 2.0
         $tokens = self::refreshTokens($subdomain);
 
         // Полный домен amoCRM
@@ -199,8 +232,7 @@ trait AmoAPIOAuth2
         self::$tokenStorage->save($tokens, $domain);
 
         // Обновляем данные, использованные при последней авторизации для поддомена
-        self::$lastAuth[ $subdomain ]['access_token'] = $tokens['access_token'];
-        self::$lastAuth[ $subdomain ]['refresh_token'] = $tokens['refresh_token'];
+        self::updateLastAuth($tokens, $subdomain);
 
         // Выполняем повторный запрос
         $response = self::request(
@@ -215,15 +247,5 @@ trait AmoAPIOAuth2
 
         // Возвращаем результат повторного запроса
         return $response;
-    }
-
-    /**
-     * Возвращает полное имя домена amoCRM
-     * @param  string $subdomain Поддомен амоCRM
-     * @return string
-     */
-    protected static function getAmoDomain(string $subdomain) :string
-    {
-        return $subdomain . '.' . self::$amoDomain;
     }
 }
