@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.4.0
+ * @version 1.4.1
  *
  * v1.0.0 (06.04.2020) Начальный релиз.
  * v1.1.0 (10.04.2020) Изменен алгоритм работы метода oAuth2()
@@ -16,6 +16,7 @@
  * v1.2.1 (25.05.2020) Исправлено отладочное сообщение
  * v1.3.0 (08.07.2020) Изменен принцип хранения токенов. Отключен trigger_error
  * v1.4.0 (10.07.2020) Добавлено сохранение параметров авторизации вместе с токенами
+ * v1.4.1 (11.07.2020) Исправлен баг в методе reOAuth2()
  *
  */
 
@@ -220,7 +221,7 @@ trait AmoAPIOAuth2
         // );
 
         // Отладочная информация
-        self::debug('['. self::$requestCounter . "] RE OAUTH2 (" . self::$reOAuth2Timeout . 's)');
+        self::debug('['. self::$requestCounter . '] RE OAUTH2');
 
         // Получаем обновленные токены OAuth 2.0
         $tokens = self::refreshTokens($subdomain);
