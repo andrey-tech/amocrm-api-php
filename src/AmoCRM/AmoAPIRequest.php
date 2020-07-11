@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.8.0
+ * @version 2.9.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -33,6 +33,7 @@
  * v2.7.0 (14.06.2020) Добавлен параметр $amoConnectTimeout
  * v2.7.1 (08.07.2020) Исправлена обработка пустого значения каталога хранения cookies. Рефракторинг
  * v2.8.0 (10.07.2020) Имя файлов cookies теперь включает полное имя домена amoCRM
+ * v2.9.0 (11.07.2020) Добавлена возможность передаче в параметре $subdomain полного домена amoCRM
  *
  */
 
@@ -317,7 +318,7 @@ trait AmoAPIRequest
         self::setDefaultCurlOptions($curl, $subdomain);
 
         // Формируем URL запроса
-        $url = 'https://' . $subdomain . '.' . self::$amoDomain . $query;
+        $url = 'https://' . self::getAmoDomain($subdomain) . $query;
 
         // Устанавливаем параметры для запроса методом GET или POST
         switch ($type) {
@@ -738,11 +739,15 @@ trait AmoAPIRequest
 
     /**
      * Возвращает полное имя домена amoCRM
-     * @param  string $subdomain Поддомен амоCRM
+     * @param  string $subdomain Поддомен или полный домен амоCRM
      * @return string
      */
     protected static function getAmoDomain(string $subdomain) :string
     {
+        if (preg_match('/\.amocrm\.(ru|com)$/', $subdomain)) {
+            return $subdomain;
+        }
+
         return $subdomain . '.' . self::$amoDomain;
     }
 }

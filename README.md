@@ -92,7 +92,7 @@ $ composer require andrey-tech/amocrm-api-php:"^2.7"
 ### Авторизация по протоколу oAuth 2.0 ([актуальный метод](https://www.amocrm.ru/developers/content/oauth/oauth))
 
 - `static AmoAPI::oAuth2(string $subdomain, string $clientId, string $clientSecret, string $redirectUri, ?string $authCode = null) :array`  
-    - `$subdomain` - поддомен amoCRM;
+    - `$subdomain` - поддомен или полный домен amoCRM;
     - `$clientId` - ID интеграции;
     - `$clientSecret` - секрет интеграции;
     - `$redirectUri` - URI перенаправления;
@@ -242,7 +242,7 @@ class DatabaseStorage implements TokenStorageInterface
 - `static AmoAPI::oauth(string $login, string $hash, string $subdomain) :array`
     - `$login` - логин пользователя;
     - `$hash` - API-ключ пользователя;
-    - `$subdomain` - поддомен amoCRM.
+    - `$subdomain` - поддомен или полный домен amoCRM.
 
 Пример авторизации по API-ключу пользователя.
 ```php
@@ -341,7 +341,7 @@ try {
 Базовый класс моделей  `AmoObject` содержит следующие общие методы:
 
 - `__construct(array $data = [], ?string $subdomain = null)` Создает новый объект модели и заполняет данными.
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
 - `fillById(int $id, array $params = [])` Заполняет модель данными по ID сущности.
     - `$params` - дополнительные параметры, передаваемые в GET-запросе к amoCRM.
 - `getParams() :array` Возвращает текущие параметры модели.
@@ -424,7 +424,7 @@ try {
         - Notes
         - CatalogElements
     - `$params` - параметры фильтрации.
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последний авторизации.
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последний авторизации.
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
 
 - `static get<Entities>(array $params, ?string $subdomain = null, bool $returnResponse = false) :?array`  
@@ -444,7 +444,7 @@ try {
         - Catalogs
         - CatalogElements
     - `$params` - параметры фильтрации и постраничной выборки;
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации;
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
@@ -462,7 +462,7 @@ try {
         - `AmoNote`
         - `AmoTask`
         - `AmoCatalogElement`
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при последний авторизации;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен, указанный при последний авторизации;
     - `$returnResponses` Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
@@ -475,7 +475,7 @@ try {
     - `$amoObjects` Массив объектов классов-моделей:
         - `AmoCatalog`
         - `AmoCatalogElement`
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен, указанный при последний авторизации;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен, указанный при последний авторизации;
     - `$returnResponses` Возвращать массив ответов сервера amoCRM вместо пустого массива параметров сущностей.
 
 
@@ -493,7 +493,7 @@ try {
         - groups
         - note_types
         - task_types
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
 
 - `static getLastResponse(bool $unescapeUnicode = true) :?string`  
     Возвращает последний ответ сервера amoCRM в сыром виде.
@@ -504,7 +504,7 @@ try {
     - `$query` - URL-путь с параметрами запроса;
     - `$type` - метод запроса 'GET' или 'POST';
     - `$params` - параметры запроса;
-    - `$subdomain` - поддомен amoCRM. Если null, то используется поддомен последней авторизации.
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
 
 <a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9"></a>
 ### Обработка исключений
