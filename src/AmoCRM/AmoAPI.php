@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.3.0
+ * @version 2.3.1
  *
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.1.0 (02.06.2019) Добавлены новые параметры, рефракторинг.
@@ -18,6 +18,8 @@
  * v2.1.0 (10.05.2020) Добавлена проверка ответа сервера в метод saveObjects()
  * v2.2.0 (16.05.2020) Добавлен метод getItems(). Добавлен параметр $returnResponses в метод saveObjects()
  * v2.3.0 (22.05.2020) Добавлен метод deleteObjects() для удаления списков и их элементов
+ * v2.3.1 (14.07.2020) Изменен порядок параметров $subdomain и $returnResponse в методах
+ *
  */
 
 declare(strict_types = 1);
@@ -44,6 +46,9 @@ class AmoAPI
     // Трейт методов для авторизации по протоколу OAuth 2.0
     use AmoAPIOAuth2;
 
+    // Трейт методов для добавления и удаления webhooks
+    use AmoAPIWebhooks;
+
     /**
      * Возращает массив параметров сущностей из ответа сервера amoCRM
      * @param array|null $response Ответ сервера
@@ -57,12 +62,12 @@ class AmoAPI
     /**
      * Сохраняет (добавляет или обновляет) объекты AmoObject
      * @param array $amoObjects Массив объектов
-     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponses Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей
+     * @param string $subdomain Поддомен amoCRM
      * @return array
      */
     // ------------------------------------------------------------------------
-    public static function saveObjects($amoObjects, $subdomain = null, bool $returnResponses = false) :array
+    public static function saveObjects($amoObjects, bool $returnResponses = false, $subdomain = null) :array
     {
         if (! is_array($amoObjects)) {
             $amoObjects = [ $amoObjects ];
@@ -102,11 +107,11 @@ class AmoAPI
     /**
      * Удаляет объекты AmoObject (списки или элементы списков)
      * @param array $amoObjects Массив объектов
-     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponses Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей
+     * @param string $subdomain Поддомен amoCRM
      * @return array
      */
-    public static function deleteObjects($amoObjects, $subdomain = null, bool $returnResponses = false) :array
+    public static function deleteObjects($amoObjects, bool $returnResponses = false, $subdomain = null) :array
     {
         if (! is_array($amoObjects)) {
             $amoObjects = [ $amoObjects ];

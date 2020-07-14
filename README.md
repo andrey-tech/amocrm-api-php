@@ -12,7 +12,8 @@
 *"Публичные интеграции должны использовать механизм авторизации oAuth 2.0,
 использование механизма API ключей не допускается. Требование с февраля 2020 года"*.
 
-В настоящее время документация по REST API **v2** amoCRM доступна по следующим ссылкам:
+В настоящее время актуальной версией REST API amoCRM является [**v4**](https://www.amocrm.ru/developers/content/crm_platform/api-reference).  
+Документация по REST API **v2** amoCRM пока доступна по следующим прямым ссылкам:
 
 - [Компании](https://www.amocrm.ru/developers/content/api/companies)
 - [Контакты](https://www.amocrm.ru/developers/content/api/contacts)
@@ -22,6 +23,7 @@
 - [Списки](https://www.amocrm.ru/developers/content/catalogs/catalogs)
 - [Элементы списков](https://www.amocrm.ru/developers/content/catalogs/elements) 
 - [Неразобранное](https://www.amocrm.ru/developers/content/api/unsorted) 
+- [Webhooks](https://www.amocrm.com/developers/content/api/webhooks/) 
 
 ## Содержание
 
@@ -35,10 +37,11 @@
         - [Получение нового access токена по его истечении](#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8)
         - [Хранение access и refresh токенов](#%D0%A5%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-access-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2)
             - [Интерфейс `TokenStorageInterface`](#%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-tokenstorageinterface)
-            - [Класс  `FileStorage`](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage)
+            - [Класс `FileStorage`](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage)
             - [Использованиe собственного класса для сохранения токенов](#%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8e-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2)
     - [Авторизация по API-ключу пользователя \(устаревший метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
     - [Авторизация в нескольких поддоменах amoCRM](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D1%85-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D1%85-amocrm)
+- [Обработка ошибок](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA)
 - [Параметры настройки](#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8)
 - [Работа с сущностями amoCRM](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm)
     - [Общие методы моделей](#%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
@@ -46,8 +49,8 @@
     - [Методы для загрузки сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Методы для пакетного сохранения сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Методы для пакетного удаления сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
+    - [Методы webhooks](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-webhooks)
     - [Дополнительные методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
-    - [Обработка исключений](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9)
 - [Примеры](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B)
     - [Работа с контактами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8)
     - [Работа с компаниями](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8)
@@ -56,6 +59,7 @@
     - [Работа с задачами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0%D0%BC%D0%B8)
     - [Работа со списками \(каталогами\)](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0%D0%BC%D0%B8-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0%D0%BC%D0%B8)
     - [Работа с элементами списков \(каталогов\)](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%BE%D0%B2-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2)
+    - [Работа с webhooks](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-webhooks)
     - [Работа с несколькими поддоменами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
@@ -121,31 +125,31 @@ try {
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+} catch (\AmoCRM\TokenStorage\TokenStorageException $e) {
+    printf('Ошибка обработки токенов (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
 
 <a id="%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8"></a>
 #### Получение нового access токена по его истечении
 
-Пример авторизации по протоколу oAuth 2.0 и получение нового access и refresh токена. 
+Пример авторизации по протоколу oAuth 2.0 и получение нового access и refresh токена по истечении access токена. 
 ```php
 use \AmoCRM\AmoAPI;
 
 try {
-    // Параметры авторизации по протоколу oAuth 2.0
-    $clientId     = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
-    $clientSecret = 'TFPoaG2A5hp3G3o6opCL8eC9v92Mm0fKQWEHBDwIjedCmVliT4kI3XQcjOOP1s';
-    $redirectUri  = 'https://www.example.com/oauth2/';
-    $subdomain    = 'testsubdomain';
+    $subdomain = 'testsubdomain';
 
     // Авторизация
-    AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri);
+    AmoAPI::oAuth2($subdomain);
 
     // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+} catch (\AmoCRM\TokenStorage\TokenStorageException $e) {
+    printf('Ошибка обработки токенов (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
 
@@ -157,7 +161,7 @@ try {
 <a id="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-tokenstorageinterface"></a>
 ##### Интерфейс `TokenStorageInterface`
 
-Интерфейс определяет два метода:
+Интерфейс `\AmoCRM\TokenStorage\TokenStorageInterface` определяет два метода:
 
 - `save(array $tokens, string $domain) :void` Сохраняет токены.
     * `$tokens` - ассоциативный массив параметров авторизации и токенов:  
@@ -168,7 +172,7 @@ try {
     * `$domain` - полный домен amoCRM.
 
 <a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage"></a>
-##### Класс  `FileStorage`
+##### Класс `FileStorage`
 
 По умолчанию для сохранения и загрузки токенов используется класс `\AmoCRM\TokenStorage\FileStorage`,
 который хранит токены в JSON-файлах, с именами, соответствующими именам доменов amoCRM (например, `testsubdomain.amocrm.ru.json`).
@@ -176,6 +180,8 @@ try {
 
 - `__construct(string $storageFolder = 'tokens/')` Конструктор класса.
     * `$storageFolder` - каталог для хранения файлов токенов.
+
+При возникновении ошибок выбрасыватся исключение класса `\AmoCRM\TokenStorage\TokenStorageException`. 
 
 <a id="%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8e-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2"></a>
 ##### Использованиe собственного класса для сохранения токенов
@@ -290,6 +296,15 @@ try {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
+<a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA"></a>
+## Обработка ошибок
+
+При возникновении ошибок выбрасыватся исключение класса `\AmoCRM\AmoAPIException`.  
+Класс-исключение `AmoAPIException` содержит следующие вспомогательные методы:
+
+- `getErrors() :array` Возвращает массив сообщений об ошибках (errors) из ответа сервера amoCRM.
+- `getItems() :array` Возвращает массив параметров сущностей (items) из ответа сервера amoCRM.
+
 
 <a id="%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8"></a>
 ## Параметры настройки
@@ -407,13 +422,15 @@ try {
     - `SMS_IN_NOTETYPE = 102` - входящее SMS сообщение;
     - `SMS_OUT_NOTETYPE = 103` - исходящее SMS сообщение.
 
+- Класс `AmoIncomingLeadForm` - модель сделки из неразобранного (при добавлении из веб-формы).
+    - save() Добавляет новую сделку в неразобранное и возвращает ответ сервера.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для загрузки сущностей
 
 Класс `AmoAPI` содержит следующие общие статические методы для загрузки сущностей:
 
-- `static getAll<Entities> (array $params, ?string $subdomain = null, bool $returnResponse = false) :\Generator`
+- `static getAll<Entities> (array $params, bool $returnResponse = false, ?string $subdomain = null) :\Generator`
     Загружает ВСЕ сущности заданного типа <Entities\> c возможностью фильтрации.  
     Возвращает объект типа \Generator для последующей выборки параметров сущностей.
     - `<Entities>`:
@@ -423,11 +440,11 @@ try {
         - Tasks
         - Notes
         - CatalogElements
-    - `$params` - параметры фильтрации.
-    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последний авторизации.
-    - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
+    - `$params` - параметры фильтрации;
+    - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последнией выполненной авторизации.
 
-- `static get<Entities>(array $params, ?string $subdomain = null, bool $returnResponse = false) :?array`  
+- `static get<Entities>(array $params, bool $returnResponse = false, ?string $subdomain = null) :?array`  
     Загружает сущности заданного типа <Entities\> c возможностью фильтрации и постраничной выборки.  
     Возвращает массив параметров сущностей для заполнения моделей или null.
     - `<Entities>`:
@@ -444,8 +461,9 @@ try {
         - Catalogs
         - CatalogElements
     - `$params` - параметры фильтрации и постраничной выборки;
-    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации;
-    - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей.
+    - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
+
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для пакетного сохранения сущностей
@@ -453,7 +471,7 @@ try {
 Класс `AmoAPI` содержит статический метод для пакетного сохранения (добавления или обновления) за один запрос до 500
 сущностей различного типа для одного поддомена amoCRM:
 
-- `static saveObjects(array $amoObjects, ?string $subdomain = null, bool $returnResponses = false) :array`  
+- `static saveObjects(array $amoObjects, bool $returnResponses = false, ?string $subdomain = null) :array`  
     Добавляет или обновляет сущности в amoCRM. Возвращает массив параметров сущностей.
     - `$amoObjects` Массив объектов классов-моделей (не более 500 объектов одного типа):
         - `AmoContact`
@@ -462,22 +480,39 @@ try {
         - `AmoNote`
         - `AmoTask`
         - `AmoCatalogElement`
-    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен, указанный при последний авторизации;
-    - `$returnResponses` Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей.
+    - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо массива параметров сущностей;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
+
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для пакетного удаления сущностей
 
 Класс `AmoAPI` содержит статический метод для пакетного удаления списков и элементов списков:
 
-- `static delteObjects(array $amoObjects, ?string $subdomain = null, bool $returnResponses = false) :array`  
+- `static delteObjects(array $amoObjects, bool $returnResponses = false, ?string $subdomain = null) :array`  
     Удаляет сущности в amoCRM. Возвращает пустой массив параметров сущностей.
     - `$amoObjects` Массив объектов классов-моделей:
         - `AmoCatalog`
         - `AmoCatalogElement`
-    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен, указанный при последний авторизации;
-    - `$returnResponses` Возвращать массив ответов сервера amoCRM вместо пустого массива параметров сущностей.
+    - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо пустого массива параметров сущностей;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 
+<a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-webhooks"></a>
+### Методы webhooks
+
+Класс `AmoAPI` содержит статические методы для добавления и удаления webhooks:
+
+- `static addWebhooks(array $params, bool $returnResponse = false, ?string $subdomain = null) :array`  
+    Добавляет один webhook или несколько webhooks (не более 100).
+    - `params` - пaрaметры webhook или массив параметров webhooks;
+    - `$returnRespons` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
+    
+- `static deleteWebhooks(array $params, bool $returnResponse = false, ?string $subdomain = null) :array`  
+    Удаляет один webhook или несколько webhooks (не более 100).
+    - `params` - пaрaметры webhook или массив параметров webhooks;
+    - `$returnRespons` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 
 <a id="%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B"></a>
 ### Дополнительные методы
@@ -493,7 +528,11 @@ try {
         - groups
         - note_types
         - task_types
-    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
+
+- `static getAccountDomain(?string $subdomain = null) :array`  
+    Возвращает информацию о домене аккаунта amoCRM при авторизации по протоколу oAuth2.0.
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 
 - `static getLastResponse(bool $unescapeUnicode = true) :?string`  
     Возвращает последний ответ сервера amoCRM в сыром виде.
@@ -505,14 +544,6 @@ try {
     - `$type` - метод запроса 'GET' или 'POST';
     - `$params` - параметры запроса;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
-
-<a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%B8%D1%81%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B9"></a>
-### Обработка исключений
-
-Класс-исключение `AmoAPIException` содержит следующие вспомогательные методы:
-
-- `getErrors() :array` Возвращает массив сообщений об ошибках (errors) из ответа сервера amoCRM.
-- `getItems() :array` Возвращает массив параметров сущностей (items) из ответа сервера amoCRM.
 
 <a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B"></a>
 ## Примеры
@@ -1130,6 +1161,62 @@ try {
 
     // Пакетное удаление элементов
     AmoAPI::deleteObjects([ $element1, $element2 ]);
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-webhooks"></a>
+### Работа с webhooks
+
+```php
+use AmoCRM\AmoAPI;
+
+try {
+
+    // Авторизация
+    AmoAPI::oAuth2($subdomain);
+
+    // Получаем список установленных webhooks
+    $webhooks = \AmoCRM\AmoAPI::getWebhooks();
+    print_r($webhooks);
+
+    // Добавляем webhook
+    \AmoCRM\AmoAPI::addWebhooks([
+        'url'    => 'https://example.com/webhook/',
+        'events' => [ 'add_lead' ]
+    ]);
+
+    // Удаляем webhook
+    \AmoCRM\AmoAPI::deleteWebhooks([
+        'url'    => 'https://example.com/webhook/',
+        'events' => [ 'add_lead' ]
+    ]);
+
+    // Добавляем несколько webhooks
+    \AmoCRM\AmoAPI::addWebhooks([
+        [
+            'url'    => 'https://example1.com/webhook/',
+            'events' => [ 'add_lead' ]
+        ],
+        [
+            'url'    => 'https://example2.com/webhook/',
+            'events' => [ 'update_lead' ]
+        ]
+    ]);
+
+    // Удаляем несколько webhooks
+    \AmoCRM\AmoAPI::deleteWebhooks([
+        [
+            'url'    => 'https://example1.com/webhook/',
+            'events' => [ 'add_lead' ]
+        ],
+        [
+            'url'    => 'https://example2.com/webhook/',
+            'events' => [ 'update_lead' ]
+        ]
+    ]);
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());

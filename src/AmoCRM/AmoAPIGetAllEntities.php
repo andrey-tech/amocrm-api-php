@@ -7,12 +7,13 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.2.2
+ * @version 1.2.3
  *
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.2.0 (16.05.2020) Добавлен параметр $returnResponse во все методы
  * v1.2.1 (18.05.2020) Рефракторинг
  * v1.2.2 (22.05.2020) Исправлен метод getAllCatalogElements()
+ * v1.2.3 (14.07.2020) Изменен порядок параметров $subdomain и $returnResponse в методах
  *
  */
 
@@ -31,14 +32,14 @@ trait AmoAPIGetAllEntities
     /**
      * Загружает все компании
      * @param array $params Параметры для фильтрации
-     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponse Вернуть ответ сервера amoCRM
+     * @param string $subdomain Поддомен amoCRM
      * @return \Generator
      */
     public static function getAllCompanies(
         array $params = [],
-        $subdomain = null,
-        bool $returnResponse = false
+        bool $returnResponse = false,
+        $subdomain = null
     ) :\Generator {
         return self::getAll(AmoCompany::URL, $params, $subdomain, $returnResponse);
     }
@@ -46,14 +47,14 @@ trait AmoAPIGetAllEntities
     /**
      * Загружает все сделки
      * @param array $params Параметры для фильтрации
-     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponse Вернуть ответ сервера amoCRM
+     * @param string $subdomain Поддомен amoCRM
      * @return \Generator
      */
     public static function getAllLeads(
         array $params = [],
-        $subdomain = null,
-        bool $returnResponse = false
+        bool $returnResponse = false,
+        $subdomain = null
     ) :\Generator {
         return self::getAll(AmoLead::URL, $params, $subdomain, $returnResponse);
     }
@@ -61,14 +62,14 @@ trait AmoAPIGetAllEntities
     /**
      * Загружает все контакты
      * @param array $params Параметры для фильтрации
-     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponse Вернуть ответ сервера amoCRM
+     * @param string $subdomain Поддомен amoCRM
      * @return \Generator
      */
     public static function getAllContacts(
         array $params = [],
-        $subdomain = null,
-        bool $returnResponse = false
+        bool $returnResponse = false,
+        $subdomain = null
     ) :\Generator {
         return self::getAll(AmoContact::URL, $params, $subdomain, $returnResponse);
     }
@@ -76,14 +77,14 @@ trait AmoAPIGetAllEntities
     /**
      * Загружает все задачи
      * @param array $params Параметры для фильтрации
-     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponse Вернуть ответ сервера amoCRM
+     * @param string $subdomain Поддомен amoCRM
      * @return \Generator
      */
     public static function getAllTasks(
         array $params = [],
-        $subdomain = null,
-        bool $returnResponse = false
+        bool $returnResponse = false,
+        $subdomain = null
     ) :\Generator {
         return self::getAll(AmoTask::URL, $params, $subdomain, $returnResponse);
     }
@@ -91,14 +92,14 @@ trait AmoAPIGetAllEntities
     /**
      * Загружает все события
      * @param array $params Параметры для фильтрации
-     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponse Вернуть ответ сервера amoCRM
+     * @param string $subdomain Поддомен amoCRM
      * @return \Generator
      */
     public static function getAllNotes(
         array $params = [],
-        $subdomain = null,
-        bool $returnResponse = false
+        bool $returnResponse = false,
+        $subdomain = null
     ) :\Generator {
         return self::getAll(AmoNote::URL, $params, $subdomain, $returnResponse);
     }
@@ -107,15 +108,15 @@ trait AmoAPIGetAllEntities
      * Загружает полный список сущностей
      * @param string $url URL для загрузки сущностей
      * @param array $params Параметры для фильтрации
-     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponse Вернуть ответ сервера amoCRM
+     * @param string $subdomain Поддомен amoCRM
      * @return \Generator
      */
     protected static function getAll(
         string $url,
         array $params = [],
-        $subdomain = null,
-        bool $returnResponse = false
+        bool $returnResponse = false,
+        $subdomain = null
     ) :\Generator {
         $params['limit_rows'] = self::$limitRows;
         $params['limit_offset'] = $params['limit_offset'] ?? 0;
@@ -140,14 +141,14 @@ trait AmoAPIGetAllEntities
     /**
      * Загружает полный список элементов каталога
      * @param array $params Параметры для фильтрации
-     * @param string $subdomain Поддомен amoCRM
      * @param bool $returnResponse Вернуть ответ сервера amoCRM
+     * @param string $subdomain Поддомен amoCRM
      * @return \Generator
      */
     public static function getAllCatalogElements(
         array $params = [],
-        $subdomain = null,
-        bool $returnResponse = false
+        bool $returnResponse = false,
+        $subdomain = null
     ) :\Generator {
         while (true) {
             $params['page'] = $params['page'] ?? 1;
