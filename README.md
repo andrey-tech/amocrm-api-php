@@ -13,17 +13,31 @@
 использование механизма API ключей не допускается. Требование с февраля 2020 года"*.
 
 В настоящее время актуальной версией REST API amoCRM является [**v4**](https://www.amocrm.ru/developers/content/crm_platform/api-reference).  
-Документация по REST API **v2** amoCRM пока доступна по следующим прямым ссылкам:
 
-- [Компании](https://www.amocrm.ru/developers/content/api/companies)
-- [Контакты](https://www.amocrm.ru/developers/content/api/contacts)
-- [Сделки](https://www.amocrm.ru/developers/content/api/leads)
-- [События](https://www.amocrm.ru/developers/content/api/notes)
-- [Задачи](https://www.amocrm.ru/developers/content/api/tasks)
-- [Списки](https://www.amocrm.ru/developers/content/catalogs/catalogs)
-- [Элементы списков](https://www.amocrm.ru/developers/content/catalogs/elements) 
-- [Неразобранное](https://www.amocrm.ru/developers/content/api/unsorted) 
-- [Webhooks](https://www.amocrm.com/developers/content/api/webhooks/) 
+## Документация по REST API **v2** amoCRM
+
+Локальный архив документации по REST API **v2** amoCRM и прямые ссылки на сайт amoCRM:
+
+- [Аккаунт](./doc/account.html) 
+- [Авторизация](./doc/auth.html)
+- [Компаниии](./doc/companies.html) [🗏](https://www.amocrm.ru/developers/content/api/companies)
+- [Контакты](./doc/contacts.html) [🗏](https://www.amocrm.ru/developers/content/api/contacts)
+- [Сделки](./doc/leads.html) [🗏](https://www.amocrm.ru/developers/content/api/leads)
+- [События](./doc/notes.html) [🗏](https://www.amocrm.ru/developers/content/api/notes)
+- [Задачи](./doc/tasks.html) [🗏](https://www.amocrm.ru/developers/content/api/tasks)
+- [Списки](./doc/catalogs.html) [🗏](https://www.amocrm.ru/developers/content/catalogs/catalogs)
+- [Элементы списков](./doc/catalog-elements.html) [🗏](https://www.amocrm.ru/developers/content/catalogs/elements) 
+- [Неразобранное](./doc/unsorted.html) [🗏](https://www.amocrm.ru/developers/content/api/unsorted) 
+- [Webhooks](./doc/webhooks.html) [🗏](https://www.amocrm.com/developers/content/api/webhooks/) (en)
+- [Покупатели](./doc/customers.html)
+- [Дополнительные поля](./doc/custom_fields.html)
+- [Виджеты](./doc/widgets.html)
+- [Товары](./doc/products.html)
+- [Воронки и этапы продаж](./doc/pipelines.html)
+- [Логирование звонков](./doc/calls-add.html)
+- [Уведомление о звонке](./doc/call-event.html)
+- [Коды ошибок](./doc/errors.html)
+- [Ограничения и рекомендации](./doc/recommendations.html)
 
 ## Содержание
 
