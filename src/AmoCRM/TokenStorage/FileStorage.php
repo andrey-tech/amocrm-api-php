@@ -8,9 +8,11 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.0.0
+ * @version 1.1.1
  *
  * v1.0.0 (08.07.2020) Начальный релиз
+ * v1.1.0 (17.07.2020) Добавлен метод hasTokens()
+ * v1.1.1 (16.07.2020) Исправлена разделяемая блокировка JSON-файла. Рефракторинг
  *
  */
 
@@ -20,7 +22,7 @@ namespace AmoCRM\TokenStorage;
 
 class FileStorage implements TokenStorageInterface
 {
-   /**
+    /**
      * Каталог для хранения файлов с токенами
      * @var string
      */
@@ -40,13 +42,11 @@ class FileStorage implements TokenStorageInterface
      * @param  array  $tokens Токены для сохранения
      * @param  string $domain Домен amoCRM
      * @return void
+     * @throws TokenStorageException
      */
     public function save(array $tokens, string $domain)
     {
-        // Формируем полное имя файла c токенами
-        $tokensFilePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . $this->storageFolder;
-        $this->checkDir($tokensFilePath);
-        $tokensFile =  $tokensFilePath . $domain . '.json';
+        $tokensFile =  $this->getTokensFileName($domain);
 
         // Кодируем параметры в JSON
         $jsonTokens = json_encode($tokens, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
@@ -65,22 +65,38 @@ class FileStorage implements TokenStorageInterface
      * Загружает токены из JSON-файла
      * @param  string $domain Домен amoCRM
      * @return array|null
+     * @throws TokenStorageException
      */
     public function load(string $domain)
     {
-        // Формируем полное имя файла c токенами
-        $tokensFilePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . $this->storageFolder;
-        $tokensFile =  $tokensFilePath . $domain . '.json';
+        $tokensFile =  $this->getTokensFileName($domain);
 
         // Выходим, если файл с токенами не существует
         if (! is_file($tokensFile)) {
             return null;
         }
 
+        $fh = @fopen($tokensFile, 'r');
+        if ($fh === false) {
+            throw new TokenStorageException("Не удалось открыть файл токенов '{$tokensFile}'");
+        }
+
+        if (! flock($fh, LOCK_SH)) {
+            throw new TokenStorageException("Не удалось получить разделяемую блокировку файла токенов '{$tokensFile}'");
+        }
+
         // Загружаем содержимое файла с токенами
         $jsonTokens = @file_get_contents($tokensFile);
         if ($jsonTokens === false) {
             throw new TokenStorageException("Не удалось прочитать файл токенов '{$tokensFile}'");
+        }
+
+        if (! flock($fh, LOCK_UN)) {
+            throw new TokenStorageException("Не удалось разблокировать файл токенов '{$tokensFile}'");
+        }
+
+        if (! fclose($fh)) {
+            throw new TokenStorageException("Не удалось закрыть файл токенов '{$storageFile}'");
         }
 
         // Декодируем содержимое файла
@@ -96,20 +112,34 @@ class FileStorage implements TokenStorageInterface
     }
 
     /**
-     * Проверяет наличие каталога для сохранения файла и создает каталог при его отсутствии рекурсивно
-     * @param string $directory Полный путь к каталогу
-     * @return void
+     * Проверяет существуют ли токены для заданного домена amoCRM
+     * @param string $domain Домен амoCRM
+     * @return bool
      */
-    protected function checkDir(string $directory)
+    public function hasTokens(string $domain) :bool
     {
-        // Выходим, если каталог уже есть (is_dir кешируется PHP)
-        if (is_dir($directory)) {
-            return;
+        $tokensFile =  $this->getTokensFileName($domain);
+        return is_file($tokensFile);
+    }
+
+    /**
+     * Возвращает абсолютное имя JSON-файла с токенами
+     * @param  string $domain Домен amoCRM
+     * @return string
+     * @throws TokenStorageException
+     */
+    protected function getTokensFileName(string $domain) :string
+    {
+        $storageFolder = __DIR__ . DIRECTORY_SEPARATOR . $this->storageFolder;
+        if (! is_dir($storageFolder)) {
+            if (! mkdir($storageFolder, $mode = 0755, $recursive = true)) {
+                throw new TokenStorageException("Не удалось рекурсивно создать каталог файлов токенов '{$storageFolder}'");
+            }
         }
 
-        // Создаем новый каталог рекурсивно
-        if (! mkdir($directory, $mode = 0755, $recursive = true)) {
-            throw new TokenStorageException("Не удалось рекурсивно создать каталог '{$directory}'");
-        }
+        $storageFolder = realpath($storageFolder);
+        $tokensFile =  $storageFolder . DIRECTORY_SEPARATOR .  $domain . '.json';
+
+        return $tokensFile;
     }
 }

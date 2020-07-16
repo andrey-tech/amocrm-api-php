@@ -194,6 +194,8 @@ try {
 
 - `__construct(string $storageFolder = 'tokens/')` Конструктор класса.
     * `$storageFolder` - каталог для хранения файлов токенов.
+- `hasTokens(string $domain) :bool` Проверяет существуют ли токены для заданного домена amoCRM.
+    * `$domain` - полный домен amoCRM.
 
 При возникновении ошибок выбрасыватся исключение класса `\AmoCRM\TokenStorage\TokenStorageException`. 
 
