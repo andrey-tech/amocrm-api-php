@@ -2,7 +2,7 @@
 
 ![amoCRM logo](./assets/amocrm-logo.png)
 
-Обертка на PHP7+ для работы с REST API **v2** [amoCRM](https://www.amocrm.ru) с авторизацией по протоколу oAuth 2.0
+Обертка на PHP7+ для работы с REST API [amoCRM](https://www.amocrm.ru) **v2** с авторизацией по протоколу oAuth 2.0
 или по API-ключу пользователя, троттлингом запросов к API, блокировкой одновременного обновления одной сущности
 и логированием в файл.
 
@@ -12,11 +12,12 @@
 *"Публичные интеграции должны использовать механизм авторизации oAuth 2.0,
 использование механизма API ключей не допускается. Требование с февраля 2020 года"*.
 
-В настоящее время актуальной версией REST API amoCRM является [**v4**](https://www.amocrm.ru/developers/content/crm_platform/api-reference).  
+В настоящее время актуальной версией является [REST API amoCRM **v4**](https://www.amocrm.ru/developers/content/crm_platform/api-reference).  
+Ссылки на документацию по REST API **v2** удалены с русскоязычной версии сайта. 
 
 ## Документация по REST API **v2** amoCRM
 
-Архив документации по REST API **v2** amoCRM и прямые ссылки на сайт amoCRM:
+Архив документации по REST API amoCRM **v2** и прямые ссылки на сайт amoCRM:
 
 - [Аккаунт](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/account.html) 
 - [Авторизация](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/auth.html)
@@ -147,7 +148,10 @@ try {
 <a id="%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8"></a>
 #### Получение нового access токена по его истечении
 
-Пример авторизации по протоколу oAuth 2.0 и получение нового access и refresh токена по истечении access токена. 
+Получение нового access и refresh токена по истечении access токена происходит автоматически,
+когда в ответ на запрос к API amoCRM приходит ответ с HTTP-статусом `401 Unauthorized`.
+
+После первичного обмена кода авторизации на access токен и refresh токен, при последующих авторизациях, достаточно указать только поддомен или полный домен amoCRM.
 ```php
 use \AmoCRM\AmoAPI;
 
@@ -177,12 +181,12 @@ try {
 
 Интерфейс `\AmoCRM\TokenStorage\TokenStorageInterface` определяет два метода:
 
-- `save(array $tokens, string $domain) :void` Сохраняет токены.
+- `save(array $tokens, string $domain) :void` Сохраняет параметры авторизации и токены.
     * `$tokens` - ассоциативный массив параметров авторизации и токенов:  
        `[ 'access_token' => '...', 'refresh_token' => '...', 'client_id' => '...', 'client_secret' => '...', 'redirect_uri'=> '...' ]`;
     * `$domain` - полный домен amoCRM (например, `testsubdomain.amocrm.ru`).
-- `load(string $domain) :?array` Загружает параметры авторизации и токены и возвращает их в виде ассоциативного массива.  
-    Должен возвращать `null` когда нет сохраненных токенов.
+- `load(string $domain) :?array` Загружает параметры авторизации и токены и возвращает их.
+    Метод должен возвращать `null`, когда нет сохраненных токенов.
     * `$domain` - полный домен amoCRM.
 
 <a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage"></a>
