@@ -38,7 +38,7 @@ abstract class AmoObject
 
     /**
      * Типы привязываемых элементов
-     * @var constant
+     * @var int
      */
     const CONTACT_TYPE = 1;
     const LEAD_TYPE = 2;

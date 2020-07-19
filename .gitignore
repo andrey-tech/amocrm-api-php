@@ -3,5 +3,6 @@ logs/
 lock/
 cookies/
 tokens/
+.idea/
 *.log
 *.bak

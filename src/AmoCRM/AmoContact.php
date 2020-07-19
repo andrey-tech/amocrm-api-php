@@ -7,13 +7,13 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.3.0
+ * @version 1.3.1
  *
  * v1.0.0 (24.04.2019) Начальный релиз.
  * v1.1.0 (16.05.2019) Добавлены свойства first_name, last_name
  * v1.2.0 (19.05.2020) Добавлена поддержка параметра $subdomain в конструктор
  * v1.3.0 (20.05.2020) Добавлены методы addCompany(), getPhone(), getEmail()
- *
+ * v1.3.1 (19.07.2020) Исправлен баг с типом возвращаемого значения в методе addCustomers()
  */
 
 declare(strict_types = 1);
@@ -126,7 +126,7 @@ class AmoContact extends AmoObject
      * @return AmoCompany
      *
      */
-    public function addCustomers($customers) :AmoCompany
+    public function addCustomers($customers) :AmoContact
     {
         if (! is_array($customers)) {
             $customers = [ $customers ];
@@ -148,8 +148,9 @@ class AmoContact extends AmoObject
     /**
      * Добавляет компанию
      * @param int $companyId ID компании
+     * @return AmoContact
      */
-    public function addCompany($companyId)
+    public function addCompany($companyId) :AmoContact
     {
         $this->company = [ 'id' => $companyId ];
         return $this;

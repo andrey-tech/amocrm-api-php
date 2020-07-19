@@ -7,15 +7,16 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * v1.0.0 (07.07.2020) Первоначальная версия
+ * v1.0.1 (19.07.2020) Исправлен баг с namespace
  *
  */
 
 declare(strict_types = 1);
 
-namespace App\Integrations\API\AmoCRM;
+namespace AmoCRM;
 
 class AmoIncomingLeadForm extends AmoObject
 {

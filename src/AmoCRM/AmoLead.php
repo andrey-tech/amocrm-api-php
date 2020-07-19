@@ -150,6 +150,7 @@ class AmoLead extends AmoObject
     /**
      * Устанавливает элементы каталога
      * @param array $catalogElements Массив каталогов с их элементами
+     * @return AmoLead
      */
     public function setCatalogElements($catalogElements) :AmoLead
     {
@@ -161,8 +162,9 @@ class AmoLead extends AmoObject
     /**
      * Добавляет компанию
      * @param int $companyId ID компании
+     * @return AmoLead
      */
-    public function addCompany($companyId)
+    public function addCompany($companyId) :AmoLead
     {
         $this->company = [ 'id' => $companyId ];
         return $this;

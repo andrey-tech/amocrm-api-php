@@ -8,11 +8,12 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * v1.0.0 (08.07.2020) Начальный релиз
  * v1.1.0 (17.07.2020) Добавлен метод hasTokens()
  * v1.1.1 (16.07.2020) Исправлена разделяемая блокировка JSON-файла. Рефракторинг
+ * v1.1.2 (19.07.2020) Исправлено сообщение об ошибке
  *
  */
 
@@ -96,7 +97,7 @@ class FileStorage implements TokenStorageInterface
         }
 
         if (! fclose($fh)) {
-            throw new TokenStorageException("Не удалось закрыть файл токенов '{$storageFile}'");
+            throw new TokenStorageException("Не удалось закрыть файл токенов '{$tokensFile}'");
         }
 
         // Декодируем содержимое файла

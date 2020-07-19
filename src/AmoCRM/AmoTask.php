@@ -28,7 +28,7 @@ class AmoTask extends AmoObject
 
     /**
      * Типы задач
-     * @var constant
+     * @var int
      */
     const CALL_TASKTYPE = 1;
     const MEET_TASKTYPE = 2;
