@@ -48,8 +48,8 @@
 - [Установка](#%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0)
 - [Авторизация](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F)
     - [Авторизация по протоколу oAuth 2.0 \(актуальный метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%83-oauth-20-%D0%B0%D0%BA%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
-        - [Обмен кода авторизации на access токен и refresh токен](#%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD)
-        - [Получение нового access токена по его истечении](#%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8)
+        - [Первичная авторизация и обмен кода авторизации на access токен и refresh токен](#%D0%9F%D0%B5%D1%80%D0%B2%D0%B8%D1%87%D0%BD%D0%B0%D1%8F-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8-%D0%BE%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD)
+        - [Поcледующие авторизации](#%D0%9F%D0%BEc%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B8%D0%B5-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8)
         - [Хранение access и refresh токенов](#%D0%A5%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-access-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2)
             - [Интерфейс `TokenStorageInterface`](#%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-tokenstorageinterface)
             - [Класс `FileStorage`](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage)
@@ -117,10 +117,12 @@ $ composer require andrey-tech/amocrm-api-php:"^2.7"
     - `$redirectUri` - URI перенаправления;
     - `$authCode` - код авторизации (временный ключ) для обмена на access токен и refresh токен.
 
-<a id="%D0%9E%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD"></a>
-#### Обмен кода авторизации на access токен и refresh токен
+<a id="%D0%9F%D0%B5%D1%80%D0%B2%D0%B8%D1%87%D0%BD%D0%B0%D1%8F-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8-%D0%BE%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD"></a>
+#### Первичная авторизация и обмен кода авторизации на access токен и refresh токен
 
-Пример авторизации по протоколу oAuth 2.0 и [обмен кода авторизации](https://www.amocrm.ru/developers/content/oauth/step-by-step#get_access_token) на access и refresh токены.
+При первичной авторизации производится [обмен кода авторизации](https://www.amocrm.ru/developers/content/oauth/step-by-step#get_access_token) `authCode`
+на access токен и refresh токен, которые сохраняются в хранилище токенов вместе с переданными значениями `$clientId`, `$clientSecret` и `$redirectUri`.
+
 ```php
 use \AmoCRM\AmoAPI;
 
@@ -132,7 +134,7 @@ try {
     $redirectUri  = 'https://www.example.com/oauth2/';
     $subdomain    = 'testsubdomain';
 
-    // Авторизация
+    // Первичная авторизация
     AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode);
 
     // Получение информации об аккаунте
@@ -145,20 +147,19 @@ try {
 }
 ```
 
-<a id="%D0%9F%D0%BE%D0%BB%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%B0-%D0%BF%D0%BE-%D0%B5%D0%B3%D0%BE-%D0%B8%D1%81%D1%82%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%D0%B8"></a>
-#### Получение нового access токена по его истечении
+<a id="%D0%9F%D0%BEc%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B8%D0%B5-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8"></a>
+#### Поcледующие авторизации
 
-Получение нового access и refresh токена по истечении access токена происходит автоматически,
-когда в ответ на запрос к API amoCRM приходит ответ с HTTP-статусом `401 Unauthorized`.
+После первичного обмена кода авторизации на access токен и refresh токен, при последующих авторизациях, 
+достаточно передать только `$subdomain` - поддомен или полный домен amoCRM .
 
-После первичного обмена кода авторизации на access токен и refresh токен, при последующих авторизациях, достаточно указать только поддомен или полный домен amoCRM.
 ```php
 use \AmoCRM\AmoAPI;
 
 try {
     $subdomain = 'testsubdomain';
 
-    // Авторизация
+    // Последующие авторизации
     AmoAPI::oAuth2($subdomain);
 
     // Получение информации об аккаунте
@@ -170,6 +171,9 @@ try {
     printf('Ошибка обработки токенов (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
+
+Получение нового access токена и refresh токена по истечении срока действия access токена происходит автоматически,
+когда в ответ на запрос к API amoCRM приходит ответ с HTTP-статусом `401 Unauthorized`.
 
 <a id="%D0%A5%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-access-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2"></a>
 #### Хранение access и refresh токенов
