@@ -21,6 +21,7 @@
  * v1.6.0 (21.05.2020) Добавлена поддержка параметра AmoAPI::$updatedAtDelta
  * v1.6.1 (25.05.2020) Рефракторинг
  * v1.7.0 (26.05.2020) Добавлена блокировка сущностей при обновлении (update) методом save()
+ * v1.7.1 (23.07.2020) Исправлен тип параметра $returnResponse в методе save()
  *
  */
 
@@ -311,10 +312,10 @@ abstract class AmoObject
     /**
      * Обновляет или добавляет объект в amoCRM
      * @param  bool $returnResponse Вернуть ответ сервера вместо ID сущности
-     * @return array|int
+     * @return mixed
      *
      */
-    public function save($returnResponse = false)
+    public function save(bool $returnResponse = false)
     {
         if (isset($this->id)) {
             $lock = AmoAPI::lockEntity($this);
