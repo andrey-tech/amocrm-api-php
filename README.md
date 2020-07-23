@@ -76,8 +76,8 @@
     - [Работа со списками \(каталогами\)](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0%D0%BC%D0%B8-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0%D0%BC%D0%B8)
     - [Работа с элементами списков \(каталогов\)](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%BE%D0%B2-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2)
     - [Работа с webhooks](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-webhooks)
-    - [Работа с несколькими поддоменами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8)
     - [Работа со сделками из неразобранного](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
+    - [Работа с несколькими поддоменами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
 
@@ -1255,48 +1255,6 @@ try {
 }
 ```
 
-<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8"></a>
-### Работа с несколькими поддоменами
-
-```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoContact;
-
-try {
-    // Авторизация в поддомене 1
-    AmoAPI::oAuth2($subdomain1, $clientId1, $clientSecret1, $redirectUri1, $authCode1);
-
-    // Авторизация в поддомене 2
-    AmoAPI::oAuth2($subdomain2, $clientId2, $clientSecret2, $redirectUri2, $authCode2);
-
-    // Загрузка компаний из поддомена 1
-    $items1 = AmoAPI::getCompanies([
-        'responsible_user_id' => 12357492
-    ], $subdomain1);
-
-    // Загрузка всех компаний из поддомена 2
-    $generator2 = AmoAPI::getAllCompanies([
-        'query' => 'OOO'
-    ], $subdomain2);
-
-    // Создание новой компании для поддомена 1
-    $company1 = new AmoCompany([
-        'name' => 'ООО Абракадабра',
-    ], $subdomain1);
-
-    // Обновление существущей компании для поддомена 1
-    $company2 = new AmoCompany([], $subdomain1);
-    $company2->fillById(12389423);
-    $company2->name = 'OOO Розенталь';
-
-    // Пакетное сохранение компаний для поддомена 1
-    AmoAPI::saveObjects([ $company1, $company2 ], $subomain1);
-
-} catch (\AmoCRM\AmoAPIException $e) {
-    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
-}
-```
-
 <a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE"></a>
 ### Работа со сделками из неразобранного
 
@@ -1309,6 +1267,7 @@ try {
 Пример работы со сделками из неразобранного (при добавлении из веб-формы).
 ```php
 use AmoCRM\AmoAPI;
+use AmoCRM\AmoIncomingLeadForm;
 
 try {
 
@@ -1316,7 +1275,7 @@ try {
     $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
-    $lead = new \App\Integrations\API\AmoCRM\AmoIncomingLeadForm([
+    $lead = new AmoIncomingLeadForm([
         'created_at' => 1595519985,
         'incoming_lead_info' => [
             'form_id'   => 1,
@@ -1358,6 +1317,48 @@ try {
     ]);
 
     $lead->save();
+
+} catch (\AmoCRM\AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8"></a>
+### Работа с несколькими поддоменами
+
+```php
+use AmoCRM\AmoAPI;
+use AmoCRM\AmoContact;
+
+try {
+    // Авторизация в поддомене 1
+    AmoAPI::oAuth2($subdomain1, $clientId1, $clientSecret1, $redirectUri1, $authCode1);
+
+    // Авторизация в поддомене 2
+    AmoAPI::oAuth2($subdomain2, $clientId2, $clientSecret2, $redirectUri2, $authCode2);
+
+    // Загрузка компаний из поддомена 1
+    $items1 = AmoAPI::getCompanies([
+        'responsible_user_id' => 12357492
+    ], $subdomain1);
+
+    // Загрузка всех компаний из поддомена 2
+    $generator2 = AmoAPI::getAllCompanies([
+        'query' => 'OOO'
+    ], $subdomain2);
+
+    // Создание новой компании для поддомена 1
+    $company1 = new AmoCompany([
+        'name' => 'ООО Абракадабра',
+    ], $subdomain1);
+
+    // Обновление существущей компании для поддомена 1
+    $company2 = new AmoCompany([], $subdomain1);
+    $company2->fillById(12389423);
+    $company2->name = 'OOO Розенталь';
+
+    // Пакетное сохранение компаний для поддомена 1
+    AmoAPI::saveObjects([ $company1, $company2 ], $subomain1);
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
