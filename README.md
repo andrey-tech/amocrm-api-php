@@ -1,6 +1,6 @@
 # amoCRM API PHP Wrapper
 
-![amoCRM logo](./assets/amocrm-logo.png)
+![amoCRM logo](./assets/amocrm-logo.png)  
 [![Latest Stable Version](https://poser.pugx.org/andrey-tech/amocrm-api-php/v)](//packagist.org/packages/andrey-tech/amocrm-api-php)
 [![Total Downloads](https://poser.pugx.org/andrey-tech/amocrm-api-php/downloads)](//packagist.org/packages/andrey-tech/amocrm-api-php)
 [![License](https://poser.pugx.org/andrey-tech/amocrm-api-php/license)](//packagist.org/packages/andrey-tech/amocrm-api-php)
@@ -464,7 +464,8 @@ try {
     не работают следующие общие методы моделей: `getCustomFields()`, `getCustomFieldValueById()`, `setCustomFields()`,
     `addTags()`, `delTags()`.
 
-    *"Изначально неразобранное было в отдельном хранилище и являлось отдельной сущностью именно поэтому до сих пор в интерфейсах amoCRM и в API есть особенности которые отличают поведение сделки в статусе Неразобранное от сделок в других статусах"*.
+    Согласно [официальной документации](https://www.amocrm.ru/developers/content/api/unsorted):
+    > Изначально неразобранное было в отдельном хранилище и являлось отдельной сущностью именно поэтому до сих пор в интерфейсах amoCRM и в API есть особенности которые отличают поведение сделки в статусе Неразобранное от сделок в других статусах.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для загрузки сущностей
@@ -1271,7 +1272,8 @@ try {
 не работают следующие общие методы моделей: `getCustomFields()`, `getCustomFieldValueById()`, `setCustomFields()`,
 `addTags()`, `delTags()`.
 
-*"Изначально неразобранное было в отдельном хранилище и являлось отдельной сущностью именно поэтому до сих пор в интерфейсах amoCRM и в API есть особенности которые отличают поведение сделки в статусе Неразобранное от сделок в других статусах"*.
+Согласно [официальной документации](https://www.amocrm.ru/developers/content/api/unsorted):
+> Изначально неразобранное было в отдельном хранилище и являлось отдельной сущностью именно поэтому до сих пор в интерфейсах amoCRM и в API есть особенности которые отличают поведение сделки в статусе Неразобранное от сделок в других статусах.
 
 Пример работы со сделками из неразобранного при добавлении заявки из веб-формы.
 ```php
