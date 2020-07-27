@@ -59,6 +59,17 @@ class AmoAPI
         return $response['_embedded']['items'] ?? null;
     }
 
+    /* Сохраняет объекты пачками, с учетом лимита */
+    public static function saveObjectsWithLimit($amoObjects, bool $returnResponses = false, $subdomain = null, $limit = 250) :array {
+        if(count($amoObjects) < $limit) return self::saveObjects($amoObjects, $returnResponses, $subdomain);
+        $out = array();
+        $amoObjectsChunks = array_chunk($amoObjects, $limit);
+        foreach ($amoObjectsChunks as $amoObjectsChunk) {
+            $out = array_merge($out, self::saveObjects($amoObjectsChunk, $returnResponses, $subdomain));
+        }
+        return  $out;
+    }
+    
     /**
      * Сохраняет (добавляет или обновляет) объекты AmoObject
      * @param array $amoObjects Массив объектов
