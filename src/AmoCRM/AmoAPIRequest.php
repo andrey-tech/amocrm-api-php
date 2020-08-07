@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.9.1
+ * @version 2.9.3
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -36,6 +36,7 @@
  * v2.9.0 (11.07.2020) Добавлена возможность передаче в параметре $subdomain полного домена amoCRM
  * v2.9.1 (15.07.2020) Метод getAmoDomain() теперь публичный
  * v2.9.2 (19.07.2020) Исправлено сообщение об ошибке с кодом 244
+ * v2.9.3 (07.08.2020) Сообщение об ошибке дополнено параметрами запроса
  *
  */
 
@@ -382,7 +383,7 @@ trait AmoAPIRequest
 
         // Проверяем наличие ошибки cURL
         if ($errno) {
-            throw new AmoAPIException("Oшибка cURL ({$errno}): {$error}");
+            throw new AmoAPIException("Oшибка cURL ({$errno}): {$error} {$requestInfo}");
         }
 
         // Если код статуса HTTP 401 (401 Unauthorized), то выполняем, при необходимости, повторную авторизацию
@@ -399,7 +400,7 @@ trait AmoAPIRequest
 
         // Проверяем код статуса HTTP
         if ($code !== 200 && $code !== 204) {
-            throw new AmoAPIException(self::getErrorMessage($code) . ": {$result}", $code);
+            throw new AmoAPIException(self::getErrorMessage($code) . ": {$requestInfo} (Response: {$result})", $code);
         }
 
         // Если код статуса HTTP 204 (204 No Content), то в ответе были переданы только заголовки без тела сообщения
