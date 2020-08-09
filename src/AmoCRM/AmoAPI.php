@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.3.1
+ * @version 2.4.0
  *
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.1.0 (02.06.2019) Добавлены новые параметры, рефракторинг.
@@ -19,6 +19,7 @@
  * v2.2.0 (16.05.2020) Добавлен метод getItems(). Добавлен параметр $returnResponses в метод saveObjects()
  * v2.3.0 (22.05.2020) Добавлен метод deleteObjects() для удаления списков и их элементов
  * v2.3.1 (14.07.2020) Изменен порядок параметров $subdomain и $returnResponse в методах
+ * v2.4.0 (09.08.2020) Добавлен метод saveObjectsWithLimit()
  *
  */
 
@@ -59,25 +60,46 @@ class AmoAPI
         return $response['_embedded']['items'] ?? null;
     }
 
-    /* Сохраняет объекты пачками, с учетом лимита */
-    public static function saveObjectsWithLimit($amoObjects, bool $returnResponses = false, $subdomain = null, $limit = 250) :array {
-        if(count($amoObjects) < $limit) return self::saveObjects($amoObjects, $returnResponses, $subdomain);
-        $out = array();
+    /**
+     * Сохраняет (добавляет или обновляет) объекты AmoObject с ограничением на число сущностей в одном запросе к API amoCRM
+     * @param array|object $amoObjects Массив объектов AmoObject или объект AmoObject
+     * @param bool $returnResponses Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей
+     * @param string $subdomain Поддомен amoCRM
+     * @param int $limit Максимальное число сущностей в одном запросе к API amoCRM
+     * @return array
+     * @throws AmoAPIException
+     */
+    public static function saveObjectsWithLimit(
+        $amoObjects,
+        bool $returnResponses = false,
+        $subdomain = null,
+        $limit = 250
+    ):array {
+        if (! is_array($amoObjects)) {
+            $amoObjects = [$amoObjects];
+        }
+
+        if (count($amoObjects) < $limit) {
+            return self::saveObjects($amoObjects, $returnResponses, $subdomain);
+        }
+
+        $responses = [];
         $amoObjectsChunks = array_chunk($amoObjects, $limit);
         foreach ($amoObjectsChunks as $amoObjectsChunk) {
-            $out = array_merge($out, self::saveObjects($amoObjectsChunk, $returnResponses, $subdomain));
+            $responses = array_merge($responses, self::saveObjects($amoObjectsChunk, $returnResponses, $subdomain));
         }
-        return  $out;
+
+        return $responses;
     }
-    
+
     /**
      * Сохраняет (добавляет или обновляет) объекты AmoObject
-     * @param array $amoObjects Массив объектов
+     * @param array|object $amoObjects Массив объектов AmoObject или объект AmoObject
      * @param bool $returnResponses Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей
      * @param string $subdomain Поддомен amoCRM
      * @return array
+     * @throws AmoAPIException
      */
-    // ------------------------------------------------------------------------
     public static function saveObjects($amoObjects, bool $returnResponses = false, $subdomain = null) :array
     {
         if (! is_array($amoObjects)) {
@@ -117,10 +139,11 @@ class AmoAPI
 
     /**
      * Удаляет объекты AmoObject (списки или элементы списков)
-     * @param array $amoObjects Массив объектов
+     * @param array|object $amoObjects Массив объектов AmoObject или объект AmoObject
      * @param bool $returnResponses Возвращать массив ответов сервера amoCRM вместо массива параметров сущностей
      * @param string $subdomain Поддомен amoCRM
      * @return array
+     * @throws AmoAPIException
      */
     public static function deleteObjects($amoObjects, bool $returnResponses = false, $subdomain = null) :array
     {
