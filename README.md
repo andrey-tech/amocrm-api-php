@@ -121,7 +121,7 @@ $ composer require andrey-tech/amocrm-api-php:"^2.7"
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%83-oauth-20-%D0%B0%D0%BA%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4"></a>
 ### Авторизация по протоколу oAuth 2.0 ([актуальный метод](https://www.amocrm.ru/developers/content/oauth/oauth))
 
-- `static AmoAPI::oAuth2(string $subdomain, string $clientId, string $clientSecret, string $redirectUri, ?string $authCode = null) :array`  
+- `static AmoAPI::oAuth2(string $subdomain, string $clientId, string $clientSecret, string $redirectUri, string $authCode = null) :array`  
     - `$subdomain` - поддомен или полный домен amoCRM;
     - `$clientId` - ID интеграции;
     - `$clientSecret` - секрет интеграции;
@@ -372,7 +372,6 @@ try {
     - `AmoCatalogElement` - модель элемента списка (каталога);
     - `AmoIncomingLeadForm` - модель сделки из неразобранного при добавлении заявки из веб-формы.
     - `AmoIncomingLeadSip` - модель сделки из неразобранного c типом входящий звонок.
-
 - дополнительных статических методов класса `AmoAPI`.
 
 Параметры моделей доступны через публичные свойства объектов классов-моделей.
@@ -382,16 +381,23 @@ try {
 
 Базовый класс моделей  `AmoObject` содержит следующие общие методы:
 
-- `__construct(array $data = [], ?string $subdomain = null)` Создает новый объект модели и заполняет данными.
+- `__construct(array $data = [], string $subdomain = null)` Создает новый объект модели и заполняет данными.
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
 - `fillById(int $id, array $params = [])` Заполняет модель данными по ID сущности.
     - `$params` - дополнительные параметры, передаваемые в GET-запросе к amoCRM.
-- `getParams() :array` Возвращает текущие параметры модели.
+- `getParams() :array` Возвращает все параметры модели.
 - `getCustomFields(array|int $ids) :array` Возвращает дополнительные поля по ID полей.
-- `getCustomFieldValueById(int $id)` Возвращает значение дополнительного поля по ID поля.
-- `setCustomFields(array $params)` Устанавливает значения дополнительных полей.
+    + `$ids` - ID поля или массив ID полей.
+- `getCustomFieldValueById(int $id, bool $returnFirst = true, string $returnValue = 'value')` Возвращает значение дополнительного поля по ID поля.
+    + `$i` - ID поля;
+    + `$returnFirst` - вернуть только первое значение из списка значений;
+    + `$returnValue` - имя параметра, значение которого возвращается (`value`, `enum`, `subtype`).
+- `setCustomFields(array $params) :AmoObject` Устанавливает значения дополнительных полей.
+    + `$params` - массив значений дополнителных полей.
 - `addTags(array|string $tags)` Добавляет теги.
+    + `$tags` - тег или массив тегов.
 - `delTags(array|string $tags)` Удаляет теги. 
+    + `$tags` - тег или массив тегов.
 - `save(bool $returnResponse = false)` Сохраняет объект модели в amoCRM и возвращает ID сущности. 
     - `$returnResponse` - вернуть ответ сервера вместо ID сущности.
 
@@ -469,7 +475,7 @@ try {
 
 Класс `AmoAPI` содержит следующие общие статические методы для загрузки сущностей:
 
-- `static getAll<Entities> (array $params, bool $returnResponse = false, ?string $subdomain = null) :\Generator`
+- `static getAll<Entities> (array $params, bool $returnResponse = false, string $subdomain = null) :\Generator`
     Загружает ВСЕ сущности заданного типа <Entities\> c возможностью фильтрации.  
     Возвращает объект типа \Generator для последующей выборки параметров сущностей.
     - `<Entities>`:
@@ -482,8 +488,7 @@ try {
     - `$params` - параметры фильтрации;
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последнией выполненной авторизации.
-
-- `static get<Entities>(array $params, bool $returnResponse = false, ?string $subdomain = null) :?array`  
+- `static get<Entities>(array $params, bool $returnResponse = false, string $subdomain = null) :?array`  
     Загружает сущности заданного типа <Entities\> c возможностью фильтрации и постраничной выборки.  
     Возвращает массив параметров сущностей для заполнения моделей или null.
     - `<Entities>`:
@@ -513,12 +518,12 @@ try {
 Согласно [официальной документации](https://www.amocrm.ru/developers/content/api/recommendations):
 > Максимальное кол-во создаваемых/изменяем сущностей не более 500, для более оптимальной работы интеграции и избежания ошибок, рекомендуется не более 250. В случае получения 504 ошибки рекомендуется уменьшить количество передаваемых сущностей в запросе и повторить запрос.
 
-- `static saveObjects(array $amoObjects, bool $returnResponses = false, ?string $subdomain = null) :array`  
+- `static saveObjects(array $amoObjects, bool $returnResponses = false, string $subdomain = null) :array`  
     Добавляет или обновляет сущности в amoCRM. Возвращает массив параметров сущностей.
     - `$amoObjects` Массив объектов классов-моделей (не более 500 объектов одного типа): `AmoContact`, `AmoCompany`,...;
     - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо массива параметров сущностей;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
-- `static saveObjectsWithLimit(array $amoObjects, bool $returnResponses = false, ?string $subdomain = null, $limit = 250) :array`  
+- `static saveObjectsWithLimit(array $amoObjects, bool $returnResponses = false, string $subdomain = null, $limit = 250) :array`  
     Добавляет или обновляет сущности в amoCRM с ограничением на число сущностей в одном запросе к API. Возвращает массив параметров сущностей.
     - `$amoObjects` Массив объектов классов-моделей: `AmoContact`, `AmoCompany`,...;
     - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо массива параметров сущностей;
@@ -531,7 +536,7 @@ try {
 
 Класс `AmoAPI` содержит статический метод для пакетного удаления списков и элементов списков:
 
-- `static delteObjects(array $amoObjects, bool $returnResponses = false, ?string $subdomain = null) :array`  
+- `static delteObjects(array $amoObjects, bool $returnResponses = false, string $subdomain = null) :array`  
     Удаляет сущности в amoCRM. Возвращает пустой массив параметров сущностей.
     - `$amoObjects` Массив объектов классов-моделей: `AmoCatalog` или `AmoCatalogElement`;
     - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо пустого массива параметров сущностей;
@@ -542,13 +547,12 @@ try {
 
 Класс `AmoAPI` содержит статические методы для добавления и удаления webhooks:
 
-- `static addWebhooks(array $params, bool $returnResponse = false, ?string $subdomain = null) :array`  
+- `static addWebhooks(array $params, bool $returnResponse = false, string $subdomain = null) :array`  
     Добавляет один webhook или несколько webhooks (не более 100).
     - `params` - пaрaметры webhook или массив параметров webhooks;
     - `$returnRespons` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
-    
-- `static deleteWebhooks(array $params, bool $returnResponse = false, ?string $subdomain = null) :array`  
+- `static deleteWebhooks(array $params, bool $returnResponse = false, string $subdomain = null) :array`  
     Удаляет один webhook или несколько webhooks (не более 100).
     - `params` - пaрaметры webhook или массив параметров webhooks;
     - `$returnRespons` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
@@ -559,7 +563,7 @@ try {
 
 Дополнительные статические методы класса `AmoAPI`:
 
-- `static getAccount(string $with = '', ?string $subdomain = null) :array`  
+- `static getAccount(string $with = '', string $subdomain = null) :array`  
     Возвращает информацию об аккаунте amoCRM.
     - `$with` - Разделенный запятыми список дополнительных параметров запроса:
         - custom_fields
@@ -569,34 +573,30 @@ try {
         - note_types
         - task_types
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
-
-- `static getAccountDomain(?string $subdomain = null) :array`  
+- `static getAccountDomain(string $subdomain = null) :array`  
     Возвращает информацию о домене аккаунта amoCRM при авторизации по протоколу oAuth2.0.
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
-
 - `static getLastResponse(bool $unescapeUnicode = true) :?string`  
     Возвращает последний ответ сервера amoCRM в сыром виде.
     - `$unescapeUnicode` - Декодировать символы UTF-8 \uXXXX в ответе сервера.
-
-- `static request(string $query, string $type = 'GET', array $params = [], ?string $subdomain = null) :?array`
+- `static request(string $query, string $type = 'GET', array $params = [], string $subdomain = null) :?array`
     Позволяет выполнить запрос к серверу amoCRM в сыром виде.  
     - `$query` - URL-путь с параметрами запроса;
     - `$type` - метод запроса 'GET' или 'POST';
     - `$params` - параметры запроса;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
 
-
 <a id="%D0%91%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B8"></a>
 ## Блокировка одновременного обновления одной сущности
 
 При одновременном обновлении одной и той же сущности (сделки, контакта, компании и т.д. с одинаковым ID)
 в разных процессах или потоках исполнения в API amoCRM может возникать ошибка *"Last modified date is older than in database"*
-из-за передаемого, вместе с запросом на обновление, значения `updated_at` сущностей.
+из-за передаемого вместе с запросом на обновление значения `updated_at` сущностей.
 
 Для предотвращения возникновения данной ошибки в методе `save()` реализован механизм блокировки одновременного обновления одной сущности.
 До окончания обновления сущности в первом по времени запущенном процессе (потоке исполнения), то есть до получения ответа от API amoCRM,
 другие процессы, конкурирующие за обновление той же сущности, приостанавливаются и предпринимают повторные попытки выполнить обновление сущности 
-каждые `AmoAPI::$lockEntityTimeout` секунд с максимально допустимом числом попыток `AmoAPI::$lockEntityAttempts`.
+каждые `AmoAPI::$lockEntityTimeout` секунд с максимально допустимым числом попыток `AmoAPI::$lockEntityAttempts`.
 
 <a id="%D0%A2%D1%80%D0%BE%D1%82%D1%82%D0%BB%D0%B8%D0%BD%D0%B3-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2-%D0%BA-api"></a>
 ## Троттлинг запросов к API
@@ -695,6 +695,9 @@ try {
     // Заполнение модели контакта по ID контакта
     $contact3 = new AmoContact();
     $contact3->fillById(12345679);
+
+    // Получение всех дополнительных полей контакта
+    print_r($contact3->custom_fields);
 
     // Получение всех параметров контакта из модели
     print_r($contact3->getParams());

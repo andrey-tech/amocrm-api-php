@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.7.0
+ * @version 1.8.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.0.1 (09.08.2019) Добавлено 5 секунд к updated_at
@@ -22,6 +22,7 @@
  * v1.6.1 (25.05.2020) Рефракторинг
  * v1.7.0 (26.05.2020) Добавлена блокировка сущностей при обновлении (update) методом save()
  * v1.7.1 (23.07.2020) Исправлен тип параметра $returnResponse в методе save()
+ * v1.8.0 (10.08.2020) Добавлены новые параметры в метод getCustomFieldValueById()
  *
  */
 
@@ -32,7 +33,7 @@ namespace AmoCRM;
 abstract class AmoObject
 {
     /**
-     * Путь для запроса к API (переопределяется в дочерних классах)
+     * Путь для запроса к API (определяется в дочерних классах)
      * @var string
      */
     const URL = '';
@@ -112,6 +113,11 @@ abstract class AmoObject
      * @var string
      */
     protected $subdomain;
+
+    /**
+     * @var array
+     */
+    protected $customFieldHelpers = [];
 
     /**
      * Конструктор
@@ -199,26 +205,39 @@ abstract class AmoObject
     /**
      * Возвращает значение дополнительного поля по его ID
      * @param  int|string $id ID дополнительного поля
+     * @param bool $returnFirst Вернуть только первое значение
+     * @param string $returnValue Имя параметра, значение которого возвращается
      * @return mixed
      */
-    public function getCustomFieldValueById($id)
+    public function getCustomFieldValueById($id, bool $returnFirst = true, string $returnValue = 'value')
     {
         $index = array_search($id, array_column($this->custom_fields, 'id'));
         if ($index === false) {
             return null;
         }
 
-        $value = array_shift($this->custom_fields[$index]['values']);
-        $value = $value['value'] ?? null;
+        $list = [];
+        foreach ($this->custom_fields[$index]['values'] as $item) {
+            if (is_array($item)) {
+                if (isset($item[$returnValue])) {
+                    $list[] = $item[$returnValue];
+                }
+            } else {
+                $list[] = $item;
+            }
+        }
 
-        return $value;
+        if ($returnFirst) {
+            return array_shift($list);
+        }
+
+        return $list;
     }
 
     /**
      * Возвращает массив дополнительных полей по их id
      * @param array|int $ids
      * @return array
-     *
      */
     public function getCustomFields($ids)
     {
@@ -236,7 +255,7 @@ abstract class AmoObject
     }
 
     /**
-     * Устанавливет значение кастомным полям
+     * Устанавливает значение дополнительных полей
      * @param array $params Значения дополнительных полей
      * @return AmoObject
      */
