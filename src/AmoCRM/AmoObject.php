@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.8.0
+ * @version 1.8.1
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.0.1 (09.08.2019) Добавлено 5 секунд к updated_at
@@ -15,7 +15,7 @@
  * v1.1.1 (13.11.2019) Добавлено исключение в метод fillById()
  * v1.2.0 (13.11.2019) Добавлен метод getCustomFieldValueById()
  * v1.2.1 (22.02.2020) Удален метод delete(), как более не поддерживаемый
- * v1.3.0 (10.05.2020) Добавлена проверка ответа сервена в метод save(). Добавлено свойство request_id
+ * v1.3.0 (10.05.2020) Добавлена проверка ответа сервера в метод save(). Добавлено свойство request_id
  * v1.4.0 (16.05.2020) Добавлен параметр $returnResponse в метод save()
  * v1.5.0 (19.05.2020) Добавлен параметр $subdomain в конструктор
  * v1.6.0 (21.05.2020) Добавлена поддержка параметра AmoAPI::$updatedAtDelta
@@ -23,6 +23,7 @@
  * v1.7.0 (26.05.2020) Добавлена блокировка сущностей при обновлении (update) методом save()
  * v1.7.1 (23.07.2020) Исправлен тип параметра $returnResponse в методе save()
  * v1.8.0 (10.08.2020) Добавлены новые параметры в метод getCustomFieldValueById()
+ * v1.8.1 (10.08.2020) Удалены неиспользуемые свойства. Рефракторинг
  *
  */
 
@@ -115,11 +116,6 @@ abstract class AmoObject
     protected $subdomain;
 
     /**
-     * @var array
-     */
-    protected $customFieldHelpers = [];
-
-    /**
      * Конструктор
      * @param array $data Параметры модели
      * @param string $subdomain Поддомен amoCRM
@@ -180,6 +176,7 @@ abstract class AmoObject
      * @param int|string $id ID сущности
      * @param array $params Дополнительные параметры запроса, передаваемые при GET-запросе к amoCRM
      * @return AmoObject
+     * @throws AmoAPIException
      */
     public function fillById($id, array $params = [])
     {
@@ -330,9 +327,10 @@ abstract class AmoObject
 
     /**
      * Обновляет или добавляет объект в amoCRM
-     * @param  bool $returnResponse Вернуть ответ сервера вместо ID сущности
+     * @param bool $returnResponse Вернуть ответ сервера вместо ID сущности
      * @return mixed
      *
+     * @throws AmoAPIException
      */
     public function save(bool $returnResponse = false)
     {
