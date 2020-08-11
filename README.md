@@ -500,14 +500,14 @@ try {
 - `fillByUid(int|string $uid, array $params = []) :AmoObject` Заполняет модель данными по UID заявки.
     + `$uid` - UID сущности;
     + `$params` - дополнительные параметры, передаваемые в GET-запросе к amoCRM.
-- `setIncomingLeadInfo(array $params) :AmoObject` Устанавливает параметры заявки из неразобранного.
+- `setIncomingLeadInfo(array $params) :AmoIncomingLead` Устанавливает параметры заявки из неразобранного.
     + `$params` - параметры неразобранного.
-- `addIncomingLead(array $params)` Добавляет параметры сделки.
-    + `$params` - параметры сделки.
-- `addIncomingContact(array $params)` Добавляет параметры контакта.
-    + `$params` - параметры контакта.
-- `addIncomingCompany(array $params)` Добавляет параметры компании.
-    + `$params` - параметры компании.
+- `addIncomingLead(AmoLead|array $lead) :AmoIncomingLeadSip` Добавляет параметры сделки.
+    + `$lead` - объект класса `AmoLead` или массив параметров сделки.
+- `addIncomingContact(AmoContact|array $contact) :AmoIncomingLead` Добавляет параметры контакта.
+    + `$contact` - объект класса `AmoContact` или массив параметров контакта.
+- `addIncomingCompany(AmoCompany|array $company) :AmoIncomingLead` Добавляет параметры компании.
+    + `$company` - объект класса `AmoCompany` или массив параметров компании.
 - `save(bool $returnResponse = false)` Добавляет новую заявку в неразобранное и возвращает массив, содержащий UID заявки.
     + `$returnResponse` - вернуть ответ сервера вместо UID.
 
@@ -516,12 +516,12 @@ try {
 <a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadform---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B8-%D0%B8%D0%B7-%D0%B2%D0%B5%D0%B1-%D1%84%D0%BE%D1%80%D0%BC%D1%8B"></a>
 ##### Класс `AmoIncomingLeadForm` - модель заявки из неразобранного при добавлении из веб-формы
 
-Класс не имеет специфических методов.
+Класс не имеет собственных методов.
 
 <a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadsip---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-c-%D1%82%D0%B8%D0%BF%D0%BE%D0%BC-%D0%B2%D1%85%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9-%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA"></a>
 ##### Класс `AmoIncomingLeadSip` - модель заявки из неразобранного c типом входящий звонок
 
-Класс не имеет специфических методов.
+Класс не имеет собственных методов.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для загрузки сущностей
@@ -784,8 +784,17 @@ try {
     // Получение дополнительных полей контакта по ID полей
     print_r($contact3->getCustomFields([ 123456, 123467 ]));    
 
-    // Получение значения дополнительного поля контакта по ID поля
+    // Получение первого значения дополнительного поля контакта по ID поля
     print_r($contact3->getCustomFieldValueById(155114));
+
+    // Получение всех значений дополнительного поля контакта по ID поля
+    print_r($contact3->getCustomFieldValueById(155116, $returnFirst = false));
+
+    // Получение первого ENUM дополнительного поля контакта по ID поля
+    print_r($contact3->getCustomFieldValueById(155116, $returnFirst = true, $returnValue = 'enum'));
+
+    // Получение всех ENUM дополнительного поля контакта по ID поля
+    print_r($contact3->getCustomFieldValueById(155116, $returnFirst = false, $returnValue = 'enum'));
 
     // -------------------------------------------------------------------------
 
@@ -918,8 +927,17 @@ try {
     // Получение дополнительных полей компании по ID полей
     print_r($company3->getCustomFields([ 123456, 123467, 2390423 ]));    
 
-    // Получение значения дополнительного поля компании по ID поля
+    // Получение первого значения дополнительного поля компании по ID поля
     print_r($company3->getCustomFieldValueById(2390423));
+
+    // Получение всех значений дополнительного поля компании по ID поля
+    print_r($company3->getCustomFieldValueById(2390423, $returnFirst = false));
+
+    // Получение первого subtype дополнительного поля компании по ID поля
+    print_r($company3->getCustomFieldValueById(2390423, $returnFirst = true, $returnValue = 'subtype'));
+
+    // Получение первого ENUM дополнительного поля компании по ID поля
+    print_r($company3->getCustomFieldValueById(2390423, $returnFirst = true, $returnValue = 'enum'));
 
     // -------------------------------------------------------------------------
 
@@ -1033,8 +1051,14 @@ try {
     // Получение дополнительных полей сделки по ID полей
     print_r($lead3->getCustomFields([ 123456, 123467, 2390423 ]));    
 
-    // Получение значения дополнительного поля сделки по ID поля
+    // Получение первого значения дополнительного поля сделки по ID поля
     print_r($lead3->getCustomFieldValueById(2390423));
+
+    // Получение всех значений дополнительного поля сделки по ID поля
+    print_r($lead3->getCustomFieldValueById(2390423, $returnFirst = false));
+
+    // Получение всех ENUM дополнительного поля сделки по ID поля
+    print_r($lead3->getCustomFieldValueById(2390423, $returnFirst = true, $returnValue = 'enum'));
 
     // -------------------------------------------------------------------------
 
@@ -1394,67 +1418,53 @@ try {
     AmoAPI::oAuth2($subdomain);
 
     // Создаем новую заявку в неразобранном при добавлении из веб-формы
-    $lead = new AmoIncomingLeadForm();
+    $incomingLead = new AmoIncomingLeadForm();
 
     // Устанавливаем обязательные параметры 
-    $lead->setIncomingLeadInfo([
+    $incomingLead->setIncomingLeadInfo([
         'form_id'   => 1,
         'form_page' => 'https://www.example.com',
         'form_name' => 'Home page form'
     ]);
 
     // Добавляем параметры сделки
-    $lead->addIncomingLead([
-        'name' => 'Новая заявка с сайта',
-        'custom_fields' => [[
-            'id' => 25475362,
-                'values' => [[
-                   'value' => '#1543252'
-                ]]
-            ],
-        ]
+    $lead = new AmoLead([
+        'name' => 'Новая заявка с сайта'
     ]);
+    $lead->setCustomFields([ 25475362 => '#1543252' ]);
+    $incomingLead->addIncomingLead($lead);
 
     // Добавляем параметры контакта
-    $lead->addIncomingContact([
-        'name' => 'Ганс-Дитрих Геншер',
-        'custom_fields' => [
-            [
-                'id' => 157435,
-                'values' => [
-                    [
-                        'value' => '+10349654820',
-                        'enum'  => 'WORK'
-                    ]
-                ]
-            ],
-            [
-                'id' => 157437,
-                'values' => [
-                    [
-                        'value' => 'hans@example.com',
-                        'enum'  => 'WORK'
-                    ]
-                ]
-            ],
-        ]
+    $contact = new AmoContact([
+       'name' => 'Ганс-Дитрих Геншер'
     ]);
+    $contact->setCustomFields([
+        255114 => [[
+            'value' => '+10349654820',
+            'enum'  => 'WORK'
+        ]],
+        255116 => [[
+            'value' => 'hans@example.com',
+            'enum'  => 'WORK'
+       ]]
+    ]);
+    $incomingLead->addIncomingContact($contact);
 
     // Добавляем параметры компании
-    $lead->addIncomingCompany([
+    $incomingLead->addIncomingCompany([
         'name' => 'Freie Demokratische Partei'
     ]);
 
     // Сохраняем заявку
-    $lead->save();
+    $incomingLead->save();
 
     // ------------------------------------------------------------------------
 
     // Получаем заявку из неразобранного по UID
     $uid = 'f03c796fb5455667e648dd0ec9755fc9680bc3775ac76a540753d249d455'
-    $lead2 = new AmoIncomingLeadForm();
-    $lead2->fillByUid($uid);
-    print_r($lead2->getParams());
+    $incomingLead2 = new AmoIncomingLeadForm();
+    $incomingLead2->fillByUid($uid);
+    print_r($incomingLead2->getParams());
 
     // Загрузка ВСЕХ заявок из неразобранного с фильтрацией по категории
     $generator = AmoAPI::getAllIncomingLeads([

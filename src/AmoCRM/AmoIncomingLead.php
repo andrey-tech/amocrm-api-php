@@ -7,10 +7,12 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.1.0
+ * @version 1.1.1
  *
  * v1.0.0 (23.07.2020) Первоначальная версия
  * v1.1.0 (11.08.2020) Добавлены новые методы setIncomingLeadInfo(), addIncomingLead(),
+ *                     addIncomingContact(), addIncomingCompany()
+ * v1.1.1 (11.08.2020) Исправлены значения параметров в методах addIncomingLead(),
  *                     addIncomingContact(), addIncomingCompany()
  *
  */
@@ -147,34 +149,52 @@ abstract class AmoIncomingLead extends AmoObject
 
     /**
      * Добавляет информацию о сделке
-     * @param array $params Параметры сделки
+     * @param AmoLead|array $lead Объект класса AmoLead или массив параметров сделки
      * @return $this AmoIncomingLead
      */
-    public function addIncomingLead(array $params)
+    public function addIncomingLead($lead)
     {
-        $this->incoming_entities['leads'][] = $params;
+        if (is_array($lead)) {
+            $this->incoming_entities['leads'][] = $lead;
+        } else if (is_object($lead) && is_a($lead, '\AmoCRM\AmoLead')) {
+            $this->incoming_entities['leads'][] = $lead->getParams();
+        } else {
+            throw new AmoAPIException("В параметрах ожидается объект класса AmoLead или массив");
+        }
+
         return $this;
     }
 
     /**
      * Добавляет информацию о контакте
-     * @param array $params Параметры контакта
+     * @param AmoContact|$contact Объект класса AmoContact или массив параметров контакта
      * @return $this AmoIncomingLead
      */
-    public function addIncomingContact(array $params)
+    public function addIncomingContact($contact)
     {
-        $this->incoming_entities['contacts'][] = $params;
-        return $this;
+        if (is_array($contact)) {
+            $this->incoming_entities['contacts'][] = $contact;
+        } else if (is_object($contact) && is_a($contact, '\AmoCRM\AmoContact')) {
+            $this->incoming_entities['contacts'][] = $contact->getParams();
+        } else {
+            throw new AmoAPIException("В параметрах ожидается объект класса AmoContact или массив");
+        }
     }
 
     /**
      * Добавляет информацию о компании
-     * @param array $params Параметры компании
+     * @param AmoCompany|$company Объект класса AmoComapny или массив параметров компании
      * @return $this AmoIncomingLead
      */
-    public function addIncomingCompany(array $params)
+    public function addIncomingCompany($company)
     {
-        $this->incoming_entities['companies'][] = $params;
+        if (is_array($company)) {
+            $this->incoming_entities['companies'][] = $company;
+        } else if (is_object($company) && is_a($company, '\AmoCRM\AmoContact')) {
+            $this->incoming_entities['companies'][] = $company->getParams();
+        } else {
+            throw new AmoAPIException("В параметрах ожидается объект класса AmoCompany или массив");
+        }
         return $this;
     }
 
