@@ -66,12 +66,22 @@
     - [Одновременная авторизация в нескольких аккаунтах amoCRM](#%D0%9E%D0%B4%D0%BD%D0%BE%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D1%85-%D0%B0%D0%BA%D0%BA%D0%B0%D1%83%D0%BD%D1%82%D0%B0%D1%85-amocrm)
 - [Параметры настройки](#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8)
 - [Работа с сущностями amoCRM](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm)
-    - [Общие методы моделей](#%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
     - [Список методов и констант моделей](#%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%B8-%D0%BA%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9)
+        - [Базовый класс моделей `AmoObject`](#%D0%91%D0%B0%D0%B7%D0%BE%D0%B2%D1%8B%D0%B9-%D0%BA%D0%BB%D0%B0%D1%81%D1%81-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9-amoobject)
+        - [Класс `AmoContact` - модель контакта](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amocontact---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0)
+        - [Класс `AmoCompany` - модель компании](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amocompany---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D0%B8)
+        - [Класс `AmoLead` - модель сделки](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amolead---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B8)
+        - [Класс `AmoTask` - модель задачи](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amotask---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B8)
+        - [Класс `AmoNote` - модель события \(примечания\)](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amonote---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%87%D0%B0%D0%BD%D0%B8%D1%8F)
+        - [Класс `AmoIncomingLead` - абстрактная базовая модель заявки из неразобранного](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincominglead---%D0%B0%D0%B1%D1%81%D1%82%D1%80%D0%B0%D0%BA%D1%82%D0%BD%D0%B0%D1%8F-%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
+            - [Общие методы для работы с заявками из неразобранного](#%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
+            - [Класс `AmoIncomingLeadForm` - модель заявки из неразобранного при добавлении из веб-формы](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadform---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B8-%D0%B8%D0%B7-%D0%B2%D0%B5%D0%B1-%D1%84%D0%BE%D1%80%D0%BC%D1%8B)
+            - [Класс `AmoIncomingLeadSip` - модель заявки из неразобранного c типом входящий звонок](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadsip---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-c-%D1%82%D0%B8%D0%BF%D0%BE%D0%BC-%D0%B2%D1%85%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9-%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA)
     - [Методы для загрузки сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Методы для пакетного сохранения сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Методы для пакетного удаления сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
-    - [Методы webhooks](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-webhooks)
+    - [Методы для webhooks](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-webhooks)
+    - [Методы для неразобранного](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
     - [Дополнительные методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
 - [Блокировка одновременного обновления одной сущности](#%D0%91%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B8)
 - [Троттлинг запросов к API](#%D0%A2%D1%80%D0%BE%D1%82%D1%82%D0%BB%D0%B8%D0%BD%D0%B3-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2-%D0%BA-api)
@@ -85,7 +95,7 @@
     - [Работа со списками \(каталогами\)](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0%D0%BC%D0%B8-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0%D0%BC%D0%B8)
     - [Работа с элементами списков \(каталогов\)](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%BE%D0%B2-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2)
     - [Работа с webhooks](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-webhooks)
-    - [Работа со сделками из неразобранного](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
+    - [Работа с заявками из неразобранного](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
     - [Работа с несколькими поддоменами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
@@ -370,21 +380,26 @@ try {
     - `AmoTask` - модель задачи;
     - `AmoCatalog` - модель списка (каталога);
     - `AmoCatalogElement` - модель элемента списка (каталога);
-    - `AmoIncomingLeadForm` - модель сделки из неразобранного при добавлении заявки из веб-формы.
-    - `AmoIncomingLeadSip` - модель сделки из неразобранного c типом входящий звонок.
-- дополнительных статических методов класса `AmoAPI`.
+    - `AmoIncomingLead` - абcтрактная базовая модель заявки из неразобранного;
+    - `AmoIncomingLeadForm` - модель заявки из неразобранного при добавлении заявки из веб-формы;
+    - `AmoIncomingLeadSip` - модель заявки из неразобранного c типом входящий звонок.
+- дополнительных статических методов класса `AmoAPI`;
+- параметров моделей, доступных через публичные свойства объектов классов-моделей.
 
-Параметры моделей доступны через публичные свойства объектов классов-моделей.
+<a id="%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%B8-%D0%BA%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
+### Список методов и констант моделей
 
-<a id="%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
-### Общие методы моделей
+<a id="%D0%91%D0%B0%D0%B7%D0%BE%D0%B2%D1%8B%D0%B9-%D0%BA%D0%BB%D0%B0%D1%81%D1%81-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9-amoobject"></a>
+#### Базовый класс моделей `AmoObject`
 
 Базовый класс моделей  `AmoObject` содержит следующие общие методы:
 
-- `__construct(array $data = [], string $subdomain = null)` Создает новый объект модели и заполняет данными.
-    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
-- `fillById(int $id, array $params = [])` Заполняет модель данными по ID сущности.
-    - `$params` - дополнительные параметры, передаваемые в GET-запросе к amoCRM.
+- `__construct(array $params = [], string $subdomain = null)` Создает новый объект модели и заполняет ее.
+    + `$params` - параметры модели;
+    + `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
+- `fillById(int|string $id, array $params = []) :AmoObject` Заполняет модель данными по ID сущности.
+    + `$id` - ID сущности;
+    + `$params` - дополнительные параметры, передаваемые в GET-запросе к amoCRM.
 - `getParams() :array` Возвращает все параметры модели.
 - `getCustomFields(array|int $ids) :array` Возвращает дополнительные поля по ID полей.
     + `$ids` - ID поля или массив ID полей.
@@ -394,81 +409,119 @@ try {
     + `$returnValue` - имя параметра, значение которого возвращается (`value`, `enum`, `subtype`).
 - `setCustomFields(array $params) :AmoObject` Устанавливает значения дополнительных полей.
     + `$params` - массив значений дополнителных полей.
-- `addTags(array|string $tags)` Добавляет теги.
+- `addTags(array|string $tags) :AmoObject` Добавляет теги.
     + `$tags` - тег или массив тегов.
-- `delTags(array|string $tags)` Удаляет теги. 
+- `delTags(array|string $tags) :AmoObject` Удаляет теги. 
     + `$tags` - тег или массив тегов.
 - `save(bool $returnResponse = false)` Сохраняет объект модели в amoCRM и возвращает ID сущности. 
-    - `$returnResponse` - вернуть ответ сервера вместо ID сущности.
+    + `$returnResponse` - вернуть ответ сервера вместо ID сущности.
 
-<a id="%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%BE%D0%B2-%D0%B8-%D0%BA%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9"></a>
-### Список методов и констант моделей
+Константы, определяющие типы привязываемых сущностей:
 
-- Базовый класс `AmoObject` содержит следующие константы, определяющие типы связываемых сущностей:
+- `CONTACT_TYPE = 1` - контакт;
+- `LEAD_TYPE = 2` - сделка;
+- `COMPANY_TYPE = 3` - компания;
+- `TASK_TYPE = 4` - задача;
+- `CUSTOMER_TYPE = 12` - покупатель.
 
-    - `CONTACT_TYPE = 1` - контакт;
-    - `LEAD_TYPE = 2` - сделка;
-    - `COMPANY_TYPE = 3` - компания;
-    - `TASK_TYPE = 4` - задача;
-    - `CUSTOMER_TYPE = 12` - покупатель.
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amocontact---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0"></a>
+#### Класс `AmoContact` - модель контакта
 
-- Класс `AmoContact` - модель контакта.
-    - `addLeads(array|int $id)` Привязывает сделки по ID.
-    - `addCustomers(array|int $id)` Привязывает покупателей по ID.
-    - `addCompany(int $id)` Привязывает компанию по ID.
-    - `getPhone()` Возвращает первый телефон контакта.
-    - `getEmail()` Возвращает первый e-mail контакта.
+- `addLeads(array|int $id)` Привязывает сделки по ID.
+- `addCustomers(array|int $id)` Привязывает покупателей по ID.
+- `addCompany(int $id)` Привязывает компанию по ID.
+- `getPhone()` Возвращает первый телефон контакта.
+- `getEmail()` Возвращает первый e-mail контакта.
 
-- Класс `AmoCompany` - модель компании.
-    - `addLeads(array|int $id)` Привязывает сделки по ID.
-    - `addContacts(array|int $id)` Привязывает контакты по ID.
-    - `addCustomers(array|int $id)` Привязывает покупателей по ID.
-    - `getPhone()` Возвращает первый телефон компании.
-    - `getEmail()` Возвращает первый e-mail компании.
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amocompany---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D0%B8"></a>
+#### Класс `AmoCompany` - модель компании
 
-- Класс `AmoLead` - модель сделки.
-    - `addContacts(array|int $id)` Привязывает контакты по ID ([не более 40 контактов у одной сделки](https://www.amocrm.ru/developers/content/api/leads)).
-    - `addCompany(int $id)` Привязывает компанию по ID.
-    - `setCatalogElements(int $id)` Устанавливает элементы списка по ID.
+- `addLeads(array|int $id)` Привязывает сделки по ID.
+- `addContacts(array|int $id)` Привязывает контакты по ID.
+- `addCustomers(array|int $id)` Привязывает покупателей по ID.
+- `getPhone()` Возвращает первый телефон компании.
+- `getEmail()` Возвращает первый e-mail компании.
 
-- Класс `AmoTask` - модель задачи.
-    - `addContact(int $id)` Привязывает контакт по ID.
-    - `addLead(int $id)` Привязывает сделку по ID.
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amolead---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B8"></a>
+#### Класс `AmoLead` - модель сделки
 
-    Константы класса, определяющие типы задач:
-    
-    - `CALL_TASKTYPE = 1` - звонок;
-    - `MEET_TASKTYPE = 2` - встреча;
-    - `MAIL_TASKTYPE = 3` - написать письмо.
+- `addContacts(array|int $id)` Привязывает контакты по ID ([не более 40 контактов у одной сделки](https://www.amocrm.ru/developers/content/api/leads)).
+- `addCompany(int $id)` Привязывает компанию по ID.
+- `setCatalogElements(int $id)` Устанавливает элементы списка по ID.
 
-- Класс `AmoNote` - модель события (примечания).
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amotask---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B8"></a>
+#### Класс `AmoTask` - модель задачи
 
-    Константы класса, определяющие типы событий:
+- `addContact(int $id)` Привязывает контакт по ID.
+- `addLead(int $id)` Привязывает сделку по ID.
 
-    - `LEAD_CREATED_NOTETYPE = 1` - создание сделки;
-    - `CONTACT_CREATED_NOTETYPE = 2` - создание контакта;
-    - `LEAD_STATUS_CHANGED_NOTETYPE = 3` - изменение статуса сделки;
-    - `COMMON_NOTETYPE = 4` - обычное примечание;
-    - `COMPANY_CREATED_NOTETYPE = 12` - создание компании;
-    - `TASK_RESULT_NOTETYPE = 13`  результат по задаче;
-    - `SYSTEM_NOTETYPE = 25` - системное сообщение;
-    - `SMS_IN_NOTETYPE = 102` - входящее SMS сообщение;
-    - `SMS_OUT_NOTETYPE = 103` - исходящее SMS сообщение.
+Константы класса, определяющие типы задач:
 
-- Класс `AmoIncomingLeadForm` - модель сделки из неразобранного при добавлении из веб-формы.
-    - `save(bool $returnResponse = false)` Добавляет новую сделку в неразобранное и возвращает массив, содержащий ID добавленной сущности.
-        - `$returnResponse` - вернуть ответ сервера вместо ID сущности.
+- `CALL_TASKTYPE = 1` - звонок;
+- `MEET_TASKTYPE = 2` - встреча;
+- `MAIL_TASKTYPE = 3` - написать письмо.
 
-- Класс `AmoIncomingLeadSip` - модель сделки из неразобранного c типом входящий звонок.
-    - `save(bool $returnResponse = false)` Добавляет новую сделку в неразобранное и возвращает массив, содержащий ID добавленной сущности.
-        - `$returnResponse` - вернуть ответ сервера вместо ID сущности.
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amonote---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%87%D0%B0%D0%BD%D0%B8%D1%8F"></a>
+#### Класс `AmoNote` - модель события (примечания)
 
-    ⚠ &nbsp; Работа со сделками из неразобранного существенно отличается от работы с другими сущностями amoCRM, в частности 
-    не работают следующие общие методы моделей: `getCustomFields()`, `getCustomFieldValueById()`, `setCustomFields()`,
-    `addTags()`, `delTags()`.
+Константы класса, определяющие типы событий:
 
-    Согласно [официальной документации](https://www.amocrm.ru/developers/content/api/unsorted) (пунктуация сохранена):
-    > Изначально неразобранное было в отдельном хранилище и являлось отдельной сущностью именно поэтому до сих пор в интерфейсах amoCRM и в API есть особенности которые отличают поведение сделки в статусе Неразобранное от сделок в других статусах.
+- `LEAD_CREATED_NOTETYPE = 1` - создание сделки;
+- `CONTACT_CREATED_NOTETYPE = 2` - создание контакта;
+- `LEAD_STATUS_CHANGED_NOTETYPE = 3` - изменение статуса сделки;
+- `COMMON_NOTETYPE = 4` - обычное примечание;
+- `COMPANY_CREATED_NOTETYPE = 12` - создание компании;
+- `TASK_RESULT_NOTETYPE = 13`  результат по задаче;
+- `SYSTEM_NOTETYPE = 25` - системное сообщение;
+- `SMS_IN_NOTETYPE = 102` - входящее SMS сообщение;
+- `SMS_OUT_NOTETYPE = 103` - исходящее SMS сообщение.
+
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincominglead---%D0%B0%D0%B1%D1%81%D1%82%D1%80%D0%B0%D0%BA%D1%82%D0%BD%D0%B0%D1%8F-%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE"></a>
+#### Класс `AmoIncomingLead` - абстрактная базовая модель заявки из неразобранного
+
+Работа с заявками из неразобранного существенно отличается от работы с другими сущностями amoCRM.  
+Согласно [официальной документации](https://www.amocrm.ru/developers/content/api/unsorted):
+> Изначально неразобранное было в отдельном хранилище и являлось отдельной сущностью именно поэтому до сих пор в интерфейсах amoCRM и в API есть особенности которые отличают поведение сделки в статусе Неразобранное от сделок в других статусах.
+
+⚠ &nbsp; Поэтому для моделей заявок из неразобранного не работают следующие методы `AmoObject`:
+
+- `fillById()`;
+- `getCustomFields()`;
+- `getCustomFieldValueById()`;
+- `setCustomFields()`;
+- `addTags()`;
+- `delTags()`;
+- `AmoAPI::saveObjects()`;
+- `AmoAPI::saveObjectsWithLimit()`.
+
+<a id="%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE"></a>
+##### Общие методы для работы с заявками из неразобранного
+
+- `fillByUid(int|string $uid, array $params = []) :AmoObject` Заполняет модель данными по UID заявки.
+    + `$uid` - UID сущности;
+    + `$params` - дополнительные параметры, передаваемые в GET-запросе к amoCRM.
+- `setIncomingLeadInfo(array $params) :AmoObject` Устанавливает параметры заявки из неразобранного.
+    + `$params` - параметры неразобранного.
+- `addIncomingLead(array $params)` Добавляет параметры сделки.
+    + `$params` - параметры сделки.
+- `addIncomingContact(array $params)` Добавляет параметры контакта.
+    + `$params` - параметры контакта.
+- `addIncomingCompany(array $params)` Добавляет параметры компании.
+    + `$params` - параметры компании.
+- `save(bool $returnResponse = false)` Добавляет новую заявку в неразобранное и возвращает массив, содержащий UID заявки.
+    + `$returnResponse` - вернуть ответ сервера вместо UID.
+
+Статические методы для пакетного добавления, принятия или отклонения неразобранных заявок находятся в классе `AmoAPI`.
+
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadform---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B8-%D0%B8%D0%B7-%D0%B2%D0%B5%D0%B1-%D1%84%D0%BE%D1%80%D0%BC%D1%8B"></a>
+##### Класс `AmoIncomingLeadForm` - модель заявки из неразобранного при добавлении из веб-формы
+
+Класс не имеет специфических методов.
+
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadsip---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-c-%D1%82%D0%B8%D0%BF%D0%BE%D0%BC-%D0%B2%D1%85%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9-%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA"></a>
+##### Класс `AmoIncomingLeadSip` - модель заявки из неразобранного c типом входящий звонок
+
+Класс не имеет специфических методов.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для загрузки сущностей
@@ -485,6 +538,7 @@ try {
         - Tasks
         - Notes
         - CatalogElements
+        - IncomingLeads
     - `$params` - параметры фильтрации;
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последнией выполненной авторизации.
@@ -493,7 +547,7 @@ try {
     Возвращает массив параметров сущностей для заполнения моделей или null.
     - `<Entities>`:
         - Contacts
-        - Companys
+        - Companies
         - Leads
         - Tasks
         - Notes
@@ -542,21 +596,46 @@ try {
     - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо пустого массива параметров сущностей;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 
-<a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-webhooks"></a>
-### Методы webhooks
+<a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-webhooks"></a>
+### Методы для webhooks
 
 Класс `AmoAPI` содержит статические методы для добавления и удаления webhooks:
 
 - `static addWebhooks(array $params, bool $returnResponse = false, string $subdomain = null) :array`  
     Добавляет один webhook или несколько webhooks (не более 100).
     - `params` - пaрaметры webhook или массив параметров webhooks;
-    - `$returnRespons` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
+    - `$returnResponse` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 - `static deleteWebhooks(array $params, bool $returnResponse = false, string $subdomain = null) :array`  
     Удаляет один webhook или несколько webhooks (не более 100).
     - `params` - пaрaметры webhook или массив параметров webhooks;
-    - `$returnRespons` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
+    - `$returnResponse` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
+
+<a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE"></a>
+### Методы для неразобранного
+
+Класс `AmoAPI` содержит следующие статические методы для работы с заявками из неразобранного:
+
+- `static saveIncomingObjects(array $amoObjects, bool $returnResponses = false, string $subdomain = null) :array`  
+    Пакетно добавляет заявки в неразобранное. Возвращает массив параметров UID неразобранного.
+    - `$amoObjects` Массив объектов классов-моделей `AmoIncomingLeadForm` или `AmoIncomingLeadSip`;
+    - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо массива UID;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
+- `static saveIncomingObjectsWithLimit(array $amoObjects, bool $returnResponses = false, string $subdomain = null, $limit = 250) :array`  
+    Пакетно добавляет заявки в неразобранное с ограничением на число заявок в одном запросе к API. Возвращает массив UID неразобранного.
+    - `$amoObjects` Массив объектов классов-моделей: `AmoIncomingLeadForm` или `AmoIncomingLeadSip`;
+    - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо массива UID;
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации;
+    - `$limit` - максимальное число заявок в одном запросе к API.
+- `static acceptIncomingLeads(array $params, bool $returnResponse = false, $subdomain = null) :array` Принимает неразобранные заявки.
+    + `params` - пaрaметры заявок;
+    + `$returnResponse` - возвращать ответ сервера amoCRM вместо массива параметров принятой заявки;
+    + `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
+- `static declineIncomingLeads(array $params, bool $returnResponse = false, $subdomain = null) :array` Отклоняет неразобранные заявки.
+    + `params` - пaрaметры заявок;
+    + `$returnResponse` - возвращать ответ сервера amoCRM вместо массива параметров отклоненной заявки;
+    + `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 
 <a id="%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B"></a>
 ### Дополнительные методы
@@ -580,8 +659,8 @@ try {
     Возвращает последний ответ сервера amoCRM в сыром виде.
     - `$unescapeUnicode` - Декодировать символы UTF-8 \uXXXX в ответе сервера.
 - `static request(string $query, string $type = 'GET', array $params = [], string $subdomain = null) :?array`
-    Позволяет выполнить запрос к серверу amoCRM в сыром виде.  
-    - `$query` - URL-путь с параметрами запроса;
+    Позволяет выполнить RAW запрос к API amoCRM.  
+    - `$query` - путь в URL запроса;
     - `$type` - метод запроса 'GET' или 'POST';
     - `$params` - параметры запроса;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
@@ -1252,23 +1331,23 @@ try {
     AmoAPI::oAuth2($subdomain);
 
     // Получаем список установленных webhooks
-    $webhooks = \AmoCRM\AmoAPI::getWebhooks();
+    $webhooks = AmoAPI::getWebhooks();
     print_r($webhooks);
 
     // Добавляем webhook
-    \AmoCRM\AmoAPI::addWebhooks([
+    AmoAPI::addWebhooks([
         'url'    => 'https://example.com/webhook/',
         'events' => [ 'add_lead' ]
     ]);
 
     // Удаляем webhook
-    \AmoCRM\AmoAPI::deleteWebhooks([
+    AmoAPI::deleteWebhooks([
         'url'    => 'https://example.com/webhook/',
         'events' => [ 'add_lead' ]
     ]);
 
     // Добавляем несколько webhooks
-    \AmoCRM\AmoAPI::addWebhooks([
+    AmoAPI::addWebhooks([
         [
             'url'    => 'https://example1.com/webhook/',
             'events' => [ 'add_lead' ]
@@ -1280,7 +1359,7 @@ try {
     ]);
 
     // Удаляем несколько webhooks
-    \AmoCRM\AmoAPI::deleteWebhooks([
+    AmoAPI::deleteWebhooks([
         [
             'url'    => 'https://example1.com/webhook/',
             'events' => [ 'add_lead' ]
@@ -1296,17 +1375,14 @@ try {
 }
 ```
 
-<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE"></a>
-### Работа со сделками из неразобранного
+<a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE"></a>
+### Работа с заявками из неразобранного
 
-Работа со сделками из неразобранного существенно отличается от работы с другими сущностями amoCRM, в частности 
-не работают следующие общие методы моделей: `getCustomFields()`, `getCustomFieldValueById()`, `setCustomFields()`,
-`addTags()`, `delTags()`.
-
-Согласно [официальной документации](https://www.amocrm.ru/developers/content/api/unsorted) (пунктуация сохранена):
+Работа с заявками из неразобранного существенно отличается от работы с другими сущностями amoCRM.  
+Согласно [официальной документации](https://www.amocrm.ru/developers/content/api/unsorted):
 > Изначально неразобранное было в отдельном хранилище и являлось отдельной сущностью именно поэтому до сих пор в интерфейсах amoCRM и в API есть особенности которые отличают поведение сделки в статусе Неразобранное от сделок в других статусах.
 
-Пример работы со сделками из неразобранного при добавлении заявки из веб-формы.
+Пример работы с заявками из неразобранного при добавлении из веб-формы.
 ```php
 use AmoCRM\AmoAPI;
 use AmoCRM\AmoIncomingLeadForm;
@@ -1317,48 +1393,96 @@ try {
     $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
-    $lead = new AmoIncomingLeadForm([
-        'created_at' => 1595519985,
-        'incoming_lead_info' => [
-            'form_id'   => 1,
-            'form_page' => 'https://www.example.com',
-            'form_name' => 'Home page form'
-        ],
-        'incoming_entities' => [
-            'leads' => [[
-                'name' => 'Новая заявка с сайта',
-                'custom_fields' => [
-                    [
-                        'id' => 25475362,
-                        'values' => [[
-                            'value' => '#1543252'
-                        ]]
-                    ],
-                ]
-            ]],
-            'contacts' => [[
-                'name' => 'Ганс-Дитрих Геншер',
-                'custom_fields' => [
-                    [
-                        'id' => 157435,
-                        'values' => [[
-                            'value' => '+10349654820',
-                            'enum'  => 'WORK'
-                        ]]
-                    ],
-                    [
-                        'id' => 157437,
-                        'values' => [[
-                            'value' => 'hans@example.com',
-                            'enum'  => 'WORK'
-                        ]]
-                    ],
-                ]
-            ]]
+    // Создаем новую заявку в неразобранном при добавлении из веб-формы
+    $lead = new AmoIncomingLeadForm();
+
+    // Устанавливаем обязательные параметры 
+    $lead->setIncomingLeadInfo([
+        'form_id'   => 1,
+        'form_page' => 'https://www.example.com',
+        'form_name' => 'Home page form'
+    ]);
+
+    // Добавляем параметры сделки
+    $lead->addIncomingLead([
+        'name' => 'Новая заявка с сайта',
+        'custom_fields' => [[
+            'id' => 25475362,
+                'values' => [[
+                   'value' => '#1543252'
+                ]]
+            ],
         ]
     ]);
 
+    // Добавляем параметры контакта
+    $lead->addIncomingContact([
+        'name' => 'Ганс-Дитрих Геншер',
+        'custom_fields' => [
+            [
+                'id' => 157435,
+                'values' => [
+                    [
+                        'value' => '+10349654820',
+                        'enum'  => 'WORK'
+                    ]
+                ]
+            ],
+            [
+                'id' => 157437,
+                'values' => [
+                    [
+                        'value' => 'hans@example.com',
+                        'enum'  => 'WORK'
+                    ]
+                ]
+            ],
+        ]
+    ]);
+
+    // Добавляем параметры компании
+    $lead->addIncomingCompany([
+        'name' => 'Freie Demokratische Partei'
+    ]);
+
+    // Сохраняем заявку
     $lead->save();
+
+    // ------------------------------------------------------------------------
+
+    // Получаем заявку из неразобранного по UID
+    $uid = 'f03c796fb5455667e648dd0ec9755fc9680bc3775ac76a540753d249d455'
+    $lead2 = new AmoIncomingLeadForm();
+    $lead2->fillByUid($uid);
+    print_r($lead2->getParams());
+
+    // Загрузка ВСЕХ заявок из неразобранного с фильтрацией по категории
+    $generator = AmoAPI::getAllIncomingLeads([
+        'categories'   => [ 'forms' ]
+    ]);
+    foreach ($generator as $items) {
+        foreach ($items as $item) {
+            print_r($item);
+        }
+    }
+
+    // ------------------------------------------------------------------------
+
+    // Прининимаем заявки из неразобранного
+    AmoAPI::acceptIncomingLeads([
+        'accept' => [
+            'f03c796fb5455667e648dd0ec9755fc9680bc3775ac76a540753d249d455',
+            'a12c723fb54556676e6487d0e89795fc9080bc3975ac86a548752302d478',
+        ],
+        'user_id'   => 13752426,
+        'status_id' => 142
+    ]));
+
+    // Отклоняем заявки из неразобранного
+    AmoAPI::declineIncomingLeads([
+      'decline' => [ 'e21c796dfb5sd566de648ccb80ec546a4d25e4baecbd343actf0b3ed4363c4' ],
+      'user_id' => 13752426
+    ]));
 
 } catch (\AmoCRM\AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());

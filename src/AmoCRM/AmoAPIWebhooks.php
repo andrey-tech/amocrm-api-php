@@ -1,6 +1,6 @@
 <?php
 /**
- * Трейт AmoAPIWebhook. Содержит методы для добаления и удаления webhooks
+ * Трейт AmoAPIWebhook. Содержит методы для добавления и удаления webhooks
  *
  * @author    andrey-tech
  * @copyright 2020 andrey-tech

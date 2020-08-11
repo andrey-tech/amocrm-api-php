@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.8.1
+ * @version 1.8.2
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.0.1 (09.08.2019) Добавлено 5 секунд к updated_at
@@ -24,6 +24,7 @@
  * v1.7.1 (23.07.2020) Исправлен тип параметра $returnResponse в методе save()
  * v1.8.0 (10.08.2020) Добавлены новые параметры в метод getCustomFieldValueById()
  * v1.8.1 (10.08.2020) Удалены неиспользуемые свойства. Рефракторинг
+ * v1.8.2 (11.08.2020) Исправлена проверка ID в методе fillById()
  *
  */
 
@@ -117,23 +118,23 @@ abstract class AmoObject
 
     /**
      * Конструктор
-     * @param array $data Параметры модели
+     * @param array $params Параметры модели
      * @param string $subdomain Поддомен amoCRM
      */
-    public function __construct(array $data = [], $subdomain = null)
+    public function __construct(array $params = [], $subdomain = null)
     {
         $this->subdomain = $subdomain;
-        $this->fill($data);
+        $this->fill($params);
     }
 
     /**
      * Заполняет модель значениями из массива data
-     * @param array $data
+     * @param array $params Параметры модели
      * @return void
      */
-    protected function fill(array $data = [])
+    protected function fill(array $params = [])
     {
-        foreach ($data as $key => $value) {
+        foreach ($params as $key => $value) {
             if (property_exists($this, $key)) {
                 $this->$key = $value;
             }
@@ -141,7 +142,7 @@ abstract class AmoObject
     }
 
     /**
-     * Приводит модель к формату для передачи в API
+     * Возвращает параметры модели в формате для передачи в API
      * @return array
      */
     public function getParams() :array
@@ -190,7 +191,7 @@ abstract class AmoObject
         }
 
         $item = array_shift($items);
-        if (empty($item)) {
+        if ($item['id'] != $id) {
             throw new AmoAPIException("Нет сущности {$className} с ID {$id}");
         }
 

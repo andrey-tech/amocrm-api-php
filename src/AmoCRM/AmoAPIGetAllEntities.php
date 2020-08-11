@@ -1,13 +1,13 @@
 <?php
 /**
- * Трейт AmoAPIGetAllEntities. Содержит методы для получения списка всех сущностей.
+ * Трейт AmoAPIGetAllEntities. Содержит методы для получения списка всех сущностей заданного типа
  *
  * @author    andrey-tech
- * @copyright 2020 andrey-tech
+ * @copyright 2019-2020 andrey-tech
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.2.4
+ * @version 1.3.0
  *
  * v1.0.0 (24.04.2019) Начальный релиз
  * v1.2.0 (16.05.2020) Добавлен параметр $returnResponse во все методы
@@ -15,6 +15,7 @@
  * v1.2.2 (22.05.2020) Исправлен метод getAllCatalogElements()
  * v1.2.3 (14.07.2020) Изменен порядок параметров $subdomain и $returnResponse в методах
  * v1.2.4 (19.07.2020) Исправлен баг с порядком параметров $subdomain и $returnResponse в методе getAll()
+ * v1.3.0 (13.08.2020) Добавлен метод getAllIncomingLeads()
  *
  */
 
@@ -103,6 +104,21 @@ trait AmoAPIGetAllEntities
         $subdomain = null
     ) :\Generator {
         return self::getAll(AmoNote::URL, $params, $returnResponse, $subdomain);
+    }
+
+    /**
+     * Загружает все сделки из неразобранного
+     * @param array $params Параметры для фильтрации
+     * @param bool $returnResponse Вернуть ответ сервера amoCRM
+     * @param string $subdomain Поддомен amoCRM
+     * @return \Generator
+     */
+    public static function getAllIncomingLeads(
+        array $params = [],
+        bool $returnResponse = false,
+        $subdomain = null
+    ) :\Generator {
+        return self::getAll(AmoIncomingLead::URL, $params, $returnResponse, $subdomain);
     }
 
     /**

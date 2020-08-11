@@ -7,13 +7,15 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.2.1
+ * @version 1.2.2
  *
  * v1.0.0 (24.04.2019) Начальный релиз.
  * v1.1.0 (08.08.2019) Добавлен метод getCatalogElementsQuantityInLead().
  * v1.1.1 (24.02.2020) Удален метод getCatalogElementsQuantityInLead() как более не поддерживаемый.
  * v1.2.0 (16.05.2020) Добавлен параметр $returnResponse во все методы
  * v1.2.1 (14.07.2020) Изменен порядок параметров $subdomain и $returnResponse в методах
+ * v1.2.2 (11.08.2020) Исправлен метод getIncomingLeadsSummary()
+ *
  */
 
 declare(strict_types = 1);
@@ -130,13 +132,9 @@ trait AmoAPIGetEntities
      * Загружает сводную информацию о неразобранных сделках
      * @return array | null
      */
-    public static function getIncomingLeadsSummary(array $params = [], bool $returnResponse = false, $subdomain = null)
+    public static function getIncomingLeadsSummary(array $params = [], bool $returnResponse = true, $subdomain = null)
     {
-        $response =  self::request('/api/v2/incoming_leads/summary', 'GET', $params, $subdomain);
-        if (! $returnResponse) {
-            return self::getItems($response);
-        }
-        return $response;
+        return self::request('/api/v2/incoming_leads/summary', 'GET', $params, $subdomain);
     }
 
     /**

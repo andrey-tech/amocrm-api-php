@@ -50,6 +50,9 @@ class AmoAPI
     // Трейт методов для добавления и удаления webhooks
     use AmoAPIWebhooks;
 
+    // Трейт методов для принятия или отклонение неразобранных заявок
+    use AmoAPIIncomingLeads;
+
     /**
      * Возращает массив параметров сущностей из ответа сервера amoCRM
      * @param array|null $response Ответ сервера
