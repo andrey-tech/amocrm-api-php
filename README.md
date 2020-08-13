@@ -73,7 +73,9 @@
         - [Класс `AmoLead` - модель сделки](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amolead---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B8)
         - [Класс `AmoTask` - модель задачи](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amotask---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B8)
         - [Класс `AmoNote` - модель события \(примечания\)](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amonote---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%87%D0%B0%D0%BD%D0%B8%D1%8F)
-        - [Класс `AmoIncomingLead` - абстрактная базовая модель заявки из неразобранного](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincominglead---%D0%B0%D0%B1%D1%81%D1%82%D1%80%D0%B0%D0%BA%D1%82%D0%BD%D0%B0%D1%8F-%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
+        - [Класс `AmoCatalog` - модель списка \(каталога\)](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amocatalog---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0)
+        - [Класс `AmoCatalogElement` - модель элемента списка \(каталога\)](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amocatalogelement---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0)
+        - [Класс `AmoIncomingLead` - базовая модель заявки из неразобранного](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincominglead---%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
             - [Общие методы для работы с заявками из неразобранного](#%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
             - [Класс `AmoIncomingLeadForm` - модель заявки из неразобранного при добавлении из веб-формы](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadform---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B8-%D0%B8%D0%B7-%D0%B2%D0%B5%D0%B1-%D1%84%D0%BE%D1%80%D0%BC%D1%8B)
             - [Класс `AmoIncomingLeadSip` - модель заявки из неразобранного c типом входящий звонок](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadsip---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-c-%D1%82%D0%B8%D0%BF%D0%BE%D0%BC-%D0%B2%D1%85%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9-%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA)
@@ -97,6 +99,7 @@
     - [Работа с webhooks](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-webhooks)
     - [Работа с заявками из неразобранного](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
     - [Работа с несколькими поддоменами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8)
+- [UML-диаграмма классов](#uml-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%BE%D0%B2)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
 
@@ -124,7 +127,6 @@ $ composer require andrey-tech/amocrm-api-php:"^2.7"
 
 в секцию require файла composer.json.
 
-
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F"></a>
 ## Авторизация
 
@@ -145,7 +147,8 @@ $ composer require andrey-tech/amocrm-api-php:"^2.7"
 на access токен и refresh токен, которые сохраняются в хранилище токенов вместе с переданными значениями `$clientId`, `$clientSecret` и `$redirectUri`.
 
 ```php
-use \AmoCRM\AmoAPI;
+use AmoCRM\{AmoAPI, AmoAPIException};
+use AmoCRM\TokenStorage\TokenStorageException;
 
 try {
     // Параметры авторизации по протоколу oAuth 2.0
@@ -161,9 +164,9 @@ try {
     // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
-} catch (\AmoCRM\TokenStorage\TokenStorageException $e) {
+} catch (TokenStorageException $e) {
     printf('Ошибка обработки токенов (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -175,20 +178,21 @@ try {
 достаточно передать только `$subdomain` - поддомен или полный домен amoCRM .
 
 ```php
-use \AmoCRM\AmoAPI;
+use AmoCRM\{AmoAPI, AmoAPIException};
+use AmoCRM\TokenStorage\TokenStorageException;
 
 try {
-    $subdomain = 'testsubdomain';
 
     // Последующие авторизации
+    $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
     // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
-} catch (\AmoCRM\TokenStorage\TokenStorageException $e) {
+} catch (TokenStorageException $e) {
     printf('Ошибка обработки токенов (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -233,7 +237,7 @@ try {
 
 Пример использования собственного класса для сохранения токенов в базе данных:
 ```php
-use \AmoCRM\AmoAPI;
+use AmoCRM\{AmoAPI, AmoAPIException};
 
 try {
     // Параметры авторизации по протоколу oAuth 2.0
@@ -252,7 +256,7 @@ try {
     // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -323,7 +327,7 @@ try {
 Для этого необходимо последовательно выполнить авторизацию в каждом их поддоменов.
 
 ```php
-use \AmoCRM\AmoAPI;
+use AmoCRM\{AmoAPI, AmoAPIException};
 
 try {
     // Авторизация в поддомене 1
@@ -337,7 +341,7 @@ try {
     // Авторизация в поддомене N
     AmoAPI::oAuth2($subdomainN, $clientIdN, $clientSecretN, $redirectUriN, $authCodeN);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -392,7 +396,7 @@ try {
 <a id="%D0%91%D0%B0%D0%B7%D0%BE%D0%B2%D1%8B%D0%B9-%D0%BA%D0%BB%D0%B0%D1%81%D1%81-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9-amoobject"></a>
 #### Базовый класс моделей `AmoObject`
 
-Базовый класс моделей  `AmoObject` содержит следующие общие методы:
+Абстрактный базовый класс всех моделей - `AmoObject` содержит следующие общие методы:
 
 - `__construct(array $params = [], string $subdomain = null)` Создает новый объект модели и заполняет ее.
     + `$params` - параметры модели;
@@ -476,14 +480,24 @@ try {
 - `SMS_IN_NOTETYPE = 102` - входящее SMS сообщение;
 - `SMS_OUT_NOTETYPE = 103` - исходящее SMS сообщение.
 
-<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincominglead---%D0%B0%D0%B1%D1%81%D1%82%D1%80%D0%B0%D0%BA%D1%82%D0%BD%D0%B0%D1%8F-%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE"></a>
-#### Класс `AmoIncomingLead` - абстрактная базовая модель заявки из неразобранного
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amocatalog---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0"></a>
+#### Класс `AmoCatalog` - модель списка (каталога)
+
+Класс `AmoCatalog` не имеет собственных специфических методов.
+
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amocatalogelement---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0"></a>
+#### Класс `AmoCatalogElement` - модель элемента списка (каталога)
+
+Класс `AmoCatalogElement` не имеет собственных специфических методов.
+
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincominglead---%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE"></a>
+#### Класс `AmoIncomingLead` - базовая модель заявки из неразобранного
 
 Работа с заявками из неразобранного существенно отличается от работы с другими сущностями amoCRM.  
 Согласно [официальной документации](https://www.amocrm.ru/developers/content/api/unsorted):
 > Изначально неразобранное было в отдельном хранилище и являлось отдельной сущностью именно поэтому до сих пор в интерфейсах amoCRM и в API есть особенности которые отличают поведение сделки в статусе Неразобранное от сделок в других статусах.
 
-⚠ &nbsp; Поэтому для моделей заявок из неразобранного не работают следующие методы `AmoObject`:
+⚠ &nbsp; Поэтому для моделей заявок из неразобранного не работают следующие методы класса `AmoObject`:
 
 - `fillById()`;
 - `getCustomFields()`;
@@ -497,7 +511,9 @@ try {
 <a id="%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE"></a>
 ##### Общие методы для работы с заявками из неразобранного
 
-- `fillByUid(int|string $uid, array $params = []) :AmoObject` Заполняет модель данными по UID заявки.
+Абстрактный базовый класс модели заявки из неразобранного - `AmoIncomingLead` содержит следующие методы:
+
+- `fillByUid(int|string $uid, array $params = []) :AmoObject` Заполняет модель заявки данными по UID заявки.
     + `$uid` - UID сущности;
     + `$params` - дополнительные параметры, передаваемые в GET-запросе к amoCRM.
 - `setIncomingLeadInfo(array $params) :AmoIncomingLead` Устанавливает параметры заявки из неразобранного.
@@ -511,17 +527,17 @@ try {
 - `save(bool $returnResponse = false)` Добавляет новую заявку в неразобранное и возвращает массив, содержащий UID заявки.
     + `$returnResponse` - вернуть ответ сервера вместо UID.
 
-Статические методы для пакетного добавления, принятия или отклонения неразобранных заявок находятся в классе `AmoAPI`.
+Статические методы для пакетного добавления заявок в amoCRM, а также для принятия или отклонения неразобранных заявок находятся в классе `AmoAPI`.
 
 <a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadform---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B8-%D0%B8%D0%B7-%D0%B2%D0%B5%D0%B1-%D1%84%D0%BE%D1%80%D0%BC%D1%8B"></a>
 ##### Класс `AmoIncomingLeadForm` - модель заявки из неразобранного при добавлении из веб-формы
 
-Класс не имеет собственных методов.
+Дочерний класс `AmoIncomingLeadForm` не имеет собственных специфических методов.
 
 <a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadsip---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-c-%D1%82%D0%B8%D0%BF%D0%BE%D0%BC-%D0%B2%D1%85%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9-%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA"></a>
 ##### Класс `AmoIncomingLeadSip` - модель заявки из неразобранного c типом входящий звонок
 
-Класс не имеет собственных методов.
+Дочерний класс `AmoIncomingLeadSip` не имеет собственных специфических методов.
 
 <a id="%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9"></a>
 ### Методы для загрузки сущностей
@@ -701,14 +717,14 @@ try {
 ### Работа с контактами
 
 ```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoContact;
+use AmoCRM\{AmoAPI, AmoContact, AmoAPIException};
 
 // Включение отладочного режима с сохранение запросов и ответов в лог файл
 AmoAPI::$debug = true;
 
 try {
     // Авторизация
+    $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
     // Загрузка ВСЕХ контактов с возможностью фильтрации
@@ -828,7 +844,7 @@ try {
     // Пакетное сохранение контактов
     AmoAPI::saveObjects($contacts);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -837,11 +853,11 @@ try {
 ### Работа с компаниями
 
 ```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoCompany;
+use AmoCRM\{AmoAPI, AmoCompany, AmoAPIException};
 
 try {
     // Авторизация
+    $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
     // Загрузка ВСЕХ компаний с возможностью фильтрации
@@ -954,7 +970,7 @@ try {
     // Пакетное сохранение компаний
     AmoAPI::saveObjects($companies);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -963,11 +979,11 @@ try {
 ### Работа со сделками
 
 ```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoLead;
+use AmoCRM\{AmoAPI, AmoLead, AmoAPIException};
 
 try {
     // Авторизация
+    $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
     // Загрузка ВСЕХ сделок с возможностью фильтрации
@@ -1075,7 +1091,7 @@ try {
     // Пакетное сохранение сделок
     AmoAPI::saveObjects($leads);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -1084,11 +1100,11 @@ try {
 ### Работа с событиями
 
 ```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoNote;
+use AmoCRM\{AmoAPI, AmoNote, AmoAPIException};
 
 try {
     // Авторизация
+    $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
     // Загрузка ВСЕХ событий, привязанных к сделкам, с возможностью фильтрации
@@ -1142,7 +1158,7 @@ try {
     // Пакетное сохранение событий
     AmoAPI::saveObjects([ $note2, $note3 ]);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -1151,11 +1167,11 @@ try {
 ### Работа с задачами
 
 ```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoTask;
+use AmoCRM\{AmoAPI, AmoTask, AmoAPIException};
 
 try {
     // Авторизация
+    $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
     // Загрузка ВСЕХ задач, привязанных к сделкам, с возможностью фильтрации
@@ -1215,7 +1231,7 @@ try {
     // Пакетное сохранение задач
     AmoAPI::saveObjects([ $task2, $task3 ]);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -1223,11 +1239,11 @@ try {
 <a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0%D0%BC%D0%B8-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%B0%D0%BC%D0%B8"></a>
 ### Работа со списками (каталогами)
 ```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoCatalog;
+use AmoCRM\{AmoAPI, AmoCatalog, AmoAPIException};
 
 try {
     // Авторизация
+    $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
     // Загрузка перечня списков с возможностью фильтрации
@@ -1264,7 +1280,7 @@ try {
     // Пакетное удаление списков
     AmoAPI::deleteObjects([ $catalog1, $catalog3 ]);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -1273,11 +1289,11 @@ try {
 ### Работа с элементами списков (каталогов)
 
 ```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoCatalogElement;
+use AmoCRM\{AmoAPI, AmoCatalogElement, AmoAPIException};
 
 try {
     // Авторизация
+    $subdomain = 'testsubdomain';
     AmoAPI::oAuth2($subdomain);
 
     // Загрузка ВСЕХ элементов заданного списка с возможностью фильтрации
@@ -1338,7 +1354,7 @@ try {
     // Пакетное удаление элементов
     AmoAPI::deleteObjects([ $element1, $element2 ]);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -1347,11 +1363,12 @@ try {
 ### Работа с webhooks
 
 ```php
-use AmoCRM\AmoAPI;
+use AmoCRM\{AmoAPI, AmoAPIException};
 
 try {
 
     // Авторизация
+    $subdomain = 'subdomain';
     AmoAPI::oAuth2($subdomain);
 
     // Получаем список установленных webhooks
@@ -1394,7 +1411,7 @@ try {
         ]
     ]);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -1408,8 +1425,7 @@ try {
 
 Пример работы с заявками из неразобранного при добавлении из веб-формы.
 ```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoIncomingLeadForm;
+use AmoCRM\{AmoAPI, AmoIncomingLeadForm, AmoAPIException};
 
 try {
 
@@ -1494,7 +1510,7 @@ try {
       'user_id' => 13752426
     ]));
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -1503,14 +1519,15 @@ try {
 ### Работа с несколькими поддоменами
 
 ```php
-use AmoCRM\AmoAPI;
-use AmoCRM\AmoContact;
+use AmoCRM\{AmoAPI, AmoContact, AmoAPIException};
 
 try {
     // Авторизация в поддомене 1
+    // ...
     AmoAPI::oAuth2($subdomain1, $clientId1, $clientSecret1, $redirectUri1, $authCode1);
 
     // Авторизация в поддомене 2
+    // ...
     AmoAPI::oAuth2($subdomain2, $clientId2, $clientSecret2, $redirectUri2, $authCode2);
 
     // Загрузка компаний из поддомена 1
@@ -1536,10 +1553,15 @@ try {
     // Пакетное сохранение компаний для поддомена 1
     AmoAPI::saveObjects([ $company1, $company2 ], $subomain1);
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
+
+<a id="uml-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%BE%D0%B2"></a>
+## UML-диаграмма классов
+
+[![amoCRM API class diagram UML](./assets/amocrm-api-class-diagram-uml.png)](./assets/amocrm-api-class-diagram-uml.png)
 
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80"></a>
 ## Автор
