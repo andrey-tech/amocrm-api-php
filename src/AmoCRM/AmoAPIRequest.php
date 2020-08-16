@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.9.3
+ * @version 2.10.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -37,6 +37,7 @@
  * v2.9.1 (15.07.2020) Метод getAmoDomain() теперь публичный
  * v2.9.2 (19.07.2020) Исправлено сообщение об ошибке с кодом 244
  * v2.9.3 (07.08.2020) Сообщение об ошибке дополнено параметрами запроса
+ * v2.10.0 (16.08.2020) Добавлена поддержка для класса, выполняющего логирование запросов/ответов к API
  *
  */
 
@@ -53,11 +54,10 @@ trait AmoAPIRequest
     public static $debug = false;
 
     /**
-     * Лог файл для сохранения отладочной информации (относительно каталога файла класса AmoAPI)
-     * (null - вывод в STDOUT)
-     * @var string|null
+     * Объект класса, выполняющего логирование запросов/ответов к API
+     * @var object
      */
-    public static $debugLogFile = 'logs/debug.log';
+    public static $debugLogger;
 
     /**
      * Максимальное число запросов к amoCRM API в секунду
@@ -245,6 +245,7 @@ trait AmoAPIRequest
      * @param resource $curl Ресурс cURL
      * @param string $subdomain Поддомен amoCRM
      * @return void
+     * @throws AmoAPIException
      */
     protected static function setDefaultCurlOptions($curl, string $subdomain)
     {
@@ -288,6 +289,7 @@ trait AmoAPIRequest
      * @param array $params Параметры запроса
      * @param string|null $subdomain Поддомен amoCRM
      * @return array|null
+     * @throws AmoAPIException
      */
     public static function request(string $query, string $type = 'GET', array $params = [], $subdomain = null)
     {
@@ -559,9 +561,7 @@ trait AmoAPIRequest
 
         self::$lastRequestTime = microtime(true);
 
-        $result = curl_exec($curl);
-
-        return $result;
+        return curl_exec($curl);
     }
 
     /**
@@ -590,6 +590,7 @@ trait AmoAPIRequest
      * Проверяет наличие каталога для сохранения файла и создает каталог при его отсутствии рекурсивно
      * @param string $directory Полный путь к каталогу
      * @return void
+     * @throws AmoAPIException
      */
     protected static function checkDir(string $directory)
     {
@@ -621,33 +622,20 @@ trait AmoAPIRequest
      */
     protected static function debug(string $message = '')
     {
-        // Выходим, если отладочный режим выключен
-        if (! self::$debug) {
-            return;
-        }
-
-        // Формируем строку времени логгирования
         $dateTime = \DateTime::createFromFormat('U.u', sprintf('%.f', microtime(true)));
         $timeZone = new \DateTimeZone(date_default_timezone_get());
         $dateTime->setTimeZone($timeZone);
-        $timeString = $dateTime->format('Y-m-d H:i:s,u P');
+        $timeString = $dateTime->format('Y-m-d H:i:s.u P');
 
         $uniqId = self::getUniqId();
         $message = "*** {$uniqId} [{$timeString}]" . PHP_EOL . $message . PHP_EOL . PHP_EOL;
 
-        // Если лог файл не указан, то вывод в STDOUT
-        if (empty(self::$debugLogFile)) {
+        if (self::$debug) {
             echo $message;
-            return;
         }
 
-        // Формируем полное имя лог файла
-        $debugLogFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::$debugLogFile;
-        self::checkDir(dirname($debugLogFile));
-
-        // Записываем сообщение в лог файл
-        if (! file_put_contents($debugLogFile, $message, FILE_APPEND|LOCK_EX)) {
-            throw new AmoAPIException("Не удалось записать в лог файл " . $debugLogFile);
+        if (isset(self::$debugLogger)) {
+            self::$debugLogger->debug($message);
         }
     }
 
@@ -666,8 +654,9 @@ trait AmoAPIRequest
 
     /**
      * Выполняет блокировку сущности при обновлении (update) методом AmoObject::save()
-     * @param  object $amoObject Объект \AmoCRM\AmoObject
+     * @param object $amoObject Объект \AmoCRM\AmoObject
      * @return array|null
+     * @throws AmoAPIException
      */
     public static function lockEntity($amoObject)
     {
@@ -717,8 +706,9 @@ trait AmoAPIRequest
 
     /**
      * Выполняет разблокировку сущности при обновлении (update) методом AmoObject::save()
-     * @param  array|null $lock Параметры блокировки сущности
+     * @param array|null $lock Параметры блокировки сущности
      * @return void
+     * @throws AmoAPIException
      */
     public static function unlockEntity($lock)
     {

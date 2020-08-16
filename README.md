@@ -7,7 +7,7 @@
 
 Обертка на PHP7+ для работы с REST API [amoCRM](https://www.amocrm.ru) **v2** с авторизацией по протоколу oAuth 2.0
 или по API-ключу пользователя, троттлингом запросов к API, блокировкой одновременного обновления одной сущности
-и логированием в файл.
+и логированием запросов/ответов к API в файл.
 
 Данная библиотека была создана для удовлетворения
 [новых требований amoCRM](https://www.amocrm.ru/developers/content/integrations/requirements),
@@ -87,6 +87,7 @@
     - [Дополнительные методы](#%D0%94%D0%BE%D0%BF%D0%BE%D0%BB%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B)
 - [Блокировка одновременного обновления одной сущности](#%D0%91%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B8)
 - [Троттлинг запросов к API](#%D0%A2%D1%80%D0%BE%D1%82%D1%82%D0%BB%D0%B8%D0%BD%D0%B3-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2-%D0%BA-api)
+- [Отладочный режим и логирование](#%D0%9E%D1%82%D0%BB%D0%B0%D0%B4%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D1%80%D0%B5%D0%B6%D0%B8%D0%BC-%D0%B8-%D0%BB%D0%BE%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
 - [Обработка ошибок](#%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA)
 - [Примеры](#%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B)
     - [Работа с контактами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8)
@@ -99,6 +100,7 @@
     - [Работа с webhooks](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-webhooks)
     - [Работа с заявками из неразобранного](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
     - [Работа с несколькими поддоменами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8)
+    - [Отладка и логирование](#%D0%9E%D1%82%D0%BB%D0%B0%D0%B4%D0%BA%D0%B0-%D0%B8-%D0%BB%D0%BE%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
 - [UML-диаграмма классов](#uml-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%BE%D0%B2)
 - [Автор](#%D0%90%D0%B2%D1%82%D0%BE%D1%80)
 - [Лицензия](#%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)
@@ -353,8 +355,8 @@ try {
 
 Свойство                | По умолчанию | Описание
 ----------------------- | ------------ | --------
-`$debug`                | false        | Включает отладочный режим с сохранением запросов и ответов в лог файл или выводом в STDOUT
-`$debugLogFile`         | logs/debug.log | Устанавливает лог файл отладочного режима (null - вывод в STDOUT)
+`$debug`                | false        | Включает отладочный режим с выводом запросов/ответов в API в STDOUT
+`$debugLogger`          | null         | Устанавливает объект класса, выполняющего логирование и реализующего стандарт [PSR-3](https://www.php-fig.org/psr/psr-3/)
 `$throttle`             | 7            | Устанавливает максимальное число запросов к API amoCRM в секунду ([не более 7 запросов в секунду](https://www.amocrm.ru/developers/content/api/recommendations))
 `$verifySSLCerfificate` | true         | Включает проверку SSL/TLS-сертификата сервера amoCRM
 `$SSLCertificateFile`   | 'cacert.pem' | Устанавливает файл SSL/TLS-сертификатов X.509 корневых удостоверяющих центров (CA) в формате РЕМ (null - использовать файл, указанный в параметре curl.cainfo файла php.ini)
@@ -701,6 +703,21 @@ try {
 основанный на вычислении времени, прошедшего с момента отправки последнего запроса к API, и приостановке процесса 
 до истечения `1/AmoAPI::$throttle` секунд.
 
+<a id="%D0%9E%D1%82%D0%BB%D0%B0%D0%B4%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D1%80%D0%B5%D0%B6%D0%B8%D0%BC-%D0%B8-%D0%BB%D0%BE%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5"></a>
+## Отладочный режим и логирование
+
+При включении отладочного режима `AmoAPI::$debug = true` информация о каждом запросе/ответе к API amoCRM выводится в STDOUT.  
+
+Для логирования каждого запроса/ответа к API amoCRM может быть использован произвольный класс-логгер, реализующий стандарт [PSR-3](https://www.php-fig.org/psr/psr-3/),
+или простейший класс-логгер `AmoAPIDebugLogger`. Объект класса-логгера устанавливается в свойстве `AmoAPI::$debugLogger`.
+Логирование выполняется независимо от состояния отладочного режима `AmoAPI::$debug`.
+При каждом запросе/ответе к API в классе-логгере вызывается метод `debug()`.  
+
+В конструктор класса `AmoAPIDebugLogger` может быть передано имя лог-файла:
+
+- `__construct(string $logFile = 'logs/debug.log')`
+    + `$logFile` - лог-файл.
+
 <a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA"></a>
 ## Обработка ошибок
 
@@ -710,6 +727,7 @@ try {
 - `getErrors() :array` Возвращает массив сообщений об ошибках (errors) из ответа сервера amoCRM;
 - `getItems() :array` Возвращает массив параметров сущностей (items) из ответа сервера amoCRM.
 
+
 <a id="%D0%9F%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B"></a>
 ## Примеры
 
@@ -718,9 +736,6 @@ try {
 
 ```php
 use AmoCRM\{AmoAPI, AmoContact, AmoAPIException};
-
-// Включение отладочного режима с сохранение запросов и ответов в лог файл
-AmoAPI::$debug = true;
 
 try {
     // Авторизация
@@ -1557,6 +1572,29 @@ try {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
+
+<a id="%D0%9E%D1%82%D0%BB%D0%B0%D0%B4%D0%BA%D0%B0-%D0%B8-%D0%BB%D0%BE%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5"></a>
+### Отладка и логирование
+
+```php
+use AmoCRM\{AmoAPI, AmoAPIDebugLogger, AmoAPIException};
+
+try {
+    // Включение вывода запросов/ответов к API в STDOUT
+    AmoAPI::$debug = true;
+
+    // Включение логирования запросов/ответов к API в файл
+    AmoAPI::$debugLogger = new AmoAPIDebugLogger($logFile = 'logs/debug_amocrm_api.log');
+
+    // Авторизация
+    $subdomain = 'testsubdomain';
+    AmoAPI::oAuth2($subdomain);
+
+} catch (AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+```
+
 
 <a id="uml-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%BE%D0%B2"></a>
 ## UML-диаграмма классов
