@@ -19,13 +19,13 @@
 Документация по REST API **v2** (запросы к API отправляются на /api/v2/):
 
 - отсутствует на русскоязычной версии сайта amoCRM;
-- пока частично доступна по прямым ссылкам на отдельные разделы на русскоязычной версии сайта;
-- пока присутствует на англоизычной версии сайта в разделе [Api General Methods](https://www.amocrm.com/developers/).
+- пока частично доступна по прямым ссылкам на отдельные разделы на русскоязычной версии сайта amoCRM;
+- пока присутствует на англоязычной версии сайта amoCRM в разделе [Api General Methods](https://www.amocrm.com/developers/).
 
 ## Документация по REST API amoCRM **v2**
 
-Архив документации по REST API amoCRM **v2** в формате HTML находится в отдельном репозитории на [GitHub](https://github.com/andrey-tech/amocrm-api-v2-docs).   
-Ниже приведены ссылки на отдельные разделы этого архива, а также прямые ссылки на страницы сайта amoCRM.
+Архив документации по REST API amoCRM **v2** в формате HTML вынесен в самостоятельный [репозиторий](https://github.com/andrey-tech/amocrm-api-v2-docs).   
+Ниже приведены ссылки на отдельные HTML-файлы этого архива, а также прямые ссылки на страницы документации на сайте amoCRM.
 
 - [Аккаунт](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/account.html) 
 - [Авторизация](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/auth.html)
