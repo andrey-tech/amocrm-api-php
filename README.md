@@ -19,34 +19,35 @@
 Документация по REST API **v2** (запросы к API отправляются на /api/v2/):
 
 - отсутствует на русскоязычной версии сайта;
-- пока доступна по прямым ссылкам на отдельные разделы на русскоязычной версии сайта;
-- присутствует на англоизычной версии сайта в разделе [Api General Methods](https://www.amocrm.com/developers/).
+- пока частично доступна по прямым ссылкам на отдельные разделы на русскоязычной версии сайта;
+- пока присутствует на англоизычной версии сайта в разделе [Api General Methods](https://www.amocrm.com/developers/).
 
 
 ## Документация по REST API amoCRM **v2**
 
-Архив документации по REST API amoCRM **v2** и прямые ссылки на сайт amoCRM:
+Архив документации по REST API amoCRM **v2** в формате HTML находится в отдельном репозитории на [GitHub](https://github.com/andrey-tech/amocrm-api-v2-docs).   
+Ниже приведены ссылки на файлы этого архива, а также прямые ссылки на сайт amoCRM.
 
-- [Аккаунт](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/account.html) 
-- [Авторизация](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/auth.html)
-- [Компаниии](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/companies.html) [🗏](https://www.amocrm.ru/developers/content/api/companies)
-- [Контакты](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/contacts.html) [🗏](https://www.amocrm.ru/developers/content/api/contacts)
-- [Сделки](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/leads.html) [🗏](https://www.amocrm.ru/developers/content/api/leads)
-- [События](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/notes.html) [🗏](https://www.amocrm.ru/developers/content/api/notes)
-- [Задачи](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/tasks.html) [🗏](https://www.amocrm.ru/developers/content/api/tasks)
-- [Списки](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/catalogs.html) [🗏](https://www.amocrm.ru/developers/content/catalogs/catalogs)
-- [Элементы списков](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/catalog-elements.html) [🗏](https://www.amocrm.ru/developers/content/catalogs/elements) 
-- [Неразобранное](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/unsorted.html) [🗏](https://www.amocrm.ru/developers/content/api/unsorted) 
-- [Webhooks](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/webhooks.html) [🗏](https://www.amocrm.com/developers/content/api/webhooks/) (en)
-- [Покупатели](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/customers.html)
-- [Дополнительные поля](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/custom_fields.html)
-- [Виджеты](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/widgets.html)
-- [Товары](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/products.html)
-- [Воронки и этапы продаж](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/pipelines.html)
-- [Логирование звонков](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/calls-add.html)
-- [Уведомление о звонке](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/call-event.html)
-- [Коды ошибок](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/errors.html)
-- [Ограничения и рекомендации](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-php/blob/master/doc/recommendations.html)
+- [Аккаунт](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/account.html) 
+- [Авторизация](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/auth.html)
+- [Компаниии](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/companies.html) [🗏](https://www.amocrm.ru/developers/content/api/companies)
+- [Контакты](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/contacts.html) [🗏](https://www.amocrm.ru/developers/content/api/contacts)
+- [Сделки](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/leads.html) [🗏](https://www.amocrm.ru/developers/content/api/leads)
+- [События](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/notes.html) [🗏](https://www.amocrm.ru/developers/content/api/notes)
+- [Задачи](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/tasks.html) [🗏](https://www.amocrm.ru/developers/content/api/tasks)
+- [Списки](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/catalogs.html) [🗏](https://www.amocrm.ru/developers/content/catalogs/catalogs)
+- [Элементы списков](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/catalog-elements.html) [🗏](https://www.amocrm.ru/developers/content/catalogs/elements) 
+- [Неразобранное](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/unsorted.html) [🗏](https://www.amocrm.ru/developers/content/api/unsorted) 
+- [Webhooks](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/webhooks.html) [🗏](https://www.amocrm.com/developers/content/api/webhooks/) (en)
+- [Покупатели](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/customers.html)
+- [Дополнительные поля](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/custom_fields.html)
+- [Виджеты](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/widgets.html)
+- [Товары](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/products.html)
+- [Воронки и этапы продаж](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/pipelines.html)
+- [Логирование звонков](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/calls-add.html)
+- [Уведомление о звонке](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/call-event.html)
+- [Коды ошибок](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/errors.html)
+- [Ограничения и рекомендации](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/recommendations.html)
 
 ## Содержание
 
