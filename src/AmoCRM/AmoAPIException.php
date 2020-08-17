@@ -3,14 +3,15 @@
  * Клсаа AmoCRMAPIException. Обрабатывает исключения в AmoAPI.
  *
  * @author    andrey-tech
- * @copyright 2019 andrey-tech
+ * @copyright 2019-2020 andrey-tech
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.1.0
+ * @version 1.1.1
  *
  * v1.0.0 (24.05.2019) Начальный релиз
  * v1.1.0 (13.11.2019) Добавлены методы getItems, setItems, getErrors, setErrors
+ * v1.1.1 (18.09.2020) Добавлен use Exception
  *
  */
 
@@ -18,7 +19,9 @@ declare(strict_types = 1);
 
 namespace AmoCRM;
 
-class AmoAPIException extends \Exception
+use Exception;
+
+class AmoAPIException extends Exception
 {
     /**
      * Массив ошибок из $response['_embedded']['errors']
@@ -36,9 +39,9 @@ class AmoAPIException extends \Exception
      * Конструктор
      * @param string $message Сообщение об исключении
      * @param int $code Код исключения
-     * @param \Exception|null $previous Предыдущее исключение
+     * @param Exception|null $previous Предыдущее исключение
      */
-    public function __construct(string $message = '', $code = 0, \Exception $previous = null)
+    public function __construct(string $message = '', $code = 0, Exception $previous = null)
     {
         parent::__construct("AmoCRM API: " . $message, $code, $previous);
     }

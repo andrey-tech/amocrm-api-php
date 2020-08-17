@@ -240,6 +240,7 @@ try {
 Пример использования собственного класса для сохранения токенов в базе данных:
 ```php
 use AmoCRM\{AmoAPI, AmoAPIException};
+use AmoCRM\TokenStorage\DatabaseStorage;
 
 try {
     // Параметры авторизации по протоколу oAuth 2.0
@@ -250,7 +251,7 @@ try {
     $subdomain    = 'testsubdomain';
 
     // Устанавливаем объект класса, обеспечивающего сохранение токенов
-    AmoAPI::$tokenStorage = new \AmoCRM\TokenStorage\DatabaseStorage();
+    AmoAPI::$tokenStorage = new DatabaseStorage();
 
     // Авторизация
     AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode);
@@ -303,7 +304,7 @@ class DatabaseStorage implements TokenStorageInterface
 
 Пример авторизации по API-ключу пользователя.
 ```php
-use \AmoCRM\AmoAPI;
+use \AmoCRM\{AmoAPI, AmoAPIException};
 
 try {
     // Параметры авторизации по API-ключу пользователя
@@ -317,7 +318,7 @@ try {
     // Получение информации об аккаунте
     print_r(AmoAPI::getAccount());
 
-} catch (\AmoCRM\AmoAPIException $e) {
+} catch (AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
@@ -770,7 +771,7 @@ try {
     ]);
 
     // Установка дополнительных полей
-    $contact1->addCustomFields([
+    $contact1->setCustomFields([
         '6532343' => 41,
         '123456' => [[
             'value' => '+79451112233',
@@ -905,7 +906,7 @@ try {
     ]);
 
     // Установка дополнительных полей
-    $company1->addCustomFields([
+    $company1->setCustomFields([
         '2390423' => 'Город Москва',
         '123456' => [[
             'value' => '+79457778899',
@@ -1032,7 +1033,7 @@ try {
    ]);
 
     // Установка дополнительных полей
-    $lead1->addCustomFields([
+    $lead1->setCustomFields([
         '3434323' => 'Акционерное общество',
         '3434327' => [ 1121, 1122, 1123 ]
     ]);
@@ -1073,7 +1074,7 @@ try {
     // -------------------------------------------------------------------------
 
     // Заполнение модели сделки по ID
-    $lead3 = new AmoContact();
+    $lead3 = new AmoLead();
     $lead3->fillById(12328958);
 
     // Получение параметров сделки из модели
@@ -1293,7 +1294,7 @@ try {
     AmoAPI::saveObjects([ $catalog2, $catalog3 ]);
 
     // Пакетное удаление списков
-    AmoAPI::deleteObjects([ $catalog1, $catalog3 ]);
+    AmoAPI::deleteObjects([ $catalog2, $catalog3 ]);
 
 } catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
@@ -1341,7 +1342,7 @@ try {
     ]);
 
     // Установка дополнительных полей
-    $element->addCustomFields([
+    $element->setCustomFields([
         '20423' => 'Артикул 14567323',
         '24233' => 120
     ]);
@@ -1367,7 +1368,7 @@ try {
     AmoAPI::saveObjects([ $element2, $element3 ]);
 
     // Пакетное удаление элементов
-    AmoAPI::deleteObjects([ $element1, $element2 ]);
+    AmoAPI::deleteObjects([ $element2, $element3 ]);
 
 } catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
@@ -1440,7 +1441,7 @@ try {
 
 Пример работы с заявками из неразобранного при добавлении из веб-формы.
 ```php
-use AmoCRM\{AmoAPI, AmoIncomingLeadForm, AmoAPIException};
+use AmoCRM\{AmoAPI, AmoLead, AmoContact, AmoIncomingLeadForm, AmoAPIException};
 
 try {
 
@@ -1492,7 +1493,7 @@ try {
     // ------------------------------------------------------------------------
 
     // Получаем заявку из неразобранного по UID
-    $uid = 'f03c796fb5455667e648dd0ec9755fc9680bc3775ac76a540753d249d455'
+    $uid = 'f03c796fb5455667e648dd0ec9755fc9680bc3775ac76a540753d249d455';
     $incomingLead2 = new AmoIncomingLeadForm();
     $incomingLead2->fillByUid($uid);
     print_r($incomingLead2->getParams());
@@ -1509,7 +1510,7 @@ try {
 
     // ------------------------------------------------------------------------
 
-    // Прининимаем заявки из неразобранного
+    // Принимаем заявки из неразобранного
     AmoAPI::acceptIncomingLeads([
         'accept' => [
             'f03c796fb5455667e648dd0ec9755fc9680bc3775ac76a540753d249d455',
@@ -1517,13 +1518,13 @@ try {
         ],
         'user_id'   => 13752426,
         'status_id' => 142
-    ]));
+    ]);
 
     // Отклоняем заявки из неразобранного
     AmoAPI::declineIncomingLeads([
       'decline' => [ 'e21c796dfb5sd566de648ccb80ec546a4d25e4baecbd343actf0b3ed4363c4' ],
       'user_id' => 13752426
-    ]));
+    ]);
 
 } catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
@@ -1534,7 +1535,7 @@ try {
 ### Работа с несколькими поддоменами
 
 ```php
-use AmoCRM\{AmoAPI, AmoContact, AmoAPIException};
+use AmoCRM\{AmoAPI, AmoCompany, AmoAPIException};
 
 try {
     // Авторизация в поддомене 1
@@ -1560,7 +1561,7 @@ try {
         'name' => 'ООО Абракадабра',
     ], $subdomain1);
 
-    // Обновление существущей компании для поддомена 1
+    // Обновление существующей компании для поддомена 1
     $company2 = new AmoCompany([], $subdomain1);
     $company2->fillById(12389423);
     $company2->name = 'OOO Розенталь';

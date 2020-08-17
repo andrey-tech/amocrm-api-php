@@ -7,13 +7,14 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.1.1
+ * @version 1.1.2
  *
  * v1.0.0 (23.07.2020) Первоначальная версия
  * v1.1.0 (11.08.2020) Добавлены новые методы setIncomingLeadInfo(), addIncomingLead(),
  *                     addIncomingContact(), addIncomingCompany()
  * v1.1.1 (11.08.2020) Исправлены значения параметров в методах addIncomingLead(),
  *                     addIncomingContact(), addIncomingCompany()
+ * v1.1.2 (17.08.2020) Исправлен баг с возвратом значения из метода addIncomingLead()
  *
  */
 
@@ -161,13 +162,12 @@ abstract class AmoIncomingLead extends AmoObject
         } else {
             throw new AmoAPIException("В параметрах ожидается объект класса AmoLead или массив");
         }
-
         return $this;
     }
 
     /**
      * Добавляет информацию о контакте
-     * @param AmoContact|$contact Объект класса AmoContact или массив параметров контакта
+     * @param AmoContact|array $contact Объект класса AmoContact или массив параметров контакта
      * @return $this AmoIncomingLead
      */
     public function addIncomingContact($contact)
@@ -179,11 +179,12 @@ abstract class AmoIncomingLead extends AmoObject
         } else {
             throw new AmoAPIException("В параметрах ожидается объект класса AmoContact или массив");
         }
+        return $this;
     }
 
     /**
      * Добавляет информацию о компании
-     * @param AmoCompany|$company Объект класса AmoComapny или массив параметров компании
+     * @param AmoCompany|array $company Объект класса AmoCompany или массив параметров компании
      * @return $this AmoIncomingLead
      */
     public function addIncomingCompany($company)

@@ -7,17 +7,16 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.0.0
+ * @version 1.0.1
  *
  * v1.0.0 (16.08.2020) Первоначальная версия
+ * v1.0.1 (17.08.2020) Удален use AmoCRM\AmoAPI
  *
  */
 
 declare(strict_types = 1);
 
 namespace AmoCRM;
-
-use AmoCRM\AmoAPI;
 
 class AmoAPIDebugLogger
 {
@@ -33,7 +32,7 @@ class AmoAPIDebugLogger
      */
     public function __construct(string $logFile = 'logs/debug.log')
     {
-        $this->logFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . $logFile;
+        $this->logFile = __DIR__ . DIRECTORY_SEPARATOR . $logFile;
         $this->checkDir(dirname($this->logFile));
     }
 

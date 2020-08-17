@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.10.0
+ * @version 2.10.1
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -38,12 +38,16 @@
  * v2.9.2 (19.07.2020) Исправлено сообщение об ошибке с кодом 244
  * v2.9.3 (07.08.2020) Сообщение об ошибке дополнено параметрами запроса
  * v2.10.0 (16.08.2020) Добавлена поддержка для класса, выполняющего логирование запросов/ответов к API
+ * v2.10.1 (17.08.2020) Добавлен use DateTime
  *
  */
 
 declare(strict_types = 1);
 
 namespace AmoCRM;
+
+use DateTime;
+use DateTimeZone;
 
 trait AmoAPIRequest
 {
@@ -261,7 +265,7 @@ trait AmoAPIRequest
         // Если авторизация по API-ключу пользователя, то устанавливаем файл cookies
         if (! self::$lastAuth[ $subdomain ]['is_oauth2']) {
             // Формируем полное имя файла cookies
-            $cookieFilePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::$cookieFileDir;
+            $cookieFilePath = __DIR__ . DIRECTORY_SEPARATOR . self::$cookieFileDir;
             self::checkDir($cookieFilePath);
             $cookieFile = $cookieFilePath . self::getAmoDomain($subdomain) . '.txt';
             curl_setopt($curl, CURLOPT_COOKIEFILE, $cookieFile);
@@ -273,7 +277,7 @@ trait AmoAPIRequest
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
             if (self::$SSLCertificateFile) {
-                $SSLCertificateFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::$SSLCertificateFile;
+                $SSLCertificateFile = __DIR__ . DIRECTORY_SEPARATOR . self::$SSLCertificateFile;
                 curl_setopt($curl, CURLOPT_CAINFO, $SSLCertificateFile);
             }
         } else {
@@ -622,8 +626,8 @@ trait AmoAPIRequest
      */
     protected static function debug(string $message = '')
     {
-        $dateTime = \DateTime::createFromFormat('U.u', sprintf('%.f', microtime(true)));
-        $timeZone = new \DateTimeZone(date_default_timezone_get());
+        $dateTime = DateTime::createFromFormat('U.u', sprintf('%.f', microtime(true)));
+        $timeZone = new DateTimeZone(date_default_timezone_get());
         $dateTime->setTimeZone($timeZone);
         $timeString = $dateTime->format('Y-m-d H:i:s.u P');
 
@@ -666,7 +670,7 @@ trait AmoAPIRequest
         }
 
         // Проверяем каталог для хранения файлов блокировки
-        $dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . self::$lockEntityDir;
+        $dir = __DIR__ . DIRECTORY_SEPARATOR . self::$lockEntityDir;
         self::checkDir($dir);
         
         // Формируем полное имя файла блокировки

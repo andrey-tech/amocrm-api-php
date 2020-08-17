@@ -7,7 +7,7 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.4.1
+ * @version 1.4.2
  *
  * v1.0.0 (06.04.2020) Начальный релиз.
  * v1.1.0 (10.04.2020) Изменен алгоритм работы метода oAuth2()
@@ -17,12 +17,15 @@
  * v1.3.0 (08.07.2020) Изменен принцип хранения токенов. Отключен trigger_error
  * v1.4.0 (10.07.2020) Добавлено сохранение параметров авторизации вместе с токенами
  * v1.4.1 (11.07.2020) Исправлен баг в методе reOAuth2()
+ * v1.4.2 (17.08.2020) Добавлен use AmoCRM\TokenStorage\FileStorage
  *
  */
 
 declare(strict_types = 1);
 
 namespace AmoCRM;
+
+use AmoCRM\TokenStorage\FileStorage;
 
 trait AmoAPIOAuth2
 {
@@ -56,7 +59,7 @@ trait AmoAPIOAuth2
 
         // Проверяем наличие установленного объекта класса для сохранения токенов oAuth 2.0
         if (empty(self::$tokenStorage)) {
-            self::$tokenStorage = new \AmoCRM\TokenStorage\FileStorage();
+            self::$tokenStorage = new FileStorage();
         }
 
         // Полный домен amoCRM для сохранения токенов
@@ -213,7 +216,6 @@ trait AmoAPIOAuth2
             return true;
         }
 
-        // Сохраняем сообщение в лог файл
         // trigger_error(
         //     "Запрос обновления access token OAuth 2.0 #" . self::$reAuthCounter .
         //         " ({$subdomain}) при ответе '401 Unauthorized': {$lastResult}",

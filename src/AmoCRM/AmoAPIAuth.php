@@ -108,7 +108,6 @@ trait AmoAPIAuth
             return true;
         }
 
-        // Сохраняем сообщение в лог файл
         // trigger_error(
         //     "Повторная авторизация по API-ключу #" . self::$reAuthCounter .
         //         " (" . $lastRequest['subdomain'] . ") при ответе '401 Unauthorized': {$lastResult}",
