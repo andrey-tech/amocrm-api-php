@@ -166,8 +166,8 @@ try {
     // Первичная авторизация
     AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode);
 
-    // Получение информации об аккаунте
-    print_r(AmoAPI::getAccount());
+    // Получение информации об аккаунте вместе с пользователями и группами
+    print_r(AmoAPI::getAccount($with = 'users,groups'));
 
 } catch (AmoAPIException $e) {
     printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
@@ -717,13 +717,13 @@ try {
 
 - `static getAccount(string $with = '', string $subdomain = null) :array`  
     Возвращает информацию об аккаунте amoCRM.
-    - `$with` - Разделенный запятыми список дополнительных параметров запроса:
-        - custom_fields
-        - users
-        - pipelines
-        - groups
-        - note_types
-        - task_types
+    - `$with` - Разделенный запятыми список возвращаемых дополнительных параметров аккаунта, включающий:
+        - `custom_fields` - дополнительные поля сущностей;
+        - `users` - пользователи;
+        - `pipelines` - воронки;
+        - `groups` - группы пользователей;
+        - `note_types` - типы событий (примечаний);
+        - `task_types` - типы задач.
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 - `static getAccountDomain(string $subdomain = null) :array`  
     Возвращает информацию о домене аккаунта amoCRM при авторизации по протоколу oAuth2.0.
