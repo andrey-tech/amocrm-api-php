@@ -15,6 +15,8 @@
 > Публичные интеграции должны использовать механизм авторизации oAuth 2.0,
 использование механизма API ключей не допускается. Требование с февраля 2020 года.
 
+С 1 июля 2020 г. информация о API-ключе пользователя стала недоступна в интерфейсе amoCRM.
+
 В настоящее время актуальной версией является [REST API amoCRM **v4**](https://www.amocrm.ru/developers/content/crm_platform/api-reference) (запросы к API отправляются на /api/v4/).  
 Документация по REST API **v2** (запросы к API отправляются на /api/v2/):
 
@@ -62,6 +64,7 @@
             - [Интерфейс `TokenStorageInterface`](#%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-tokenstorageinterface)
             - [Класс `FileStorage`](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage)
             - [Использованиe собственного класса для сохранения токенов](#%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8e-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2)
+        - [Проверка наличия первичной авторизации](#%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D1%8F-%D0%BF%D0%B5%D1%80%D0%B2%D0%B8%D1%87%D0%BD%D0%BE%D0%B9-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8)
     - [Авторизация по API-ключу пользователя \(устаревший метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
     - [Одновременная авторизация в нескольких аккаунтах amoCRM](#%D0%9E%D0%B4%D0%BD%D0%BE%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D1%85-%D0%B0%D0%BA%D0%BA%D0%B0%D1%83%D0%BD%D1%82%D0%B0%D1%85-amocrm)
 - [Параметры настройки](#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8)
@@ -210,7 +213,7 @@ try {
 <a id="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-tokenstorageinterface"></a>
 ##### Интерфейс `TokenStorageInterface`
 
-Интерфейс `\AmoCRM\TokenStorage\TokenStorageInterface` определяет два метода:
+Интерфейс `\AmoCRM\TokenStorage\TokenStorageInterface` определяет три метода:
 
 - `save(array $tokens, string $domain) :void` Сохраняет параметры авторизации и токены.
     * `$tokens` - ассоциативный массив параметров авторизации и токенов:  
@@ -219,18 +222,20 @@ try {
 - `load(string $domain) :?array` Загружает параметры авторизации и токены и возвращает их.
     Метод должен возвращать `null`, когда нет сохраненных токенов.
     * `$domain` - полный домен amoCRM.
+- `hasTokens(string $domain) :bool` Проверяет существуют ли токены для заданного домена amoCRM, то есть была ли выполнена первичная авторизация.
+    * `$domain` - полный домен amoCRM.
 
 <a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage"></a>
 ##### Класс `FileStorage`
 
 По умолчанию для сохранения и загрузки токенов используется класс `\AmoCRM\TokenStorage\FileStorage`,
-который хранит токены в JSON-файлах, с именами, соответствующими именам доменов amoCRM (например, `testsubdomain.amocrm.ru.json`).
+реализующий интерфейс `\AmoCRM\TokenStorage\TokenStorageInterface`.
+Класс хранит токены в JSON-файлах, с именами, соответствующими именам доменов amoCRM (например, `testsubdomain.amocrm.ru.json`).  
+
 В параметрах, передаваемых конструктору класса, можно указать каталог для хранения файлов токенов:
 
 - `__construct(string $storageFolder = 'tokens/')` Конструктор класса.
     * `$storageFolder` - каталог для хранения файлов токенов.
-- `hasTokens(string $domain) :bool` Проверяет существуют ли токены для заданного домена amoCRM.
-    * `$domain` - полный домен amoCRM.
 
 При возникновении ошибок выбрасыватся исключение класса `\AmoCRM\TokenStorage\TokenStorageException`. 
 
@@ -274,7 +279,7 @@ class DatabaseStorage implements TokenStorageInterface
     /**
      * Сохраняет токены
      * @param  array  $tokens Токены для сохранения
-     * @param  string $domain Домен amoCRM
+     * @param  string $domain Полный домен amoCRM
      * @return void
      */
     public function save(array $tokens, string $domain)
@@ -284,18 +289,67 @@ class DatabaseStorage implements TokenStorageInterface
 
     /**
      * Загружает токены
-     * @param  string $domain Домен amoCRM
+     * @param  string $domain Полный домен amoCRM
      * @return array|null
      */
     public function load(string $domain)
     {
         // Здесь токены извлекаются из базы данных
     }
+
+    /**
+     * Проверяет существуют ли токены для заданного домена amoCRM, то есть была ли выполнена первичная авторизация
+     * @param  string  $domain Полный домен amoCRM
+     * @return boolean
+     */
+    public function hasTokens(string $domain) :bool
+    {
+        // Здесь проверяется наличие токенов в базе данных
+    }
+}
+```
+
+<a id="%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D1%8F-%D0%BF%D0%B5%D1%80%D0%B2%D0%B8%D1%87%D0%BD%D0%BE%D0%B9-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8"></a>
+#### Проверка наличия первичной авторизации
+
+Чтобы проверить происходила ли первичная авторизация для нужного поддомена amoCRM,
+можно воспользоваться методом hasTokens() интерфейса `\AmoCRM\TokenStorage\TokenStorageInterface`:
+
+```php
+use AmoCRM\{AmoAPI, AmoAPIException};
+use AmoCRM\TokenStorage\{FileStorage, TokenStorageException};
+
+try {
+
+    // Параметры авторизации по протоколу oAuth 2.0
+    $clientId     = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
+    $clientSecret = 'TFPoaG2A5hp3G3o6opCL8eC9v92Mm0fKQWEHBDwIjedCmVliT4kI3XQcjOOP1s';
+    $authCode     = 'eee60208cc09e3ae3506d667228038345b6578a11d4862094655f630074c8c6ed87a9d804d49b5880e';
+    $redirectUri  = 'https://www.example.com/oauth2/';
+    $subdomain    = 'testsubdomain';
+
+    $domain = AmoAPI::getAmoDomain($subdomain);
+    $isFirstAuth = !(new FileStorage())->hasTokens($domain);
+
+    if ($isFirstAuth) {
+        // Первичная авторизация
+        AmoAPI::oAuth2($subdomain, $clientId, $clientSecret, $redirectUri, $authCode);
+    } else {
+        // Последующие авторизации
+        AmoAPI::oAuth2($subdomain);
+    }
+
+} catch (AmoAPIException $e) {
+    printf('Ошибка авторизации (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+} catch (TokenStorageException $e) {
+    printf('Ошибка обработки токенов (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
 ```
 
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4"></a>
 ### Авторизация по API-ключу пользователя ([устаревший метод](https://www.amocrm.ru/developers/content/oauth/old))
+
+С 1 июля 2020 г. информация о API-ключе пользователя стала недоступна в интерфейсе amoCRM.
 
 - `static AmoAPI::oauth(string $login, string $hash, string $subdomain) :array`
     - `$login` - логин пользователя;
@@ -372,7 +426,7 @@ try {
 `$lockEntityAttempts`   | 10           | Устанавливает максимальное число попыток блокировки обновления сущности при вызове метода `AmoObject::save()` (0 - блокировка не выполняется)
 `$lockEntityTimeout`    | 1            | Устанавливает таймаут между попытками блокировки обновления сущности при вызове метода `AmoObject::save()`, секунды
 `$limitRows`            | 500          | Устанавливает максимальное количество сущностей, выбираемых за один запрос к серверу amoCRM ([не более 500, рекомендуется не более 250](https://www.amocrm.ru/developers/content/api/recommendations))
-`$tokenStorage`         | object       | Устанавливает объект класса, обеспечивающего сохранение токенов oAuth 2.0. По умолчанию `new \AmoCRM\TokenStorage\FileStorage()`
+`$tokenStorage`         | object       | Устанавливает объект класса, обеспечивающего сохранение токенов oAuth 2.0 и реализующего интерфейс `TokenStorageInterface`. По умолчанию объект класса `FileStorage`
 
 <a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D1%8F%D0%BC%D0%B8-amocrm"></a>
 ## Работа с сущностями amoCRM
@@ -683,6 +737,9 @@ try {
     - `$type` - метод запроса 'GET' или 'POST';
     - `$params` - параметры запроса;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
+- `static getAmoDomain(string $subdomain) :string`  
+    Возвращает полное имя домена amoCRM.
+    - `$subdomain` - поддомен или полный домен amoCRM.
 
 <a id="%D0%91%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B8"></a>
 ## Блокировка одновременного обновления одной сущности

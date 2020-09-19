@@ -8,9 +8,10 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.0.0
+ * @version 1.1.0
  *
  * v1.0.0 (08.07.2020) Начальный релиз
+ * v1.1.0 (19.09.2020) Добавлен метод hasTokens()
  *
  */
 
@@ -34,4 +35,11 @@ interface TokenStorageInterface
      * @return void
      */
     public function save(array $tokens, string $domain);
+
+    /**
+     * Проверяет существуют ли токены
+     * @param  string  $domain Полный домен amoCRM
+     * @return boolean
+     */
+    public function hasTokens(string $domain) :bool;
 }
