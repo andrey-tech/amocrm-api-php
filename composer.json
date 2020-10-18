@@ -1,6 +1,6 @@
 {
     "name": "andrey-tech/amocrm-api-php",
-    "description": "Обертка для работы с API v2 amoCRM с авторизацией по протоколу oAuth 2.0 или по API-ключу пользователя, троттлингом запросов, блокировкой одновременного обновления одной сущности и логированием запросов/ответов к API в файл",
+    "description": "Простая обертка для работы с API amoCRM v2 с авторизацией по протоколу oAuth 2.0 или по API-ключу пользователя, троттлингом запросов, блокировкой одновременного обновления одной сущности и логированием запросов/ответов к API в файл",
     "keywords": [ "amocrm", "crm", "api", "api-wrapper", "oauth2", "throttling", "logging" ],
     "homepage": "https://github.com/andrey-tech/amocrm-api-php",
     "minimum-stability": "stable",
