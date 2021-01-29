@@ -5,7 +5,7 @@
 [![Total Downloads](https://poser.pugx.org/andrey-tech/amocrm-api-php/downloads)](//packagist.org/packages/andrey-tech/amocrm-api-php)
 [![License](https://poser.pugx.org/andrey-tech/amocrm-api-php/license)](//packagist.org/packages/andrey-tech/amocrm-api-php)
 
-Простая обертка на PHP7+ для работы с REST API [amoCRM](https://www.amocrm.ru) **v2** с авторизацией по протоколу oAuth 2.0
+Простая обертка на PHP7+ для работы с REST API [amoCRM](https://www.amocrm.ru) **v2 (версии 2)** с авторизацией по протоколу oAuth 2.0
 или по API-ключу пользователя, троттлингом запросов к API, блокировкой одновременного обновления одной сущности
 и логированием запросов/ответов к API в файл.
 
@@ -17,29 +17,27 @@
 
 С 1 июля 2020 г. информация о API-ключе пользователя стала недоступна в интерфейсе amoCRM.
 
-В настоящее время актуальной версией является [REST API amoCRM **v4**](https://www.amocrm.ru/developers/content/crm_platform/api-reference) (запросы к API отправляются на /api/v4/).  
-Документация по REST API **v2** (запросы к API отправляются на /api/v2/):
-
-- отсутствует на русскоязычной версии сайта amoCRM;
-- пока частично доступна по прямым ссылкам на отдельные разделы на русскоязычной версии сайта amoCRM;
-- пока присутствует на англоязычной версии сайта amoCRM в разделе [Api General Methods](https://www.amocrm.com/developers/).
+В настоящее время актуальной версией является [REST API amoCRM **v4 (версия 4)**](https://www.amocrm.ru/developers/content/crm_platform/api-reference) (запросы к API отправляются на /api/v4/).  
 
 ## Документация по REST API amoCRM **v2**
 
+Документация по REST API **v2** теперь недоступна на русскоязычной версии сайта amoCRM.
+На англоязычной версии сайта эта документация перенесена в раздел [API V2 GENERAL METHODS](https://www.amocrm.com/developers/).
+
 Архив документации по REST API amoCRM **v2** в формате HTML вынесен в самостоятельный [репозиторий](https://github.com/andrey-tech/amocrm-api-v2-docs).   
-Ниже приведены ссылки на отдельные HTML-файлы этого архива, а также прямые ссылки на страницы документации на сайте amoCRM.
+Ниже приведены ссылки на отдельные HTML-файлы этого архива:
 
 - [Аккаунт](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/account.html) 
 - [Авторизация](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/auth.html)
-- [Компаниии](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/companies.html) [🗏](https://www.amocrm.ru/developers/content/api/companies)
-- [Контакты](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/contacts.html) [🗏](https://www.amocrm.ru/developers/content/api/contacts)
-- [Сделки](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/leads.html) [🗏](https://www.amocrm.ru/developers/content/api/leads)
-- [События](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/notes.html) [🗏](https://www.amocrm.ru/developers/content/api/notes)
-- [Задачи](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/tasks.html) [🗏](https://www.amocrm.ru/developers/content/api/tasks)
-- [Списки](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/catalogs.html) [🗏](https://www.amocrm.ru/developers/content/catalogs/catalogs)
-- [Элементы списков](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/catalog-elements.html) [🗏](https://www.amocrm.ru/developers/content/catalogs/elements) 
-- [Неразобранное](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/unsorted.html) [🗏](https://www.amocrm.ru/developers/content/api/unsorted) 
-- [Webhooks](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/webhooks.html) [🗏](https://www.amocrm.com/developers/content/api/webhooks/) (en)
+- [Компаниии](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/companies.html)
+- [Контакты](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/contacts.html)
+- [Сделки](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/leads.html)
+- [События](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/notes.html)
+- [Задачи](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/tasks.html)
+- [Списки](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/catalogs.html)
+- [Элементы списков](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/catalog-elements.html)
+- [Неразобранное](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/unsorted.html)
+- [Webhooks](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/webhooks.html)
 - [Покупатели](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/customers.html)
 - [Дополнительные поля](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/custom_fields.html)
 - [Виджеты](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/widgets.html)
@@ -1662,7 +1660,7 @@ try {
 <a id="%D0%90%D0%B2%D1%82%D0%BE%D1%80"></a>
 ## Автор
 
-© 2019-2020 andrey-tech
+© 2019-2021 andrey-tech
 
 <a id="%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F"></a>
 ## Лицензия
