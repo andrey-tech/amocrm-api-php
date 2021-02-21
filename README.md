@@ -1,8 +1,12 @@
 # amoCRM API PHP Wrapper
 
 ![amoCRM logo](./assets/amocrm-logo.png)  
+
 [![Latest Stable Version](https://poser.pugx.org/andrey-tech/amocrm-api-php/v)](//packagist.org/packages/andrey-tech/amocrm-api-php)
 [![Total Downloads](https://poser.pugx.org/andrey-tech/amocrm-api-php/downloads)](//packagist.org/packages/andrey-tech/amocrm-api-php)
+[![GitHub stars](https://img.shields.io/github/stars/andrey-tech/amocrm-api-php)](https://github.com/andrey-tech/amocrm-api-php/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/andrey-tech/amocrm-api-php)](https://github.com/andrey-tech/amocrm-api-php/network)
+[![GitHub watchers](https://img.shields.io/github/watchers/andrey-tech/amocrm-api-php)](https://github.com/andrey-tech/amocrm-api-php/watchers)
 [![License](https://poser.pugx.org/andrey-tech/amocrm-api-php/license)](//packagist.org/packages/andrey-tech/amocrm-api-php)
 
 Простая обертка на PHP7+ для работы с REST API [amoCRM](https://www.amocrm.ru) **v2 (версии 2)** с авторизацией по протоколу oAuth 2.0
