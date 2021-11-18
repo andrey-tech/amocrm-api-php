@@ -15,7 +15,7 @@
 
 Данная библиотека была создана для удовлетворения
 [новых требований amoCRM](https://www.amocrm.ru/developers/content/integrations/requirements),
-предъявляемых к публичным интерациям:
+предъявляемых к публичным интеграциям:
 > Публичные интеграции должны использовать механизм авторизации oAuth 2.0,
 использование механизма API ключей не допускается. Требование с февраля 2020 года.
 
@@ -33,7 +33,7 @@
 
 - [Аккаунт](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/account.html) 
 - [Авторизация](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/auth.html)
-- [Компаниии](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/companies.html)
+- [Компании](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/companies.html)
 - [Контакты](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/contacts.html)
 - [Сделки](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/leads.html)
 - [События](https://htmlpreview.github.io/?https://github.com/andrey-tech/amocrm-api-v2-docs/blob/master/docs/notes.html)
@@ -61,11 +61,11 @@
 - [Авторизация](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F)
     - [Авторизация по протоколу oAuth 2.0 \(актуальный метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%83-oauth-20-%D0%B0%D0%BA%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
         - [Первичная авторизация и обмен кода авторизации на access токен и refresh токен](#%D0%9F%D0%B5%D1%80%D0%B2%D0%B8%D1%87%D0%BD%D0%B0%D1%8F-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B8-%D0%BE%D0%B1%D0%BC%D0%B5%D0%BD-%D0%BA%D0%BE%D0%B4%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-%D0%BD%D0%B0-access-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD)
-        - [Поcледующие авторизации](#%D0%9F%D0%BEc%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B8%D0%B5-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8)
+        - [Последующие авторизации](#%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B8%D0%B5-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8)
         - [Хранение access и refresh токенов](#%D0%A5%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-access-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2)
             - [Интерфейс `TokenStorageInterface`](#%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-tokenstorageinterface)
             - [Класс `FileStorage`](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-filestorage)
-            - [Использованиe собственного класса для сохранения токенов](#%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8e-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2)
+            - [Использование собственного класса для сохранения токенов](#%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2)
         - [Проверка наличия первичной авторизации](#%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D1%8F-%D0%BF%D0%B5%D1%80%D0%B2%D0%B8%D1%87%D0%BD%D0%BE%D0%B9-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8)
     - [Авторизация по API-ключу пользователя \(устаревший метод\)](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE-api-%D0%BA%D0%BB%D1%8E%D1%87%D1%83-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D1%80%D0%B5%D0%B2%D1%88%D0%B8%D0%B9-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4)
     - [Одновременная авторизация в нескольких аккаунтах amoCRM](#%D0%9E%D0%B4%D0%BD%D0%BE%D0%B2%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D1%85-%D0%B0%D0%BA%D0%BA%D0%B0%D1%83%D0%BD%D1%82%D0%B0%D1%85-amocrm)
@@ -83,7 +83,7 @@
         - [Класс `AmoIncomingLead` - базовая модель заявки из неразобранного](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincominglead---%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
             - [Общие методы для работы с заявками из неразобранного](#%D0%9E%D0%B1%D1%89%D0%B8%D0%B5-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
             - [Класс `AmoIncomingLeadForm` - модель заявки из неразобранного при добавлении из веб-формы](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadform---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8-%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B8-%D0%B8%D0%B7-%D0%B2%D0%B5%D0%B1-%D1%84%D0%BE%D1%80%D0%BC%D1%8B)
-            - [Класс `AmoIncomingLeadSip` - модель заявки из неразобранного c типом входящий звонок](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadsip---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-c-%D1%82%D0%B8%D0%BF%D0%BE%D0%BC-%D0%B2%D1%85%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9-%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA)
+            - [Класс `AmoIncomingLeadSip` - модель заявки из неразобранного с типом входящий звонок](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadsip---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81-%D1%82%D0%B8%D0%BF%D0%BE%D0%BC-%D0%B2%D1%85%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9-%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA)
     - [Методы для загрузки сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Методы для пакетного сохранения сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
     - [Методы для пакетного удаления сущностей](#%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BD%D0%BE%D0%B3%D0%BE-%D1%83%D0%B4%D0%B0%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D1%81%D1%83%D1%89%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9)
@@ -126,7 +126,7 @@
 $ composer require andrey-tech/amocrm-api-php:"^2.7"
 ```
 
-или добавить
+или путем добавления:
 
 ```
 "andrey-tech/amocrm-api-php": "^2.7"
@@ -178,11 +178,11 @@ try {
 }
 ```
 
-<a id="%D0%9F%D0%BEc%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B8%D0%B5-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8"></a>
-#### Поcледующие авторизации
+<a id="%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D1%83%D1%8E%D1%89%D0%B8%D0%B5-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8"></a>
+#### Последующие авторизации
 
 После первичного обмена кода авторизации на access токен и refresh токен, при последующих авторизациях, 
-достаточно передать только `$subdomain` - поддомен или полный домен amoCRM .
+достаточно передать только `$subdomain` - поддомен или полный домен amoCRM.
 
 ```php
 use AmoCRM\{AmoAPI, AmoAPIException};
@@ -239,10 +239,10 @@ try {
 - `__construct(string $storageFolder = 'tokens/')` Конструктор класса.
     * `$storageFolder` - каталог для хранения файлов токенов.
 
-При возникновении ошибок выбрасыватся исключение класса `\AmoCRM\TokenStorage\TokenStorageException`. 
+При возникновении ошибок выбрасывается исключение класса `\AmoCRM\TokenStorage\TokenStorageException`. 
 
-<a id="%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8e-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2"></a>
-##### Использованиe собственного класса для сохранения токенов
+<a id="%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D1%81%D0%BE%D0%B1%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B0-%D0%B4%D0%BB%D1%8F-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2"></a>
+##### Использование собственного класса для сохранения токенов
 
 Пример использования собственного класса для сохранения токенов в базе данных:
 ```php
@@ -300,7 +300,8 @@ class DatabaseStorage implements TokenStorageInterface
     }
 
     /**
-     * Проверяет существуют ли токены для заданного домена amoCRM, то есть была ли выполнена первичная авторизация
+     * Проверяет: существуют ли токены для заданного домена amoCRM,
+     * то есть была ли выполнена первичная авторизация
      * @param  string  $domain Полный домен amoCRM
      * @return boolean
      */
@@ -314,7 +315,7 @@ class DatabaseStorage implements TokenStorageInterface
 <a id="%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D1%8F-%D0%BF%D0%B5%D1%80%D0%B2%D0%B8%D1%87%D0%BD%D0%BE%D0%B9-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8"></a>
 #### Проверка наличия первичной авторизации
 
-Чтобы проверить происходила ли первичная авторизация для нужного поддомена amoCRM,
+Чтобы проверить, происходила ли первичная авторизация для нужного поддомена amoCRM,
 можно воспользоваться методом hasTokens() интерфейса `\AmoCRM\TokenStorage\TokenStorageInterface`:
 
 ```php
@@ -408,7 +409,7 @@ try {
 <a id="%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B8"></a>
 ## Параметры настройки
 
-Все параметры настройки библиотеки установливаются через статические свойства класса `AmoAPI`.
+Все параметры настройки библиотеки устанавливаются через статические свойства класса `AmoAPI`.
 
 Свойство                | По умолчанию | Описание
 ----------------------- | ------------ | --------
@@ -443,9 +444,9 @@ try {
     - `AmoTask` - модель задачи;
     - `AmoCatalog` - модель списка (каталога);
     - `AmoCatalogElement` - модель элемента списка (каталога);
-    - `AmoIncomingLead` - абcтрактная базовая модель заявки из неразобранного;
+    - `AmoIncomingLead` - абстрактная базовая модель заявки из неразобранного;
     - `AmoIncomingLeadForm` - модель заявки из неразобранного при добавлении заявки из веб-формы;
-    - `AmoIncomingLeadSip` - модель заявки из неразобранного c типом входящий звонок.
+    - `AmoIncomingLeadSip` - модель заявки из неразобранного с типом входящий звонок.
 - дополнительных статических методов класса `AmoAPI`;
 - параметров моделей, доступных через публичные свойства объектов классов-моделей.
 
@@ -471,7 +472,7 @@ try {
     + `$returnFirst` - вернуть только первое значение из списка значений;
     + `$returnValue` - имя параметра, значение которого возвращается (`value`, `enum`, `subtype`).
 - `setCustomFields(array $params) :AmoObject` Устанавливает значения дополнительных полей.
-    + `$params` - массив значений дополнителных полей.
+    + `$params` - массив значений дополнительных полей.
 - `addTags(array|string $tags) :AmoObject` Добавляет теги.
     + `$tags` - тег или массив тегов.
 - `delTags(array|string $tags) :AmoObject` Удаляет теги. 
@@ -593,8 +594,8 @@ try {
 
 Дочерний класс `AmoIncomingLeadForm` не имеет собственных специфических методов.
 
-<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadsip---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-c-%D1%82%D0%B8%D0%BF%D0%BE%D0%BC-%D0%B2%D1%85%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9-%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA"></a>
-##### Класс `AmoIncomingLeadSip` - модель заявки из неразобранного c типом входящий звонок
+<a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincomingleadsip---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81-%D1%82%D0%B8%D0%BF%D0%BE%D0%BC-%D0%B2%D1%85%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9-%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA"></a>
+##### Класс `AmoIncomingLeadSip` - модель заявки из неразобранного с типом входящий звонок
 
 Дочерний класс `AmoIncomingLeadSip` не имеет собственных специфических методов.
 
@@ -616,7 +617,7 @@ try {
         - IncomingLeads
     - `$params` - параметры фильтрации;
     - `$returnResponse` - возвращать полный ответ сервера amoCRM вместо массива параметров сущностей;
-    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последнией выполненной авторизации.
+    - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 - `static get<Entities>(array $params, bool $returnResponse = false, string $subdomain = null) :?array`  
     Загружает сущности заданного типа <Entities\> c возможностью фильтрации и постраничной выборки.  
     Возвращает массив параметров сущностей для заполнения моделей или null.
@@ -678,12 +679,12 @@ try {
 
 - `static addWebhooks(array $params, bool $returnResponse = false, string $subdomain = null) :array`  
     Добавляет один webhook или несколько webhooks (не более 100).
-    - `params` - пaрaметры webhook или массив параметров webhooks;
+    - `params` - параметры webhook или массив параметров webhooks;
     - `$returnResponse` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 - `static deleteWebhooks(array $params, bool $returnResponse = false, string $subdomain = null) :array`  
     Удаляет один webhook или несколько webhooks (не более 100).
-    - `params` - пaрaметры webhook или массив параметров webhooks;
+    - `params` - параметры webhook или массив параметров webhooks;
     - `$returnResponse` - возвращать массив ответов сервера amoCRM вместо массива параметров webhook;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 
@@ -692,23 +693,23 @@ try {
 
 Класс `AmoAPI` содержит следующие статические методы для работы с заявками из неразобранного:
 
-- `static saveIncomingObjects(array $amoObjects, bool $returnResponses = false, string $subdomain = null) :array`  
+- `static saveIncomingObjects(AmoIncomingLeadForm|AmoIncomingLeadSip|array $amoObjects, bool $returnResponses = false, string $subdomain = null) :array`  
     Пакетно добавляет заявки в неразобранное. Возвращает массив параметров UID неразобранного.
-    - `$amoObjects` Массив объектов классов-моделей `AmoIncomingLeadForm` или `AmoIncomingLeadSip`;
+    - `$amoObjects` - объект классов-моделей `AmoIncomingLeadForm` или `AmoIncomingLeadSip` или массив этих объектов;
     - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо массива UID;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
-- `static saveIncomingObjectsWithLimit(array $amoObjects, bool $returnResponses = false, string $subdomain = null, $limit = 250) :array`  
+- `static saveIncomingObjectsWithLimit(AmoIncomingLeadForm|AmoIncomingLeadSip|array $amoObjects, bool $returnResponses = false, string $subdomain = null, $limit = 250) :array`  
     Пакетно добавляет заявки в неразобранное с ограничением на число заявок в одном запросе к API. Возвращает массив UID неразобранного.
-    - `$amoObjects` Массив объектов классов-моделей: `AmoIncomingLeadForm` или `AmoIncomingLeadSip`;
+    - `$amoObjects` - объект классов-моделей `AmoIncomingLeadForm` или `AmoIncomingLeadSip` или массив этих объектов;
     - `$returnResponses` - возвращать массив ответов сервера amoCRM вместо массива UID;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации;
     - `$limit` - максимальное число заявок в одном запросе к API.
 - `static acceptIncomingLeads(array $params, bool $returnResponse = false, $subdomain = null) :array` Принимает неразобранные заявки.
-    + `params` - пaрaметры заявок;
+    + `params` - параметры заявок;
     + `$returnResponse` - возвращать ответ сервера amoCRM вместо массива параметров принятой заявки;
     + `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 - `static declineIncomingLeads(array $params, bool $returnResponse = false, $subdomain = null) :array` Отклоняет неразобранные заявки.
-    + `params` - пaрaметры заявок;
+    + `params` - параметры заявок;
     + `$returnResponse` - возвращать ответ сервера amoCRM вместо массива параметров отклоненной заявки;
     + `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней выполненной авторизации.
 
@@ -748,7 +749,7 @@ try {
 
 При одновременном обновлении одной и той же сущности (сделки, контакта, компании и т.д. с одинаковым ID)
 в разных процессах или потоках исполнения в API amoCRM может возникать ошибка *"Last modified date is older than in database"*
-из-за передаемого вместе с запросом на обновление значения `updated_at` сущностей.
+из-за передаваемого вместе с запросом на обновление значения `updated_at` сущностей.
 
 Для предотвращения возникновения данной ошибки в методе `save()` реализован механизм блокировки одновременного обновления одной сущности.
 До окончания обновления сущности в первом по времени запущенном процессе (потоке исполнения), то есть до получения ответа от API amoCRM,
@@ -781,7 +782,7 @@ try {
 <a id="%D0%9E%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B0-%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA"></a>
 ## Обработка ошибок
 
-При возникновении ошибок выбрасыватся исключение с объектом класса `\AmoCRM\AmoAPIException`.  
+При возникновении ошибок выбрасывается исключение с объектом класса `\AmoCRM\AmoAPIException`.  
 Класс-исключение `AmoAPIException` содержит следующие вспомогательные методы:
 
 - `getErrors() :array` Возвращает массив сообщений об ошибках (errors) из ответа сервера amoCRM;
@@ -1547,7 +1548,7 @@ try {
     ]);
 
     // Сохраняем заявку
-    $incomingLead->save();
+    AmoAPI::saveIncomingObjects($incomingLead);
 
     // ------------------------------------------------------------------------
 
