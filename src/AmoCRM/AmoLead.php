@@ -7,12 +7,13 @@
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.3.0
+ * @version 1.4.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (15.08.2019) Добавлен метод setCatalogElements
  * v1.2.0 (19.05.2020) Добавлена поддержка параметра $subdomain в конструктор
  * v1.3.0 (20.05.2020) Добавлен метод addCompany()
+ * v1.4.0 (12.12.2021) Добавлены методы removeContacts() и removeCompany()
  *
  */
 
@@ -80,6 +81,11 @@ class AmoLead extends AmoObject
     public $catalog_elements = [];
 
     /**
+     * @var array
+     */
+    public $unlink = [];
+
+    /**
      * Конструктор
      * @param array $data Параметры модели
      * @param string $subdomain Поддомен amoCRM
@@ -118,7 +124,11 @@ class AmoLead extends AmoObject
         if (count($this->catalog_elements)) {
             $params['catalog_elements_id'] = $this->catalog_elements;
         }
-        
+
+        if (count($this->unlink)) {
+            $params['unlink'] = $this->unlink;
+        }
+
         return array_merge(parent::getParams(), $params);
     }
 
@@ -167,6 +177,50 @@ class AmoLead extends AmoObject
     public function addCompany($companyId) :AmoLead
     {
         $this->company = [ 'id' => $companyId ];
+
+        return $this;
+    }
+
+    /**
+     * Отвязывает контакты по ID контактов
+     * @param array|int $contacts
+     * @return AmoLead
+     */
+    public function removeContacts($contacts) :AmoLead
+    {
+        if (! is_array($contacts)) {
+            $contacts = [ $contacts ];
+        }
+
+        if (isset($this->contacts['id'])) {
+            foreach ($contacts as $id) {
+                if (false !== $index = array_search($id, $this->contacts['id'])) {
+                    unset($this->contacts['id'][$index]);
+                }
+            }
+
+            if (empty($this->contacts['id'])) {
+                $this->contacts = [];
+            } else {
+                $this->contacts['id'] = array_values($this->contacts['id']);
+            }
+        }
+
+        $this->unlink['contacts_id'] = $contacts;
+
+        return $this;
+    }
+
+    /**
+     * Отвязывает компанию по ID компании
+     * @param int $companyId
+     * @return AmoLead
+     */
+    public function removeCompany(int $companyId) :AmoLead
+    {
+        $this->unlink['company_id'] = $companyId;
+        $this->company = [];
+
         return $this;
     }
 }
