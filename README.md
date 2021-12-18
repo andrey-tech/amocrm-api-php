@@ -509,9 +509,13 @@ try {
 <a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amolead---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B8"></a>
 #### Класс `AmoLead` - модель сделки
 
-- `addContacts(array|int $id)` Привязывает контакты по ID ([не более 40 контактов у одной сделки](https://www.amocrm.ru/developers/content/api/leads)).
-- `addCompany(int $id)` Привязывает компанию по ID.
-- `setCatalogElements(int $id)` Устанавливает элементы списка по ID.
+⚠ &nbsp; Для заявок из неразобранного существуют [специальные методы](#%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amoincominglead---%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE).
+
+- `addContacts(array|int $id)` Привязывает контакты по ID контакта(ов) ([не более 40 контактов у одной сделки](https://www.amocrm.ru/developers/content/api/leads)).
+- `removeContacts(array|int $id)` Отвязывает контакты по ID контакта(ов).
+- `addCompany(int $id)` Привязывает компанию по ID компании.
+- `removeCompany(int $id)` Отвязывает компанию по ID компании.
+- `setCatalogElements(int $id)` Устанавливает элементы списка по ID списка.
 
 <a id="%D0%9A%D0%BB%D0%B0%D1%81%D1%81-amotask---%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C-%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B8"></a>
 #### Класс `AmoTask` - модель задачи
@@ -1054,6 +1058,9 @@ try {
 <a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81%D0%BE-%D1%81%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0%D0%BC%D0%B8"></a>
 ### Работа со сделками
 
+> Работа с заявками из неразобранного существенно отличается от работы со сделками.
+Для них используются [специальные методы](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE).
+
 ```php
 use AmoCRM\{AmoAPI, AmoLead, AmoAPIException};
 
@@ -1136,6 +1143,12 @@ try {
     // Заполнение модели сделки по ID
     $lead3 = new AmoLead();
     $lead3->fillById(12328958);
+
+    // Отвязка контакта от сделки
+    $lead3->removeContacts(12345678);
+
+    // Отвязка компании от сделки
+    $lead3->removeCompany(12345671);
 
     // Получение параметров сделки из модели
     print_r($lead3->getParams());

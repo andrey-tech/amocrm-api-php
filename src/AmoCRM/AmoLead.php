@@ -3,17 +3,18 @@
  * Класс AmoLead. Содержит методы для работы со сделками.
  *
  * @author    andrey-tech
- * @copyright 2020 andrey-tech
+ * @copyright 2020-2021 andrey-tech
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.4.0
+ * @version 1.4.1
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (15.08.2019) Добавлен метод setCatalogElements
  * v1.2.0 (19.05.2020) Добавлена поддержка параметра $subdomain в конструктор
  * v1.3.0 (20.05.2020) Добавлен метод addCompany()
  * v1.4.0 (12.12.2021) Добавлены методы removeContacts() и removeCompany()
+ * v1.4.1 (19.12.2021) Улучшены методы removeContacts() и removeCompany()
  *
  */
 
@@ -23,7 +24,6 @@ namespace AmoCRM;
 
 class AmoLead extends AmoObject
 {
-
     /**
      * Путь для запроса к API
      * @var string
@@ -99,7 +99,7 @@ class AmoLead extends AmoObject
      * Приводит модель к формату для передачи в API
      * @return array
      */
-    public function getParams() :array
+    public function getParams(): array
     {
         $params = [];
         $properties = [ 'is_deleted', 'closed_at', 'closest_task_at', 'status_id', 'sale' ];
@@ -134,24 +134,38 @@ class AmoLead extends AmoObject
 
     /**
      * Добавляет контакты (не более 40 контактов у 1 сделки)
-     * @param array | int $contacts
+     * @param array|int $contacts ID контакта или массив ID контактов
      * @return AmoLead
      *
      */
-    public function addContacts($contacts) :AmoLead
+    public function addContacts($contacts): AmoLead
     {
         if (! is_array($contacts)) {
             $contacts = [ $contacts ];
         }
-        
-        if (isset($this->contacts['id'])) {
-            foreach ($contacts as $id) {
-                if (! in_array($id, $this->contacts['id'])) {
-                    $this->contacts['id'][] = $id;
-                }
+
+        if (! isset($this->contacts['id'])) {
+            $this->contacts['id'] = [];
+        }
+
+        $this->contacts['id'] = array_values(
+            array_unique(
+                array_merge($this->contacts['id'], $contacts)
+            )
+        );
+
+        if (! $this->contacts['id']) {
+            $this->contacts = [];
+        }
+
+        if (isset($this->unlink['contacts_id'])) {
+            $this->unlink['contacts_id'] = array_values(
+                array_diff($this->unlink['contacts_id'], $contacts)
+            );
+
+            if (! $this->unlink['contacts_id']) {
+                unset($this->unlink['contacts_id']);
             }
-        } else {
-            $this->contacts['id'] = $contacts;
         }
 
         return $this;
@@ -162,7 +176,7 @@ class AmoLead extends AmoObject
      * @param array $catalogElements Массив каталогов с их элементами
      * @return AmoLead
      */
-    public function setCatalogElements($catalogElements) :AmoLead
+    public function setCatalogElements(array $catalogElements): AmoLead
     {
         $this->catalog_elements = $catalogElements;
         
@@ -174,52 +188,67 @@ class AmoLead extends AmoObject
      * @param int $companyId ID компании
      * @return AmoLead
      */
-    public function addCompany($companyId) :AmoLead
+    public function addCompany(int $companyId) :AmoLead
     {
         $this->company = [ 'id' => $companyId ];
+
+        if (isset($this->unlink['company_id']) && $this->unlink['company_id'] === $companyId) {
+            unset($this->unlink['company_id']);
+        }
 
         return $this;
     }
 
     /**
      * Отвязывает контакты по ID контактов
-     * @param array|int $contacts
+     * @param array|int $contacts ID контакта или массив ID контактов
      * @return AmoLead
      */
-    public function removeContacts($contacts) :AmoLead
+    public function removeContacts($contacts): AmoLead
     {
         if (! is_array($contacts)) {
             $contacts = [ $contacts ];
         }
 
-        if (isset($this->contacts['id'])) {
-            foreach ($contacts as $id) {
-                if (false !== $index = array_search($id, $this->contacts['id'])) {
-                    unset($this->contacts['id'][$index]);
-                }
-            }
-
-            if (empty($this->contacts['id'])) {
-                $this->contacts = [];
-            } else {
-                $this->contacts['id'] = array_values($this->contacts['id']);
-            }
+        if (! isset($this->unlink['contacts_id'])) {
+            $this->unlink['contacts_id'] = [];
         }
 
-        $this->unlink['contacts_id'] = $contacts;
+        $this->unlink['contacts_id'] = array_values(
+            array_unique(
+                array_merge($this->unlink['contacts_id'], $contacts)
+            )
+        );
+
+        if (! $this->unlink['contacts_id']) {
+            unset($this->unlink['contacts_id']);
+        }
+
+        if (isset($this->contacts['id'])) {
+            $this->contacts['id'] = array_values(
+                array_diff($this->contacts['id'], $contacts)
+            );
+
+            if (! $this->contacts['id']) {
+                $this->contacts = [];
+            }
+        }
 
         return $this;
     }
 
     /**
      * Отвязывает компанию по ID компании
-     * @param int $companyId
+     * @param int $companyId ID компании
      * @return AmoLead
      */
-    public function removeCompany(int $companyId) :AmoLead
+    public function removeCompany(int $companyId): AmoLead
     {
         $this->unlink['company_id'] = $companyId;
-        $this->company = [];
+
+        if (isset($this->company['id']) && $this->company['id'] === $companyId) {
+            $this->company = [];
+        }
 
         return $this;
     }
