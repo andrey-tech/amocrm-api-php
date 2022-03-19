@@ -205,7 +205,7 @@ try {
 ```
 
 Получение нового access токена и refresh токена по истечении срока действия access токена происходит автоматически,
-когда в ответ на запрос к API amoCRM приходит ответ с HTTP-статусом `401 Unauthorized`.
+когда на запрос к API amoCRM приходит ответ с HTTP-статусом `401 Unauthorized`.
 
 <a id="%D0%A5%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-access-%D0%B8-refresh-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2"></a>
 #### Хранение access и refresh токенов
@@ -215,7 +215,7 @@ try {
 <a id="%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81-tokenstorageinterface"></a>
 ##### Интерфейс `TokenStorageInterface`
 
-Интерфейс `\AmoCRM\TokenStorage\TokenStorageInterface` определяет три метода:
+В интерфейсе `\AmoCRM\TokenStorage\TokenStorageInterface` определены три метода:
 
 - `save(array $tokens, string $domain) :void` Сохраняет параметры авторизации и токены.
     * `$tokens` - ассоциативный массив параметров авторизации и токенов:  
@@ -236,8 +236,9 @@ try {
 
 В параметрах, передаваемых конструктору класса, можно указать каталог для хранения файлов токенов:
 
-- `__construct(string $storageFolder = 'tokens/')` Конструктор класса.
-    * `$storageFolder` - каталог для хранения файлов токенов.
+- `__construct(string $storageFolder = '')` Конструктор класса.
+    * `$storageFolder` - каталог для хранения файлов токенов. Может быть задан абсолютный путь
+или путь относительно текущего рабочего каталога. Если передана пустая строка, то создается каталог по умолчанию - 'tokens'. 
 
 При возникновении ошибок выбрасывается исключение класса `\AmoCRM\TokenStorage\TokenStorageException`. 
 
@@ -331,8 +332,10 @@ try {
     $redirectUri  = 'https://www.example.com/oauth2/';
     $subdomain    = 'testsubdomain';
 
+    AmoAPI::$tokenStorage = new FileStorage();
+
     $domain = AmoAPI::getAmoDomain($subdomain);
-    $isFirstAuth = !(new FileStorage())->hasTokens($domain);
+    $isFirstAuth = ! AmoAPI::$tokenStorage->hasTokens($domain);
 
     if ($isFirstAuth) {
         // Первичная авторизация

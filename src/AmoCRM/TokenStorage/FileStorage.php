@@ -4,17 +4,17 @@
  * Класс FileStorage. Реализует хранение токенов в JSON-файле
  *
  * @author    andrey-tech
- * @copyright 2020 andrey-tech
+ * @copyright 2020-2022 andrey-tech
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 1.1.2
+ * @version 1.1.3
  *
  * v1.0.0 (08.07.2020) Начальный релиз
  * v1.1.0 (17.07.2020) Добавлен метод hasTokens()
- * v1.1.1 (16.07.2020) Исправлена разделяемая блокировка JSON-файла. Рефракторинг
+ * v1.1.1 (16.07.2020) Исправлена разделяемая блокировка JSON-файла. Рефакторинг
  * v1.1.2 (19.07.2020) Исправлено сообщение об ошибке
- *
+ * v1.1.3 (19.03.2022) Изменен каталог для хранения файлов с токенами
  */
 
 declare(strict_types = 1);
@@ -33,7 +33,7 @@ class FileStorage implements TokenStorageInterface
      * Конструктор
      * @param string $storageFolder Каталог для хранения файлов с токенами
      */
-    public function __construct(string $storageFolder = 'tokens/')
+    public function __construct(string $storageFolder = '')
     {
         $this->storageFolder = $storageFolder;
     }
@@ -131,16 +131,18 @@ class FileStorage implements TokenStorageInterface
      */
     protected function getTokensFileName(string $domain) :string
     {
-        $storageFolder = __DIR__ . DIRECTORY_SEPARATOR . $this->storageFolder;
+        $storageFolder = $this->storageFolder ?: __DIR__ . DIRECTORY_SEPARATOR . 'tokens/';
+
         if (! is_dir($storageFolder)) {
-            if (! mkdir($storageFolder, $mode = 0755, $recursive = true)) {
-                throw new TokenStorageException("Не удалось рекурсивно создать каталог файлов токенов '{$storageFolder}'");
+            if (! mkdir($storageFolder, 0755, true) && ! is_dir($storageFolder)) {
+                throw new TokenStorageException(
+                    "Не удалось рекурсивно создать каталог файлов токенов '{$storageFolder}'"
+                );
             }
         }
 
         $storageFolder = realpath($storageFolder);
-        $tokensFile =  $storageFolder . DIRECTORY_SEPARATOR .  $domain . '.json';
 
-        return $tokensFile;
+        return $storageFolder . DIRECTORY_SEPARATOR .  $domain . '.json';
     }
 }
