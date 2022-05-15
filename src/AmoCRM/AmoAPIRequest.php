@@ -3,11 +3,11 @@
  * Трейт AmoAPIRequest. Отправляет GET/POST запросы к API amoCRM.
  *
  * @author    andrey-tech
- * @copyright 2019-2020 andrey-tech
+ * @copyright 2019-2022 andrey-tech
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 2.10.1
+ * @version 2.11.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v1.1.0 (05.07.2019) Добавлен обработчик ошибки 401 Unautorized
@@ -20,7 +20,7 @@
  * v1.5.0 (04.04.2020) Добавлена опция cURL CURLOPT_SSLVERSION
  * v2.0.0 (07.04.2020) Добавлена авторизация по протоколу OAuth 2.0.
  *                     Параметр $throttle теперь это максимальное число запросов в секунду.
- *                     Рефракторинг
+ *                     Рефакторинг
  * v2.1.0 (09.04.2020) Добавлен метод getLastResponse()
  * v2.1.1 (10.04.2020) Уточнены сообщения об ошибках в request()
  * v2.1.2 (11.04.2020) Уточнены коды исключений в request()
@@ -31,7 +31,7 @@
  * v2.6.0 (26.05.2020) Добавлена блокировка сущностей при обновлении (update) методом AmoObject::save()
  * v2.6.1 (10.06.2020) Исправлено приведение к целому в методе throttle()
  * v2.7.0 (14.06.2020) Добавлен параметр $amoConnectTimeout
- * v2.7.1 (08.07.2020) Исправлена обработка пустого значения каталога хранения cookies. Рефракторинг
+ * v2.7.1 (08.07.2020) Исправлена обработка пустого значения каталога хранения cookies. Рефакторинг
  * v2.8.0 (10.07.2020) Имя файлов cookies теперь включает полное имя домена amoCRM
  * v2.9.0 (11.07.2020) Добавлена возможность передаче в параметре $subdomain полного домена amoCRM
  * v2.9.1 (15.07.2020) Метод getAmoDomain() теперь публичный
@@ -39,6 +39,7 @@
  * v2.9.3 (07.08.2020) Сообщение об ошибке дополнено параметрами запроса
  * v2.10.0 (16.08.2020) Добавлена поддержка для класса, выполняющего логирование запросов/ответов к API
  * v2.10.1 (17.08.2020) Добавлен use DateTime
+ * v2.11.0 (15.05.2022) Добавлена поддержка для AJAX-запросов к frontend-методам
  *
  */
 
@@ -131,6 +132,12 @@ trait AmoAPIRequest
      * @var int
      */
     public static $lockEntityTimeout = 1; // Секунды
+
+    /**
+     * Коды состояния НТТР, соответствующие успешному выполнению запроса
+     * @var array
+     */
+    public static $successStatusCodes = [ 200, 202, 204 ];
 
     /**
      * Соответствие кодов ошибок и сообщений аmoCRM
@@ -289,7 +296,7 @@ trait AmoAPIRequest
     /**
      * Отправляет запрос к amoCRM API
      * @param string $query Путь в строке запроса
-     * @param string $type Тип запроса GET|POST
+     * @param string $type Тип запроса GET|POST|AJAX
      * @param array $params Параметры запроса
      * @param string|null $subdomain Поддомен amoCRM
      * @return array|null
@@ -367,7 +374,23 @@ trait AmoAPIRequest
     
                 break;
     
-            // Допустимые методы запроса только GET и POST
+            case 'AJAX':
+                // Кодируем тело запроса
+                $ajaxParams = http_build_query($params);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $ajaxParams );
+
+                // Добавляем заголовки HTTP
+                self::setHTTPHeaders($curl, $subdomain, true, true);
+
+                // Отладочная информация
+                $ajaxParams = self::unescapeUnicode($ajaxParams);
+                $requestInfo = " (POST (AJAX): {$url} {$ajaxParams})";
+                self::debug('['. self::$requestCounter . "] POST (AJAX): {$url}" . PHP_EOL . $ajaxParams);
+
+                break;
+
+            // Допустимые методы запроса только GET, POST и AJAX
             default:
                 throw new AmoAPIException("Недопустимый метод запроса {$type}");
         }
@@ -405,7 +428,7 @@ trait AmoAPIRequest
         }
 
         // Проверяем код статуса HTTP
-        if ($code !== 200 && $code !== 204) {
+        if (! in_array($code, self::$successStatusCodes, true)) {
             throw new AmoAPIException(self::getErrorMessage($code) . ": {$requestInfo} (Response: {$result})", $code);
         }
 
@@ -499,9 +522,10 @@ trait AmoAPIRequest
      * @param resource $curl Ресурс cURL
      * @param string $subdomain Поддомен amoCRM
      * @param bool $isPost Метод запроса POST?
+     * @param bool $isAjax Метод запроса AJAX?
      * @return void
      */
-    protected static function setHTTPHeaders($curl, string $subdomain, bool $isPost)
+    protected static function setHTTPHeaders($curl, string $subdomain, bool $isPost, bool $isAjax = false)
     {
         // Список НТТP-заголовков
         $headers = [];
@@ -514,9 +538,13 @@ trait AmoAPIRequest
             }
         }
 
-        // Если метод запроса POST, то добавляем заголовок Content-Type:
+        // Если метод запроса POST, то добавляем заголовки
         if ($isPost) {
-            $headers[] = 'Content-Type: application/json';
+            if ($isAjax) {
+                $headers[] = 'X-Requested-With: XMLHttpRequest';
+            } else {
+                $headers[] = 'Content-Type: application/json';
+            }
         }
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -604,7 +632,7 @@ trait AmoAPIRequest
         }
 
         // Создаем новый каталог рекурсивно
-        if (! mkdir($directory, $mode = 0755, $recursive = true)) {
+        if (! mkdir($directory, $mode = 0755, $recursive = true) && ! is_dir($directory)) {
             throw new AmoAPIException("Не удалось рекурсивно создать каталог: {$directory}");
         }
     }

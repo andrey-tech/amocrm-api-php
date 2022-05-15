@@ -10,8 +10,8 @@
 [![License](https://poser.pugx.org/andrey-tech/amocrm-api-php/license)](//packagist.org/packages/andrey-tech/amocrm-api-php)
 
 Простая обертка на PHP7+ для работы с REST API [amoCRM](https://www.amocrm.ru) **v2 (версии 2)** с авторизацией по протоколу oAuth 2.0
-или по API-ключу пользователя, троттлингом запросов к API, блокировкой одновременного обновления одной сущности
-и логированием запросов/ответов к API в файл.
+или по API-ключу пользователя, поддержкой AJAX-запросов к frontend-методам, троттлингом запросов к API,
+блокировкой одновременного обновления одной сущности и логированием запросов/ответов к API в файл.
 
 Данная библиотека была создана для удовлетворения
 [новых требований amoCRM](https://www.amocrm.ru/developers/content/integrations/requirements),
@@ -104,6 +104,7 @@
     - [Работа с элементами списков \(каталогов\)](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%8D%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D0%BC%D0%B8-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%BE%D0%B2-%D0%BA%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2)
     - [Работа с webhooks](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-webhooks)
     - [Работа с заявками из неразобранного](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D1%8F%D0%B2%D0%BA%D0%B0%D0%BC%D0%B8-%D0%B8%D0%B7-%D0%BD%D0%B5%D1%80%D0%B0%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE)
+    - [Поддержка AJAX-запросов к frontend-методам](#%D0%9F%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D0%B0-ajax-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2-%D0%BA-frontend-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%B0%D0%BC)
     - [Работа с несколькими поддоменами](#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8)
     - [Отладка и логирование](#%D0%9E%D1%82%D0%BB%D0%B0%D0%B4%D0%BA%D0%B0-%D0%B8-%D0%BB%D0%BE%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
 - [UML-диаграмма классов](#uml-%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0-%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%BE%D0%B2)
@@ -561,7 +562,7 @@ try {
 #### Класс `AmoIncomingLead` - базовая модель заявки из неразобранного
 
 Работа с заявками из неразобранного существенно отличается от работы с другими сущностями amoCRM.  
-Согласно [официальной документации](https://www.amocrm.ru/developers/content/api/unsorted):
+Согласно официальной документации:
 > Изначально неразобранное было в отдельном хранилище и являлось отдельной сущностью именно поэтому до сих пор в интерфейсах amoCRM и в API есть особенности которые отличают поведение сделки в статусе Неразобранное от сделок в других статусах.
 
 ⚠ &nbsp; Поэтому для моделей заявок из неразобранного не работают следующие методы класса `AmoObject`:
@@ -744,7 +745,7 @@ try {
 - `static request(string $query, string $type = 'GET', array $params = [], string $subdomain = null) :?array`
     Позволяет выполнить RAW запрос к API amoCRM.  
     - `$query` - путь в URL запроса;
-    - `$type` - метод запроса 'GET' или 'POST';
+    - `$type` - метод запроса 'GET', 'POST' или 'AJAX';
     - `$params` - параметры запроса;
     - `$subdomain` - поддомен или полный домен amoCRM. Если null, то используется поддомен последней авторизации.
 - `static getAmoDomain(string $subdomain) :string`  
@@ -1605,6 +1606,100 @@ try {
 } catch (AmoAPIException $e) {
     printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
 }
+```
+
+<a id="%D0%9F%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%BA%D0%B0-ajax-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2-%D0%BA-frontend-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%B0%D0%BC"></a>
+### Поддержка AJAX-запросов к frontend-методам
+
+Метод `\AmoCRM\AmoAPI::request()` позволяет выполнять AJAX-запросы к frontend-методам.
+
+```php
+use AmoCRM\{AmoAPI, AmoAPIException};
+
+try {
+
+    // Авторизация
+    $subdomain = 'testsubdomain';
+    AmoAPI::oAuth2($subdomain);
+
+    $params = [
+        'filter' => [
+            'cf'=> [
+                '681165'=> [
+                    'from' => '30.03.2022',
+                    'to' => '30.03.2022'
+                ]
+            ],
+        ],
+        'useFilter' => 'y',
+        'element_type' => 1,
+        'json' => 1,
+        'page' => 1
+    ];
+
+    $data = AmoAPI::request('/ajax/contacts/list', 'AJAX', $params);
+
+    print_r($data);    
+
+} catch (AmoAPIException $e) {
+    printf('Ошибка (%d): %s' . PHP_EOL, $e->getCode(), $e->getMessage());
+}
+````
+
+Пример ответа (фрагмент):
+```
+{
+    "response": {
+        "url": "\/contacts\/list\/contacts\/",
+        "items": [
+            {
+                "id": 68207643,
+                "tags": {
+                    "items": []
+                },
+                "url": "\/contacts\/detail\/68207643",
+                "element_type": 1,
+                "entity": "contact",
+                "is_deleted": false,
+                "rights": {
+                    "contacts": {
+                        "edit": true
+                    },
+                    "companies": {
+                        "edit": true
+                    }
+                },
+                "class_name": "",
+                "name": {
+                    "text": "Звонок от 79521111111",
+                    "url": "\/contacts\/detail\/68207643"
+                },
+                "company_name": {
+                    "name": "",
+                    "url": "#"
+                },
+                "manager": "Иван Петров",
+                "date_create": "Сегодня 11:30",
+                "creator": "Робот",
+                "date_modified": "Сегодня 11:31",
+                "modified_by": "Робот",
+                "date_of_nearest_task": {
+                    "date": 1652641199,
+                    "failed": false
+                },
+                "custom_fields": [
+                    {
+                        "id": "72797",
+                        "name": "Телефон",
+                        "values": [
+                            {
+                                "enum": "112761",
+                                "value": "+7 952 111-11-11"
+                            }
+                        ]
+                    }
+                ],
+...                
 ```
 
 <a id="%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%B4%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%B0%D0%BC%D0%B8"></a>
