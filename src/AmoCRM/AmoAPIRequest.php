@@ -23,6 +23,7 @@ use DateTime;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Lock\Lock;
 use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\PersistingStoreInterface;
 use Symfony\Component\Lock\Store\FlockStore;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
@@ -81,9 +82,19 @@ trait AmoAPIRequest
     public static int $updatedAtDelta = 5;
 
     /**
-     * Каталог для хранения lock-файлов (блокировка сущностей и доменов)
+     * Каталог для хранения lock-файлов (блокировка сущностей и доменов).
+     * Используется только когда $lockStore равен null (FlockStore по умолчанию).
      */
     public static string $lockEntityDir = 'lock/';
+
+    /**
+     * Хранилище блокировок symfony/lock.
+     * Если null, используется FlockStore (файловые блокировки в каталоге $lockEntityDir).
+     * Позволяет подключить любой совместимый стор: RedisStore, MemcachedStore и др.
+     * Пример: AmoAPI::$lockStore = new RedisStore($redis);
+     * Должно быть задано до первого вызова метода, использующего блокировки.
+     */
+    public static ?PersistingStoreInterface $lockStore = null;
 
     /**
      * Максимальное число попыток блокировки сущности при обновлении (update) методом AmoObject::save()
@@ -573,14 +584,20 @@ trait AmoAPIRequest
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Возвращает LockFactory с FlockStore (инициализация при первом вызове).
+     * Возвращает LockFactory (инициализация при первом вызове).
+     * Использует $lockStore если задан, иначе FlockStore ($lockEntityDir).
      */
     private static function getLockFactory(): LockFactory
     {
         if (self::$lockFactory === null) {
-            $dir = __DIR__ . DIRECTORY_SEPARATOR . self::$lockEntityDir;
-            self::checkDir($dir);
-            self::$lockFactory = new LockFactory(new FlockStore($dir));
+            if (self::$lockStore !== null) {
+                $store = self::$lockStore;
+            } else {
+                $dir = __DIR__ . DIRECTORY_SEPARATOR . self::$lockEntityDir;
+                self::checkDir($dir);
+                $store = new FlockStore($dir);
+            }
+            self::$lockFactory = new LockFactory($store);
         }
 
         return self::$lockFactory;
