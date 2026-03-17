@@ -3,15 +3,16 @@
  * Трейт AmoAPIRequest. Отправляет GET/POST запросы к API amoCRM.
  *
  * @author    andrey-tech
- * @copyright 2019-2024 andrey-tech
+ * @copyright 2019-2026 andrey-tech
  * @see https://github.com/andrey-tech/amocrm-api-php
  * @license   MIT
  *
- * @version 3.0.0
+ * @version 3.1.0
  *
  * v1.0.0 (24.04.2019) Первоначальная версия
  * v2.11.0 (15.05.2022) Добавлена поддержка для AJAX-запросов к frontend-методам
  * v3.0.0 (xx.xx.2024) Add support for PHP 8.3, symfony/http-client, symfony/lock (entity + domain locks), custom headers
+ * v3.1.0 (16.03.2026) Add support for custom lock storage
  *
  */
 
